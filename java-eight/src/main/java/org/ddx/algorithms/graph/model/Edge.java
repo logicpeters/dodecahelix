@@ -38,4 +38,14 @@ public class Edge {
         return isBidirectional();
     }
 
+    @Override
+    public String toString() {
+        String dirStr = isBidirectional() ? "->" : "<->";
+        String costStr = (cost>0) ? " ($" + cost + ")" : "";
+        return "Edge{"
+            + sourceNodeId
+            + dirStr
+            + targetNodeId
+            + costStr  + "}";
+    }
 }

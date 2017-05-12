@@ -5,7 +5,7 @@ import java.util.*;
 /**
  *  Simple starter class for creating graphs.
  *
- *  Useful for one-class assignments and code competitions.
+ *  Useful for one-class assignments and code competitions.  If there are no restrictions on using multiple classes, use the model objects instead.
  *
  */
 public class SimpleGraph {

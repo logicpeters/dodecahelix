@@ -11,7 +11,9 @@ import java.util.*;
 /**
  * Breadth first strategy, as described by Udacity's "Intro to Artifical Intelligence" class.
  *
- * NOTE: this is just a personal interpretation, not endorsed by the class.
+ * NOTE: this is just a personal interpretation of the discussion, not endorsed by the class.
+ * This ignores cost, and disovers a path based on the least number of hops (edges) between nodes.
+ *
  */
 public class BreadthFirstStrategy implements TraversalStrategy {
 
