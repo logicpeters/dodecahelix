@@ -6,7 +6,7 @@ import org.ddx.algorithms.graph.model.Path;
 /**
  * Created on 5/9/2017.
  */
-public interface TraversalStrategy {
+public interface GraphTraversalStrategy {
 
     /**
      * Find the path between two nodes.

@@ -1,4 +1,4 @@
-package org.ddx.algorithms.graph;
+package org.ddx.algorithms.graph.grid;
 
 import org.ddx.algorithms.graph.model.Edge;
 import org.ddx.algorithms.graph.model.Graph;
@@ -23,25 +23,32 @@ public class GridGraph {
     }
 
     public static Graph buildGridGraph(int rows, int columns) {
+        return buildGridGraph(rows, columns,
+            new SimpleGridNodeCreationStrategy(), new SimpleGridEdgeCreationStrategy());
+    }
+
+    public static Graph buildGridGraph(int rows, int columns,
+                                       GridNodeCreationStrategy nodeCreator,
+                                       GridEdgeCreationStrategy edgeCreator) {
 
         Graph graph = new Graph();
 
         for (int row=0; row<rows; row++) {
             for (int column = 0; column < columns; column++) {
                 long nodeId = getIdByCoordinatePair(column, row);
-                Node gridNode = new Node(nodeId);
+                Node gridNode = nodeCreator.createNode(column, row);
 
                 // add edge to right
-                if (column<(columns-1)) { gridNode.addEdge(new Edge(nodeId, getIdByCoordinatePair(column+1, row))); };
+                if (column<(columns-1)) { gridNode.addEdge(edgeCreator.createEdge(nodeId, getIdByCoordinatePair(column+1, row))); }
 
                 // add edge to left
-                if (column>0) { gridNode.addEdge(new Edge(nodeId, getIdByCoordinatePair(column-1, row))); };
+                if (column>0) { gridNode.addEdge(edgeCreator.createEdge(nodeId, getIdByCoordinatePair(column-1, row))); }
 
                 // add edge on top
-                if (row>0) { gridNode.addEdge(new Edge(nodeId, getIdByCoordinatePair(column, row-1))); };
+                if (row>0) { gridNode.addEdge(edgeCreator.createEdge(nodeId, getIdByCoordinatePair(column, row-1))); }
 
                 // add bottom edge
-                if (row<(rows-1)) { gridNode.addEdge(new Edge(nodeId, getIdByCoordinatePair(column, row+1))); };
+                if (row<(rows-1)) { gridNode.addEdge(edgeCreator.createEdge(nodeId, getIdByCoordinatePair(column, row+1))); }
 
                 graph.addNode(gridNode);
             }

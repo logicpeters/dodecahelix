@@ -2,6 +2,7 @@ package org.ddx.algorithms.graph.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -13,7 +14,7 @@ public class Path {
 
     private long pathCost = 0;
 
-    private List<Long> nodeIds = new ArrayList<>();
+    private LinkedList<Long> nodeIds = new LinkedList<>();
 
     public Path(long nodeId) {
         nodeIds.add(nodeId);
@@ -21,6 +22,7 @@ public class Path {
 
     public Path(Path originalPath) {
         nodeIds.addAll(originalPath.getNodeIds());
+        pathCost = originalPath.getCost();
     }
 
     public List<Long> getNodeIds() {
@@ -52,6 +54,14 @@ public class Path {
 
     public long getCost() {
         return pathCost;
+    }
+
+    public long getTailNodeId() {
+        return nodeIds.getLast();
+    }
+
+    public long getHeadNodeId() {
+        return nodeIds.getFirst();
     }
 
 }
