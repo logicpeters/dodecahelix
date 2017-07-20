@@ -27,6 +27,10 @@ public class GraphBuilder {
     public GraphBuilder connect(long sourceNodeId, long targetNodeId, int cost, boolean bidirectional) {
         Node sourceNode = graph.getNode(sourceNodeId);
         sourceNode.addEdge(new Edge(sourceNodeId, targetNodeId, cost, bidirectional));
+        if (bidirectional) {
+            Node targetNode = graph.getNode(targetNodeId);
+            targetNode.addEdge(new Edge(targetNodeId, sourceNodeId, cost, true));
+        }
         return this;
     }
 

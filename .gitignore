@@ -1,3 +1,5 @@
 **/target/
 .idea/
 *.iml
+python-three/
+java-eight/src/test/java/org/ddx/Sandbox.java
