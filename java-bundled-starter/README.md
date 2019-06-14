@@ -1,9 +1,26 @@
-### Java Bundled Starter project
+## Consola ##
 
-Sample modular (Java 9+) swing-based project for applications intended to be bundled with their own Java Runtine.
+Consola is a starter project for building a modular swing application with a bundled JRE.  This allows you to deliver swing apps to users who do not have or want a Java runtime installed.  It is an exercise in usage of the 'jlink' command and the java module system of Java 9+.
 
-This application is a swing-based terminal/shell with support for custom font sizes, colors and backgrounds.
+The application itself is a simple terminal/shell emulator with a customizable display (font sizes, colors, background).
 
-### Build
 
-This project uses the gradle build tool to compile, run and bundle the application.
+### Usage
+
+This project uses the gradle wrapper for build, run and packaging.  
+
+To build:
+
+    gradlew build
+    
+To run:
+
+    gradlew run
+
+Creating and executing a custom runtime image:
+
+    gradlew jlink
+    cd build/image/bin
+    ./consola
+
+
