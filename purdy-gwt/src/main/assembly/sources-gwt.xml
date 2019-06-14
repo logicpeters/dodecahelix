@@ -1,0 +1,34 @@
+<assembly>
+  <id>sources-gwt</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+  	<fileSet>
+      <filtered>false</filtered>
+      <directory>target/GwtPurdy/WEB-INF/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>**/client/**/*.class</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <filtered>false</filtered>
+      <directory>src/main/java</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>**/client/**/*.*</include>
+        <include>**/GwtPurdy.gwt.xml</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <filtered>false</filtered>
+      <directory>src/main/resources</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>**/*.*</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

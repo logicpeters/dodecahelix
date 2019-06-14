@@ -1,0 +1,114 @@
+@def selectionBorderWidth 2px;
+.cellTableWidget {
+	border-collapse		 : collapse;
+    background-color	 : white;
+    font-size			 : 12px;
+    padding				 : 0px;
+}
+
+.cellTableFirstColumn {
+}
+
+.cellTableLastColumn {
+}
+
+.cellTableFooter {
+}
+
+.cellTableHeader {
+	color                 : #444;  
+	padding               : 5px 10px 5px 11px;
+    border-top	          : 1px solid #777;
+    border-right		  : 1px solid #777;
+	background            : #ccc;
+	text-align            : left;
+	font-weight           : normal;
+	background: -webkit-gradient(linear, literal("left top"), literal("left bottom"), from(#aaa), to(#fff));
+	background: -moz-linear-gradient(bottom,  #aaa,  #fff);
+	filter: literal("progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#aaaaaa');");
+}
+
+.cellTableCell {
+	border		         : 1px solid #ddd;
+	border-collapse      : collapse;
+	padding              : 5px 10px;
+    color                : #666;
+}
+
+.cellTableFirstColumnFooter {
+  
+}
+
+.cellTableFirstColumnHeader {
+  
+}
+
+.cellTableLastColumnFooter {
+  
+}
+
+.cellTableLastColumnHeader {
+  
+}
+
+.cellTableSortableHeader {
+  cursor: pointer;
+  cursor: hand;
+}
+
+.cellTableSortableHeader:hover {
+}
+
+.cellTableSortedHeaderAscending {
+
+}
+
+.cellTableSortedHeaderDescending {
+
+}
+
+.cellTableEvenRow {
+	background: #FFF;
+}
+
+.cellTableEvenRowCell {
+}
+
+.cellTableOddRow {
+	background: #EEE;
+}
+
+.cellTableOddRowCell {
+}
+
+.cellTableHoveredRow {
+	-moz-box-shadow: 0 0 5px #888;
+	-webkit-box-shadow: 0 0 5px #888;
+	box-shadow: 0 0 5px #888;
+}
+
+.cellTableHoveredRowCell {
+}
+
+.cellTableKeyboardSelectedRow {
+}
+
+.cellTableKeyboardSelectedRowCell {
+}
+
+.cellTableSelectedRow {
+	background: #777;
+}
+
+.cellTableSelectedRowCell {
+	color: white;
+	border-color: #EEE;
+}
+
+.cellTableKeyboardSelectedCell {
+}
+
+@sprite .cellTableLoading {
+  gwt-image: 'waitSpinner';
+  margin: 30px;
+}

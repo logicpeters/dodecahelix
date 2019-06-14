@@ -1,0 +1,97 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.dmp</groupId>
+    <artifactId>aop-sample-spring</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <description>Sample Spring AOP web application project</description>
+    <packaging>war</packaging>
+
+    <properties>
+        <java.version>1.6</java.version>
+        <junit.version>4.8.2</junit.version>
+        <log4j.version>1.2.17</log4j.version>
+        <resteasy.spring.version>2.3.2.Final</resteasy.spring.version>
+        <spring.version>3.1.0.RELEASE</spring.version>
+        <aspectj.version>1.6.11</aspectj.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+
+        <!-- test -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-spring</artifactId>
+            <version>${resteasy.spring.version}</version>
+        </dependency>
+
+        <!-- spring and aop -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
+ 
+        <!-- Although the AspectJ weaver is not used, we do need some of the library dependencies -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
+
+        <!-- Spring uses CGLIB to proxy objects that do not have interfaces -->
+        <!-- http://docs.spring.io/spring/docs/current/spring-framework-reference/html/aop.html#aop-proxying -->
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>2.2.2</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <configuration>
+                        <archive>
+                            <!-- This will create a MANIFEST.MF file indicating that JBoss needs to include these JBoss modules -->
+                            <manifestEntries>
+                                <Dependencies>javax.ws.rs.api</Dependencies>
+                                <Dependencies>org.jboss.resteasy.resteasy-jaxrs</Dependencies>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

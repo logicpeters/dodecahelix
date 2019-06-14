@@ -1,0 +1,92 @@
+Todo - Purdygwt
+
+Bugs:
+Get working in Kindle Fire
+Make CSS3 gradients work in chrome and IE
+Image Column for Grid
+Grid - Sort arrows in header
+Grid - Footer with Paging Controls (improve)
+* Fix numColumns on multi-column form
+* Line up icon and text in button
+Make a nicer button active (clicked) effect (perhaps reverse gradient?)
+TextArea should have scroll bars
+ - set visible lines is not working
+Form View should scroll
+Label on Checkbox should cause check event
+Outline: none on text fields to remove Chrome yellow border
+IE8 doesnt show mask (cant put parenthesis in GWT cssresource)
+
+Project:
+Code Samples / Walkthrough on Wiki
+
+Features:
+Cool Lists - (i.e form selection lists)
+Attach icons to fields : inside - left aligned, outside to the right or in the label
+Attach icons to list items
+Color themes - White on Dark, Grey on White, Customized backgorund and foreground colors
+
+Make a tree with breadcrumbs using lists and arrows (i.e; iPod-like)
+
+Graphics
+Change field gradients to gray instead of blue
+Make multiple field gradients for different base colors
+
+Modal Window
+*- Make it simpler to configure
+*- Information, Dialogue, Spinner (Please Wait)
+- Icons for minimize and close
+filter:alpha(opacity=60); /* For IE8 and earlier */ -- get this to work
+
+Icon Link (i.e; action link from FF)
+
+Customizable TitleBar for a widget
+
+Menubar - Vertical and Horizontal, with menu icons, submenus
+
+Collapsible Field Group
+
+Toolbar - attach to window header
+
+Grid
+- Features:
+-- Adjustable width columns
+-- Sticky Header and Footer (contents scroll, but footer and column headers are fixed)
+-- Sort on Column
+-- Multi-select (highlighting)
+-- Action Icon Column
+-- Checkbox Row Selection
+-- Paging, with Paging Bar on Footer
+
+Nice to Have (Grid)
+-- Grid Groupings
+
+
+PropertyGrid
+-- Name and Value only
+
+Tree with gridlines
+
+Accordion Menu
+
+Slider Field
+
+Spinner Field (up, down arrows on right)
+
+Date Field (Use GWT)
+
+Rich Text Editor field (Use GWT)
+
+Animations
+
+Decorated Frame - Decorative border around panel
+
+Dependent Comboboxes
+
+Window header icons
+
+*Make more attractive HR component for form - not as dark
+
+TextArea -- Larger gradient?
+
+Combobox like AOL autos
+

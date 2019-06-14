@@ -1,0 +1,5 @@
+PurdyGwt makes use of the following third-party libraries and resources:
+
+Mark James Silk Icon Set
+http://www.famfamfam.com/lab/icons/silk/
+

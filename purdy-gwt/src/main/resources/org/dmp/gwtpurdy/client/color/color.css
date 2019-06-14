@@ -1,0 +1,68 @@
+.colorSchemeBase {
+	color: black;
+	background-color: white;
+}
+.colorSchemeLight {
+	color: black;
+	background-color: #eee;
+}
+.colorSchemeLightGrey {
+	color: black;
+	background-color: #ccc;
+	background: -moz-linear-gradient(bottom,  #bbb,  #eee);
+	background: -webkit-gradient(linear, literal("left top"), literal("left bottom"), from(#bbb), to(#eee));
+}
+.colorSchemeDarkGrey {
+	color: white;
+	background-color: #999;
+	background: -moz-linear-gradient(bottom,  #999,  #777);
+	background: -webkit-gradient(linear, literal("left top"), literal("left bottom"), from(#999), to(#777));
+}
+.colorSchemeLightRed {
+	color: black;
+	background-color: #ffa1a1;
+	background: -moz-linear-gradient(bottom,  #ffa1a1,  #ff7e7e);
+	background: -webkit-gradient(linear, left top, left bottom, from(#ff7e7e), to(#ffa1a1));
+}
+.colorSchemeLightBlue {
+	color: black;
+	background-color: #3399cc;
+	background: -moz-linear-gradient(bottom,  #3399cc,  #aaeeff);
+	background: -webkit-gradient(linear, left top, left bottom, from(#3399cc), to(#aaeeff));
+}
+.colorSchemeLightGreen {
+	color: black;
+	background-color: #289E30;
+	background: -moz-linear-gradient(bottom,  #289E30, #3CE644);
+	background: -webkit-gradient(linear, left top, left bottom, from(#289E30), to(#3CE644));
+}
+.colorSchemeDarkRed {
+	color: white;
+	background-color: #66091C;
+	background: -moz-linear-gradient(bottom,  #66091C, #991128);
+	background: -webkit-gradient(linear, left top, left bottom, from(#66091C), to(#991128));
+}
+.colorSchemeDarkBlue {
+	color: white;
+	background-color: #223994;
+	background: -moz-linear-gradient(bottom,  #223994, #3667C9);
+	background: -webkit-gradient(linear, left top, left bottom, from(#223994), to(#3667C9));
+}
+.colorSchemeDarkGreen {
+	color: white;
+	background-color: #069111;
+	background: -moz-linear-gradient(bottom, #069111, #0C7A13);
+	background: -webkit-gradient(linear, left top, left bottom, from(#C7D0DB), to(#0C7A13));
+}
+.colorSchemeBlack {
+	color: white;
+	background-color: #777;
+	background: -moz-linear-gradient(top,  #777,  #000);
+	background: -webkit-gradient(linear, literal("left top"), literal("left bottom"), from(#777), to(#000));
+}
+.colorSchemeBlueToWhite {
+	color:black;
+	background-color: #C7D0DB;
+	background: -moz-linear-gradient(bottom, #C7D0DB, #F0F0F0);
+	background: -webkit-gradient(linear, left top, left bottom, from(#C7D0DB), to(#F0F0F0));
+}

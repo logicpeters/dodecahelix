@@ -1,0 +1,54 @@
+Form API
+As you may know, stock GWT form field components are very low level and do not even provide a label.  This gives you more flexibility in designing forms, but also makes your job harder as a developer in that you have to create the layout for your form fields.  Purdy-GWT provides some basic layout components, such as FormView, FormGroup and FormCell to help set up labels, validation messages and instruction text in your form.  These layout components are not necessary for using the provided UI Components, and stock GWT layouts can be used in place of them.
+
+FormView -- Extends Form Panel, holds FormGroups and Cells
+FormGroup -- Similar to a field set.  Groups UI components with similar layouts, providing a collapsible header (optional).
+FormCell -- Wraps the UI component, providing a label, subtext, supertext, validation messages
+
+For a simple form with two fields, arranged in a group:
+
+public class MyFormView extends FormView {
+	
+	public MyFormView() {
+		super();
+        
+        FormCellGroup myFormGroup = new FormCellGroup("Default Form");
+        
+        FormCell nameField = new FormCell(new FormInputField(), "Name:");
+		myFormGroup.addFormCell(nameField);
+				
+        FormCell textAreaCell = new FormCell(new FormTextArea(), "Description:");
+        myFormGroup.addFormCell(textAreaCell);
+		
+        this.appendCellGroup(myFormGroup);
+	}
+	
+}
+
+Setting properties at the CellGroup or FormView level will cascade down to any FormCells added to the group (must be added AFTER the property is set).
+
+		myFormGroup.setLabelWidths("100px");
+		myFormGroup.setFieldWidths("200px");
+		myFormGroup.setLabelPositions(LabelPosition.LEFT_LEFT);
+		
+Regarding LabelPositions
+		
+The default LEFT_RIGHT label position will set your labels left of the field component, but right-aligned so that it will flush with the field component.  LEFT_LEFT will be left aligned, flush with the left side of the form.
+
+Some fields may require a label that is aligned in a different position, such as a checkbox.  Add this checkbox component to your form:
+
+        FormCell sourceField = new FormCell(new FormCheckbox(), "Registered to Vote?");
+        sourceField.setLabelPosition(LabelPosition.RIGHT);
+        baseDemoGroup.addFormCell(sourceField);
+		
+		
+FormCells have placeholders for supertext (appears above the field) and subtext (below the field).  This is a good location for information and validation messages.  Add an instruction field to your name cell:
+
+        nameField.setSubText(SafeHtmlUtils.fromString("Please enter your name (last, first)"));
+		
+Most of the PurdyGwt form field components extend from the base GWT component, in order to take advantage of GWT's existing API for those components (exceptions : RadioBox and Checkbox).  The FormCombobox extends GWT's ListBox component with the abilty to add combobox itesm using their module. 
+
+
+Validation:
+
+

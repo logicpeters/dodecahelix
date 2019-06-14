@@ -1,0 +1,14 @@
+# ignore specific files
+.*
+!/.gitignore
+
+# ignore wildcards
+*.jar
+
+# ignore all directories and files in a directory.
+target/**/*
+aop-sample-mongo-cdi/target/
+*.iml
+aop-sample-guice/target/
+aop-sample-aspectj/target/
+aop-sample-spring/target/

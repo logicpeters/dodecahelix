@@ -1,0 +1,5 @@
+
+Purdy-GWT is a component library with several goals:
+- a lightweight GWT module, which should add less than 100kb to your app download size
+- components that are slightly larger in size, friendly to mobile visitors
+- an API for simplifying form layout

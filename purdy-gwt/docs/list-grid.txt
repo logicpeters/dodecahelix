@@ -1,0 +1,17 @@
+List-Tree Panel
+
+Scroll Panel
+Gap Between List Items?
+Black or White background?
+Icon Placement
+Text and Subtext
+Subtext placement
+Arrow when list is expandable
+Header shows breadcrumb
+Fixed Height and Width - Adjustable?
+
+ListItem
+- Text
+- Subtext
+- IconResource
+

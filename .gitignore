@@ -4,3 +4,15 @@
 python-three/
 java-eight/src/test/java/org/ddx/Sandbox.java
 coursera/
+java-bundled-starter/build/
+java-bundled-starter/.gradle/
+mini2dx-starter/android/build/
+mini2dx-starter/desktop/build/
+mini2dx-starter/core/build/
+mini2dx-starter/ios/build/
+mini2dx-starter/gradle/
+mini2dx-starter/build/
+mini2dx-starter/android/libs/
+java-bundled-starter/gradle/
+mini2dx-starter/local.properties
+java-bundled-starter/src/main/resources/ttf/

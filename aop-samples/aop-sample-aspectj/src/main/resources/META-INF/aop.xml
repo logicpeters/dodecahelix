@@ -1,0 +1,15 @@
+<!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.eclipse.org/aspectj/dtd/aspectj.dtd">
+
+<!-- aop.xml -->
+<aspectj>
+    <weaver options="-verbose -showWeaveInfo">
+	    <!-- Here is where we specify the classes to be woven. -->
+	    <include within="org.dmp.aspectj..*"/>
+  	</weaver>
+
+    <aspects>
+        <!-- Define all of the aspects.  Not sure if there is a way to use wildcards with this config -->
+        <aspect name="org.dmp.aspectj.aspects.RestCallAuditorAspect" />
+    </aspects>
+</aspectj>
+

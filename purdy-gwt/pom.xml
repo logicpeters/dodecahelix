@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <!-- POM file generated with GWT webAppCreator -->
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.dmp</groupId>
+  <artifactId>GwtPurdy</artifactId>
+  <packaging>war</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+
+  <properties>
+    <!-- Convenience property to set the GWT version -->
+    <gwt.version>2.4.0</gwt.version>
+    <gwt.draft.compile>false</gwt.draft.compile>
+    <gwt.module>org.dmp.gwtpurdy.GwtPurdyShowcase</gwt.module>
+    <gwt.style>OBF</gwt.style>
+    
+    <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-servlet</artifactId>
+      <version>${gwt.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-user</artifactId>
+      <version>${gwt.version}</version>
+      <scope>provided</scope>
+    </dependency>  
+    
+    <!-- 
+	<dependency>
+	    <groupId>com.google.appengine</groupId>
+	    <artifactId>appengine-api-1.0-sdk</artifactId>
+	    <version>1.5.5</version>
+	</dependency>
+    -->
+    
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.7</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>GwtPurdy</finalName>
+    
+    <!-- Generate compiled stuff in the folder used for developing mode -->
+    <outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
+
+    <plugins>
+
+      <!-- GWT Maven Plugin -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>gwt-maven-plugin</artifactId>
+        <version>${gwt.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+              <goal>test</goal>
+            </goals>
+            <configuration>
+              <draftCompile>${gwt.draft.compile}</draftCompile>
+              <module>${gwt.module}</module>
+              <rpcPattern>{0}.rpc</rpcPattern>
+              <servicePattern>org/dmp/gwtpurdy/client/*Service.java</servicePattern>
+              <style>${gwt.style}</style>
+            </configuration>
+          </execution>
+        </executions>
+        <!-- Plugin configuration. There are many available options, see gwt-maven-plugin documentation at codehaus.org -->
+        <configuration>
+          <runTarget>showcase.html</runTarget>
+          <hostedWebapp>${webapp.build.directory}</hostedWebapp>
+          <webappDirectory>${webapp.build.directory}</webappDirectory>
+          <i18nMessagesBundle>org.dmp.gwtpurdy.client.Messages</i18nMessagesBundle>
+        </configuration>
+      </plugin>
+
+      <!-- Copy static web files before executing gwt:run -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.1.1</version>
+        <configuration>
+          <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+        </configuration>
+      </plugin>
+      
+      <!-- Use JDK 1.6 (reverts to 1.5 on update project configuration otherwise) -->
+	  <plugin>
+	    <artifactId>maven-compiler-plugin</artifactId>
+	    <version>2.3.2</version>
+	    <configuration>
+	      <source>1.6</source>
+	      <target>1.6</target>
+	    </configuration>
+	  </plugin> 
+	  
+	  <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>sources-gwt</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <descriptors>
+                <descriptor>src/main/assembly/sources-gwt.xml</descriptor>
+              </descriptors>
+              <finalName>purdy-gwt-${project.version}</finalName>
+              <outputDirectory>${project.build.directory}</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      
+    </plugins>
+    
+  </build>
+
+</project>

@@ -1,0 +1,4 @@
+Using the dialog widgets
+
+- add a <div id="pgApp"></div> in your index.html.  This will identify the area of the application that should be masked
+
