@@ -1,4 +1,4 @@
-package com.ddxlabs.consola;
+package com.ddxlabs.consola.response;
 
 /**
  * Created on 6/1/2019.

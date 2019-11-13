@@ -1,5 +1,7 @@
 package com.ddxlabs.consola.view;
 
+import com.ddxlabs.consola.UserPreferences;
+
 import javax.swing.*;
 
 /**
@@ -13,5 +15,12 @@ public interface ViewComponent {
      * @return
      */
     JComponent buildUI();
+
+    /**
+     *  Apply the user preferences to this component.
+     *
+     * @param
+     */
+    void applyPreferences(UserPreferences preferences);
 
 }

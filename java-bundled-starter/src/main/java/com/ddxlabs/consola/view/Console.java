@@ -1,6 +1,9 @@
 package com.ddxlabs.consola.view;
 
 import com.ddxlabs.consola.*;
+import com.ddxlabs.consola.response.StyledFragment;
+import com.ddxlabs.consola.response.StyledLine;
+import com.ddxlabs.consola.response.TextStyle;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -13,7 +16,7 @@ import java.util.Queue;
  */
 public class Console implements ViewComponent {
 
-    private Application app;
+    public static final String BASE_STYLE = "base";
 
     private JTextPane textPane;
     private StyledDocument doc;
@@ -24,15 +27,13 @@ public class Console implements ViewComponent {
     // number of lines to retain in the history
     private int maxLineHistory;
 
-    private int currentFontSize = 12;
+    private TextTheme textTheme;
 
-    // whether the current theme is 'dark' - this will switch colors
-    private ColorTheme currentTheme = ColorTheme.STD_LIGHT;
-
-    public Console(Application app, int maxLineHistory) {
-        this.app = app;
+    public Console(UserPreferences defaultPrefs) {
         this.linesAdded = new ArrayDeque<>();
-        this.maxLineHistory = maxLineHistory;
+
+        this.textTheme = new TextTheme(defaultPrefs);
+        this.maxLineHistory = defaultPrefs.getIntPreference(UserPreferences.KEY_MAX_HISTORY_LINES);
     }
 
     public JComponent buildUI() {
@@ -41,13 +42,23 @@ public class Console implements ViewComponent {
         doc = textPane.getStyledDocument();
         textPane.setEditable(false);
 
-        int innerPadding = 5;
-        textPane.setBorder(new EmptyBorder(innerPadding, innerPadding, innerPadding, innerPadding));
+        int pad = textTheme.getBasePadding();
+        textPane.setBorder(new EmptyBorder(pad, pad, pad, pad));
 
         addStylesToDocument(doc);
 
-        setTheme(Menu.THEME_STD_LIGHT);
+        // set the default color schemes
+        this.refreshColorTheme();
         return new JScrollPane(textPane);
+    }
+
+    @Override
+    public void applyPreferences(UserPreferences preferences) {
+        this.textTheme.setFromPreferences(preferences);
+        this.maxLineHistory = preferences.getIntPreference(UserPreferences.KEY_MAX_HISTORY_LINES);
+
+        this.refreshColorTheme();
+        this.refreshFontSizes();
     }
 
     public void addLine(StyledLine line) throws BadLocationException {
@@ -78,62 +89,99 @@ public class Console implements ViewComponent {
     }
 
     /**
-     * Updates the color scheme.
-     * <p>
-     * There are two types - light and dark themes.
+     * Updates the color scheme based on the currently loaded textTheme.
      *
-     * @param themeId
      */
-    public void setTheme(String themeId) {
-        ColorTheme theme = ColorTheme.forId(themeId);
-        textPane.setBackground(theme.bgColor);
-        textPane.setForeground(theme.fgColor);
+    private void refreshColorTheme() {
+        ColorTheme colors = textTheme.getColorTheme();
+        textPane.setBackground(colors.bgColor);
+        textPane.setForeground(colors.fgColor);
 
-        // TODO - this is not working
         Style ss = doc.getStyle(TextStyle.MINIMAL.name());
-        StyleConstants.setForeground(ss, theme.minColor);
+        StyleConstants.setForeground(ss, colors.minColor);
+        updateStyle(ss);
         ss = doc.getStyle(TextStyle.SYSTEM.name());
-        StyleConstants.setForeground(ss, theme.sysColor);
+        StyleConstants.setForeground(ss, colors.sysColor);
+        updateStyle(ss);
         ss = doc.getStyle(TextStyle.DIALOG.name());
-        StyleConstants.setForeground(ss, theme.diaColor);
-
-        this.currentTheme = theme;
+        StyleConstants.setForeground(ss, colors.diaColor);
+        updateStyle(ss);
     }
 
+    private void refreshFontSizes() {
+        int newFontSize = textTheme.getBaseFontSize();
 
-    public void incrementFont(int size) {
-        int newFontSize = currentFontSize + 2 * size;
-        if (newFontSize >= 8 && newFontSize <= 24) {
-            currentFontSize = newFontSize;
-            Style sans = doc.getStyle("sans");
-            StyleConstants.setFontSize(sans, currentFontSize);
+        Style textStyle = doc.getStyle(BASE_STYLE);
+        StyleConstants.setFontSize(textStyle, newFontSize);
+
+        int smallFontSize = (int) (newFontSize * 0.75);
+        if (smallFontSize % 2 != 0) {
+            smallFontSize++;
         }
+        textStyle = doc.getStyle(TextStyle.SMALL.name());
+        StyleConstants.setFontSize(textStyle, smallFontSize);
+        updateStyle(textStyle);
+
+        int largeFontSize = (int) (newFontSize * 1.25);
+        if (largeFontSize % 2 != 0) {
+            largeFontSize++;
+        }
+        textStyle = doc.getStyle(TextStyle.LARGE.name());
+        StyleConstants.setFontSize(textStyle, largeFontSize);
+        updateStyle(textStyle);
     }
 
     private void addStylesToDocument(StyledDocument doc) {
         //Initialize some styles.
         Style def = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
-        Style sans = doc.addStyle("sans", def);
-        StyleConstants.setFontFamily(sans, "Courier New");
+        Style baseStyle = doc.addStyle(BASE_STYLE, def);
+        StyleConstants.setFontFamily(baseStyle, textTheme.getFontFamily());
+        StyleConstants.setFontSize(baseStyle, textTheme.getBaseFontSize());
 
-        doc.addStyle(TextStyle.REGULAR.name(), sans);
+        doc.addStyle(TextStyle.REGULAR.name(), baseStyle);
 
-        Style style;
-        style = doc.addStyle(TextStyle.ITALIC.name(), sans);
+        Style style = doc.addStyle(TextStyle.ITALIC.name(), baseStyle);
         StyleConstants.setItalic(style, true);
 
-        style = doc.addStyle(TextStyle.BOLD.name(), sans);
+        style = doc.addStyle(TextStyle.BOLD.name(), baseStyle);
         StyleConstants.setBold(style, true);
 
-        style = doc.addStyle(TextStyle.MINIMAL.name(), sans);
-        StyleConstants.setForeground(style, currentTheme.minColor);
+        style = doc.addStyle(TextStyle.SMALL.name(), baseStyle);
+        StyleConstants.setFontSize(style, 10);
 
-        style = doc.addStyle(TextStyle.DIALOG.name(), sans);
-        StyleConstants.setForeground(style, currentTheme.diaColor);
+        style = doc.addStyle(TextStyle.LARGE.name(), baseStyle);
+        StyleConstants.setFontSize(style, 18);
 
-        style = doc.addStyle(TextStyle.SYSTEM.name(), sans);
-        StyleConstants.setForeground(style, currentTheme.sysColor);
+        style = doc.addStyle(TextStyle.MINIMAL.name(), baseStyle);
+        StyleConstants.setForeground(style, textTheme.getColorTheme().minColor);
+
+        style = doc.addStyle(TextStyle.DIALOG.name(), baseStyle);
+        StyleConstants.setForeground(style, textTheme.getColorTheme().diaColor);
+
+        style = doc.addStyle(TextStyle.SYSTEM.name(), baseStyle);
+        StyleConstants.setForeground(style, textTheme.getColorTheme().sysColor);
     }
 
+    /**
+     * Refresh all elements of this doc with the new style
+     *
+     * @param updatedStyle
+     */
+    private void updateStyle(AttributeSet updatedStyle) {
+
+        Object styleName = updatedStyle.getAttribute(AttributeSet.NameAttribute);
+
+        ElementIterator i = new ElementIterator(doc);
+        for (Element e = i.first(); e != null; e = i.next()) {
+            AttributeSet attr = e.getAttributes();
+            Object name = attr.getAttribute(AttributeSet.NameAttribute);
+            if (styleName.equals(name)) {
+                int start = e.getStartOffset();
+                int end = e.getEndOffset();
+                doc.setCharacterAttributes(start, end - start,
+                        updatedStyle, false);
+            }
+        }
+    }
 
 }

@@ -1,10 +1,12 @@
 package com.ddxlabs.consola;
 
+import com.ddxlabs.consola.response.Response;
+
 /**
  * Created on 6/2/2019.
  */
 public interface CommandHandler {
 
-    public Response processCommand(String command);
+    public void processCommand(String subject, String command);
 
 }

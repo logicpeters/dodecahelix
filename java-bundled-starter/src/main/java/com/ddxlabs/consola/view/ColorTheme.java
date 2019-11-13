@@ -6,7 +6,7 @@ public enum ColorTheme {
 
     STD_LIGHT (Color.WHITE, Color.BLACK, Color.RED, Color.BLUE, Color.DARK_GRAY),
     STD_DARK (Color.BLACK, Color.WHITE, Color.PINK, Color.CYAN, Color.LIGHT_GRAY),
-    OCEAN_DARK (new Color(11, 48, 111), Color.WHITE, Color.PINK, Color.YELLOW, Color.BLUE);
+    OCEAN_DARK (new Color(11, 48, 111), Color.WHITE, Color.PINK, Color.CYAN, Color.LIGHT_GRAY);
 
     Color bgColor;
     Color fgColor;

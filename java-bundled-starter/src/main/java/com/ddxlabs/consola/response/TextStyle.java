@@ -1,6 +1,7 @@
-package com.ddxlabs.consola;
+package com.ddxlabs.consola.response;
 
 import java.lang.module.ModuleDescriptor;
+import java.net.SocketOption;
 
 /**
  * Supported styles for text in the console (and input)
@@ -13,5 +14,8 @@ public enum TextStyle {
     ITALIC,
     SYSTEM,
     DIALOG,
-    MINIMAL
+    MINIMAL,
+    LARGE,
+    SMALL,
+    ;
 }

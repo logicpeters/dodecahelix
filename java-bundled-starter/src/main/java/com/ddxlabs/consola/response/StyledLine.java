@@ -1,4 +1,4 @@
-package com.ddxlabs.consola;
+package com.ddxlabs.consola.response;
 
 import java.util.ArrayList;
 import java.util.Collections;

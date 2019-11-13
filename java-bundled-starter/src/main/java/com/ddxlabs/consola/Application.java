@@ -1,8 +1,10 @@
 package com.ddxlabs.consola;
 
-import com.ddxlabs.consola.system.SystemCommandHandler;
-import com.ddxlabs.consola.view.CommandInput;
-import com.ddxlabs.consola.view.Console;
+import com.ddxlabs.consola.response.StyledLine;
+import com.ddxlabs.consola.response.TextStyle;
+import com.ddxlabs.consola.system.EchoCommandHandler;
+import com.ddxlabs.consola.system.StandardMenuItemHandler;
+import com.ddxlabs.consola.view.*;
 import com.ddxlabs.consola.view.Menu;
 
 import javax.swing.*;
@@ -10,22 +12,43 @@ import javax.swing.text.BadLocationException;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Application implements Runnable {
+public class Application implements Runnable, ViewContainer {
 
-    private Console console;
-    private CommandInput commandInput;
-    private Menu menu;
-    private JFrame frame;
+    protected JFrame frame;
+
+    // view components
+    protected Console console;
+    protected CommandInput commandInput;
+    protected WordPromptRow wordPromptRow;
+    protected Menu menu;
+
+    // control components
     private CommandHandler commandHandler;
+    private CommandKeyEntryHandler commandKeyEntryHandler;
+    private MenuItemHandler menuItemHandler;
+    private UserPreferencesHandler userPreferencesHandler;
 
     public Application() {
-        // Three view components make up the GUI for this application - console, menu and commandInput
-        console = new Console(this, 100);
-        commandInput = new CommandInput(this);
-        menu = new Menu(this);
+        // initialize preferences with defaults
+        UserPreferences defaultPrefs = new UserPreferences();
 
-        this.commandHandler = new SystemCommandHandler();
+        // initialize handlers for the various backends
+        //   handlers can call app for views and other handlers
+        this.userPreferencesHandler = new UserPreferencesHandler(defaultPrefs);
+        this.commandHandler = new EchoCommandHandler(this);
+        this.menuItemHandler = new StandardMenuItemHandler(this, userPreferencesHandler);
+        this.commandKeyEntryHandler = new CommandKeyEntryHandler(this);
+
+        // initialize the view components that make up the GUI for this application
+        //   views can reference handlers, but not app or other views directly
+        //   pass in the default userPreferences (read-only methods)
+        this.console = new Console(defaultPrefs);
+        this.commandInput = new CommandInput(defaultPrefs, commandHandler, commandKeyEntryHandler);
+        this.menu = new Menu(defaultPrefs, menuItemHandler);
+        this.wordPromptRow = new WordPromptRow(defaultPrefs);
     }
 
     public static void main(String[] args) {
@@ -41,22 +64,30 @@ public class Application implements Runnable {
             console.addLine(initialLine);
             console.addLine(new StyledLine("styled text terminal", TextStyle.MINIMAL));
             StyledLine quoteLine = new StyledLine();
-            quoteLine.addFragment("'Never give a sword to a man who can't Dance'", TextStyle.DIALOG);
-            quoteLine.addFragment(" - Confucius", TextStyle.REGULAR);
+            quoteLine.addFragment("'Never give a sword to a man who can't dance'", TextStyle.DIALOG);
+            quoteLine.addFragment(" - Confucius", TextStyle.ITALIC);
             console.addLine(quoteLine);
-            console.addLine(new StyledLine("Enter 'exit' to close the application.", TextStyle.SYSTEM));
 
+            console.addLine(new StyledLine("This is BIG!", TextStyle.LARGE));
+            console.addLine(new StyledLine("This is tiny!", TextStyle.SMALL));
+            console.addLine(new StyledLine("Enter 'exit' to close the application.", TextStyle.SYSTEM));
         } catch (BadLocationException e) {
             e.printStackTrace();
         }
+
+        // should the following happen in the buildUI section before setVisible?
+        UserPreferences loadedPrefs = userPreferencesHandler.loadPreferences();
+        if (!loadedPrefs.getProperties().isEmpty()) {
+            refreshViews(loadedPrefs);
+        }
     }
 
-    private void buildUI() {
+    protected void buildUI() {
         JFrame.setDefaultLookAndFeelDecorated(true);
 
         frame = new JFrame("Consola");
 
-        frame.setIconImage(Utils.getIcon("tetra").getImage());
+        frame.setIconImage(IconUtils.getIcon("tetra").getImage());
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.addWindowListener( new WindowAdapter() {
             public void windowOpened( WindowEvent e ){
@@ -70,40 +101,47 @@ public class Application implements Runnable {
 
         frame.setJMenuBar(menu.buildUI());
         frame.add(console.buildUI(), BorderLayout.CENTER);
-        frame.add(commandInput.buildUI(), BorderLayout.SOUTH);
+
+        JPanel southComponents = new JPanel(new BorderLayout());
+        southComponents.add(wordPromptRow.buildUI(), BorderLayout.CENTER);
+        southComponents.add(commandInput.buildUI(), BorderLayout.SOUTH);
+        frame.add(southComponents, BorderLayout.SOUTH);
 
         frame.setSize(800, 640);
         frame.setVisible(true);
     }
 
-    public void processCommand(String command) {
-        if ("exit".equalsIgnoreCase(command)) {
-            exitApp();
-        }
-
-        Response response = commandHandler.processCommand(command);
-        for (StyledLine responseLine : response.getOutputDisplay()) {
-            try {
-                console.addLine(responseLine);
-            } catch (BadLocationException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void processMenuItem(String menuItemId) {
-        switch (menuItemId) {
-            case Menu.APP_EXIT: exitApp(); break;
-            case Menu.THEME_STD_DARK: console.setTheme(Menu.THEME_STD_DARK); break;
-            case Menu.THEME_STD_LIGHT: console.setTheme(Menu.THEME_STD_LIGHT); break;
-            case Menu.VIEW_INC_FONT: console.incrementFont(1); break;
-            case Menu.VIEW_DEC_FONT: console.incrementFont(-1); break;
-            default: System.err.println("Menu action " + menuItemId + " not implemented");
-        }
+    private void refreshViews(UserPreferences loadedPrefs) {
+        allViews().forEach(view -> view.applyPreferences(loadedPrefs));
     }
 
     public void exitApp() {
         frame.dispose();
+    }
+
+    public Console getConsole() {
+        return console;
+    }
+
+    public CommandInput getCommandInput() {
+        return commandInput;
+    }
+
+    public WordPromptRow getWordPromptRow() {
+        return wordPromptRow;
+    }
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public List<ViewComponent> allViews() {
+        List<ViewComponent> views = new ArrayList<>();
+        views.add(console);
+        views.add(commandInput);
+        views.add(wordPromptRow);
+        views.add(menu);
+        return views;
     }
 
 }

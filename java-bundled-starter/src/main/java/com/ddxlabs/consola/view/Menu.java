@@ -1,6 +1,8 @@
 package com.ddxlabs.consola.view;
 
 import com.ddxlabs.consola.Application;
+import com.ddxlabs.consola.MenuItemHandler;
+import com.ddxlabs.consola.UserPreferences;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,14 +18,17 @@ public class Menu implements ViewComponent {
     public static final String APP_EXIT = "app_exit";
     public static final String THEME_STD_DARK = "theme_std_dark";
     public static final String THEME_STD_LIGHT = "theme_std_light";
+    public static final String THEME_OCEAN = "theme_ocean_dark";
     public static final String HELP_ABOUT = "help_about";
     public static final String VIEW_INC_FONT = "view_inc_font";
     public static final String VIEW_DEC_FONT = "view_dec_font";
-    private Application app;
+
+    private MenuItemHandler menuHandler;
+
     private JMenuBar menuBar;
 
-    public Menu(Application app) {
-        this.app = app;
+    public Menu(UserPreferences defaultPrefs, MenuItemHandler menuItemHandler) {
+        this.menuHandler = menuItemHandler;
     }
 
     public JMenuBar buildUI() {
@@ -42,6 +47,7 @@ public class Menu implements ViewComponent {
         viewMenu.add(themeMenu);
         this.addMenuItem(themeMenu, "Standard Dark", THEME_STD_DARK, 0);
         this.addMenuItem(themeMenu, "Standard Light", THEME_STD_LIGHT, 0);
+        this.addMenuItem(themeMenu, "Ocean", THEME_OCEAN, 0);
         this.addMenuItem(viewMenu, "Increment Font Size", VIEW_INC_FONT, 0);
         this.addMenuItem(viewMenu, "Decrement Font Size", VIEW_DEC_FONT, 0);
         menuBar.add(viewMenu);
@@ -53,6 +59,11 @@ public class Menu implements ViewComponent {
         return menuBar;
     }
 
+    @Override
+    public void applyPreferences(UserPreferences preferences) {
+
+    }
+
     private void addMenuItem(JMenu menu, String itemTitle, String itemId, int mnemonic) {
         JMenuItem menuItem = new JMenuItem(itemTitle);
         if (mnemonic>0) {
@@ -60,7 +71,7 @@ public class Menu implements ViewComponent {
         }
 
         menuItem.addActionListener(e ->
-            Menu.this.app.processMenuItem(itemId)
+            menuHandler.processMenuItem(itemId)
         );
         menu.add(menuItem);
     }

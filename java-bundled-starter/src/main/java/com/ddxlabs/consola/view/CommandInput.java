@@ -1,22 +1,46 @@
 package com.ddxlabs.consola.view;
 
-import com.ddxlabs.consola.Application;
+import com.ddxlabs.consola.CommandHandler;
+import com.ddxlabs.consola.CommandKeyEntryHandler;
+import com.ddxlabs.consola.UserPreferences;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.LinkedList;
 
 /**
  * Created on 5/30/2019.
  */
 public class CommandInput implements ViewComponent {
 
-    private Application app;
-    private JTextField inputField;
-    private JLabel commandLabel;
+    private static final int MAX_HISTORY_COMMANDS = 50;
 
-    public CommandInput(Application app) {
-        this.app = app;
+    /**
+     *   Used to process the full command when enter is pressed.
+     */
+    private CommandHandler commandHandler;
+
+    /**
+     *   Processes the current input for any key entry.
+     */
+    private CommandKeyEntryHandler commandKeyEntryHandler;
+
+    private JTextField inputField;
+    private JComboBox<String> subjectDropdown;
+
+    /**
+     *   Maintain a list of commands that you can navigate back to using the arrow keys.
+     */
+    private LinkedList<String> commandHistory;
+    private int backPointer = 0;
+
+    public CommandInput(UserPreferences defaultPrefs, CommandHandler commandHandler, CommandKeyEntryHandler commandKeyEntryHandler) {
+        this.commandHandler = commandHandler;
+        this.commandKeyEntryHandler = commandKeyEntryHandler;
+        this.commandHistory = new LinkedList<>();
     }
 
     public JComponent buildUI() {
@@ -33,17 +57,81 @@ public class CommandInput implements ViewComponent {
         inputField.setCaret(new SolidCaret());
         inputField.addActionListener(e -> {
             String input = inputField.getText();
-            CommandInput.this.app.processCommand(input);
+
+            // maintain a history of command entries for up/down arrows
+            if (commandHistory.size()>=MAX_HISTORY_COMMANDS) {
+                commandHistory.removeFirst();
+            }
+            commandHistory.add(input);
+
+            // reset the backPointer
+            backPointer = commandHistory.size();  // points to the head of the index
+
+            CommandInput.this.commandHandler.processCommand((String)subjectDropdown.getSelectedItem(), input);
             inputField.setText("");
         });
 
+        inputField.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent keyEvent) {
+            }
 
-        commandLabel = new JLabel("Command > ");
-        commandLabel.setFont(inputFont);
+            @Override
+            public void keyPressed(KeyEvent keyEvent) {
+                int keyCode = keyEvent.getKeyCode();
+                switch( keyCode ) {
+                    case KeyEvent.VK_UP:
+                        // go back into history and pull up the last command
+                        if (backPointer>0) {
+                            inputField.setText(commandHistory.get(backPointer-1));
+                            backPointer--;
+                            if (backPointer < 1) {
+                                // dont go past the first element
+                                backPointer = 1;
+                            }
+                        }
+                        break;
+
+                    case KeyEvent.VK_DOWN:
+                        // go forward in history
+                        if (backPointer<commandHistory.size()) {
+                            // only works if we've gone back
+                            inputField.setText(commandHistory.get(backPointer));
+                            backPointer++;
+                        } else {
+                            inputField.setText("");
+                        }
+                        break;
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent keyEvent) {
+                commandKeyEntryHandler.processInput(inputField.getText());
+            }
+        });
+
+        // TODO - load values from possible subjects
+        String[] subjectOptions = { "command" };
+        subjectDropdown = new JComboBox<String>(subjectOptions);
+        subjectDropdown.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> jList, Object value, int idx, boolean isSelected, boolean cellHasFocus) {
+                JComponent comp = (JComponent) super.getListCellRendererComponent(jList, value, idx, isSelected, cellHasFocus);
+                comp.setBorder(new EmptyBorder(3, 3, 3, 3));
+                return comp;
+            }
+        });
+        subjectDropdown.setFont(inputFont);
 
         outerPanel.add(inputField, BorderLayout.CENTER);
-        outerPanel.add(commandLabel, BorderLayout.WEST);
+        outerPanel.add(subjectDropdown, BorderLayout.WEST);
         return outerPanel;
+    }
+
+    @Override
+    public void applyPreferences(UserPreferences preferences) {
+
     }
 
     public void setFocus() {
