@@ -11,6 +11,7 @@ import java.util.Collection;
  *  Row that sits above the Command Input, used to hint at the possible words to enter.
  *
  *  Rules:
+ *  = only prompts if the word fragment is at least 3 characters
  *  - character upper limit for row (if number of possible words cause overflow, then don't display)
  *  - as the user types into the command input field, the number of words decreases, and this row is refreshed
  *  - after a space is entered, the word list resets
@@ -27,9 +28,6 @@ public class WordPromptRow implements ViewComponent {
     private static final float FONT_DROP_PCT = 0.8f;
 
     public WordPromptRow(UserPreferences defaultPrefs) {
-        int fontBaseSize = defaultPrefs.getIntPreference(UserPreferences.KEY_BASE_FONT_SIZE);
-
-
         this.currentTheme = new TextTheme(defaultPrefs);
     }
 
@@ -37,15 +35,18 @@ public class WordPromptRow implements ViewComponent {
     public JComponent buildUI() {
         JPanel outerPanel = new JPanel(new BorderLayout());
         int pad = currentTheme.getBasePadding();
-        outerPanel.setBorder(new EmptyBorder(pad, pad, 0, 0));
+        outerPanel.setBorder(new EmptyBorder(pad, pad, 0, pad));
 
         wordsField = new JLabel("***");
+        wordsField.setOpaque(true);
         wordsField.setBorder(BorderFactory.createCompoundBorder(
                 wordsField.getBorder(),
-                BorderFactory.createEmptyBorder(pad, pad, 0, 0)));
+                BorderFactory.createEmptyBorder(pad, pad, pad, 0)));
 
         refreshFont();
         refreshTheme();
+
+        outerPanel.add(wordsField);
 
         return outerPanel;
     }
@@ -69,9 +70,11 @@ public class WordPromptRow implements ViewComponent {
 
     public void updateWords(Collection<String> wordsList) {
         if (wordsList!=null && !wordsList.isEmpty()) {
+            System.out.println("updating prompt words with " + wordsList.size() + " words");
             wordsField.setText(String.join(" ", wordsList));
             wordsField.setForeground(currentTheme.getColorTheme().sysColor);
         } else {
+            System.out.println("updating prompt words to empty");
             wordsField.setText("***");
             // hide the text
             wordsField.setForeground(currentTheme.getColorTheme().bgColor);

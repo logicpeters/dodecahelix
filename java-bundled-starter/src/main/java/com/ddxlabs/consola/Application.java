@@ -27,7 +27,7 @@ public class Application implements Runnable, ViewContainer {
 
     // control components
     private CommandHandler commandHandler;
-    private CommandKeyEntryHandler commandKeyEntryHandler;
+    private WordPromptHandler wordPromptHandler;
     private MenuItemHandler menuItemHandler;
     private UserPreferencesHandler userPreferencesHandler;
 
@@ -40,13 +40,13 @@ public class Application implements Runnable, ViewContainer {
         this.userPreferencesHandler = new UserPreferencesHandler(defaultPrefs);
         this.commandHandler = new EchoCommandHandler(this);
         this.menuItemHandler = new StandardMenuItemHandler(this, userPreferencesHandler);
-        this.commandKeyEntryHandler = new CommandKeyEntryHandler(this);
+        this.wordPromptHandler = new WordPromptHandler(this);
 
         // initialize the view components that make up the GUI for this application
         //   views can reference handlers, but not app or other views directly
         //   pass in the default userPreferences (read-only methods)
         this.console = new Console(defaultPrefs);
-        this.commandInput = new CommandInput(defaultPrefs, commandHandler, commandKeyEntryHandler);
+        this.commandInput = new CommandInput(defaultPrefs, commandHandler, wordPromptHandler);
         this.menu = new Menu(defaultPrefs, menuItemHandler);
         this.wordPromptRow = new WordPromptRow(defaultPrefs);
     }

@@ -1,7 +1,7 @@
 package com.ddxlabs.consola.view;
 
 import com.ddxlabs.consola.CommandHandler;
-import com.ddxlabs.consola.CommandKeyEntryHandler;
+import com.ddxlabs.consola.WordPromptHandler;
 import com.ddxlabs.consola.UserPreferences;
 
 import javax.swing.*;
@@ -26,7 +26,7 @@ public class CommandInput implements ViewComponent {
     /**
      *   Processes the current input for any key entry.
      */
-    private CommandKeyEntryHandler commandKeyEntryHandler;
+    private WordPromptHandler wordPromptHandler;
 
     private JTextField inputField;
     private JComboBox<String> subjectDropdown;
@@ -37,9 +37,9 @@ public class CommandInput implements ViewComponent {
     private LinkedList<String> commandHistory;
     private int backPointer = 0;
 
-    public CommandInput(UserPreferences defaultPrefs, CommandHandler commandHandler, CommandKeyEntryHandler commandKeyEntryHandler) {
+    public CommandInput(UserPreferences defaultPrefs, CommandHandler commandHandler, WordPromptHandler wordPromptHandler) {
         this.commandHandler = commandHandler;
-        this.commandKeyEntryHandler = commandKeyEntryHandler;
+        this.wordPromptHandler = wordPromptHandler;
         this.commandHistory = new LinkedList<>();
     }
 
@@ -107,7 +107,7 @@ public class CommandInput implements ViewComponent {
 
             @Override
             public void keyReleased(KeyEvent keyEvent) {
-                commandKeyEntryHandler.processInput(inputField.getText());
+                wordPromptHandler.processInput(inputField.getText());
             }
         });
 
