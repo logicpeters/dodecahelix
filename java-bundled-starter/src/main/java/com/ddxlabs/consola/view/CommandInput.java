@@ -1,5 +1,6 @@
 package com.ddxlabs.consola.view;
 
+import com.ddxlabs.consola.AutofillHandler;
 import com.ddxlabs.consola.CommandHandler;
 import com.ddxlabs.consola.WordPromptHandler;
 import com.ddxlabs.consola.UserPreferences;
@@ -19,28 +20,37 @@ public class CommandInput implements ViewComponent {
     private static final int MAX_HISTORY_COMMANDS = 50;
 
     /**
-     *   Used to process the full command when enter is pressed.
+     * Used to process the full command when enter is pressed.
      */
     private CommandHandler commandHandler;
 
     /**
-     *   Processes the current input for any key entry.
+     * Processes the current input for any key entry.
      */
     private WordPromptHandler wordPromptHandler;
+
+    /**
+     *  When a tab is pressed, attempt autofill.
+     */
+    private AutofillHandler autofillHandler;
 
     private JTextField inputField;
     private JComboBox<String> subjectDropdown;
 
     /**
-     *   Maintain a list of commands that you can navigate back to using the arrow keys.
+     * Maintain a list of commands that you can navigate back to using the arrow keys.
      */
     private LinkedList<String> commandHistory;
     private int backPointer = 0;
 
-    public CommandInput(UserPreferences defaultPrefs, CommandHandler commandHandler, WordPromptHandler wordPromptHandler) {
+    public CommandInput(UserPreferences defaultPrefs,
+                        CommandHandler commandHandler,
+                        WordPromptHandler wordPromptHandler,
+                        AutofillHandler autofillHandler) {
         this.commandHandler = commandHandler;
         this.wordPromptHandler = wordPromptHandler;
         this.commandHistory = new LinkedList<>();
+        this.autofillHandler = autofillHandler;
     }
 
     public JComponent buildUI() {
@@ -55,11 +65,15 @@ public class CommandInput implements ViewComponent {
         Font inputFont = new Font("Courier New", Font.PLAIN, 18);
         inputField.setFont(inputFont);
         inputField.setCaret(new SolidCaret());
+
+        // tabbing should be used for autofill, not focus
+        inputField.setFocusTraversalKeysEnabled(false);
+
         inputField.addActionListener(e -> {
             String input = inputField.getText();
 
             // maintain a history of command entries for up/down arrows
-            if (commandHistory.size()>=MAX_HISTORY_COMMANDS) {
+            if (commandHistory.size() >= MAX_HISTORY_COMMANDS) {
                 commandHistory.removeFirst();
             }
             commandHistory.add(input);
@@ -67,7 +81,7 @@ public class CommandInput implements ViewComponent {
             // reset the backPointer
             backPointer = commandHistory.size();  // points to the head of the index
 
-            CommandInput.this.commandHandler.processCommand((String)subjectDropdown.getSelectedItem(), input);
+            CommandInput.this.commandHandler.processCommand((String) subjectDropdown.getSelectedItem(), input);
             inputField.setText("");
         });
 
@@ -78,12 +92,18 @@ public class CommandInput implements ViewComponent {
 
             @Override
             public void keyPressed(KeyEvent keyEvent) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent keyEvent) {
+                wordPromptHandler.processInput(inputField.getText());
+
                 int keyCode = keyEvent.getKeyCode();
-                switch( keyCode ) {
+                switch (keyCode) {
                     case KeyEvent.VK_UP:
                         // go back into history and pull up the last command
-                        if (backPointer>0) {
-                            inputField.setText(commandHistory.get(backPointer-1));
+                        if (backPointer > 0) {
+                            inputField.setText(commandHistory.get(backPointer - 1));
                             backPointer--;
                             if (backPointer < 1) {
                                 // dont go past the first element
@@ -94,7 +114,7 @@ public class CommandInput implements ViewComponent {
 
                     case KeyEvent.VK_DOWN:
                         // go forward in history
-                        if (backPointer<commandHistory.size()) {
+                        if (backPointer < commandHistory.size()) {
                             // only works if we've gone back
                             inputField.setText(commandHistory.get(backPointer));
                             backPointer++;
@@ -102,17 +122,16 @@ public class CommandInput implements ViewComponent {
                             inputField.setText("");
                         }
                         break;
-                }
-            }
 
-            @Override
-            public void keyReleased(KeyEvent keyEvent) {
-                wordPromptHandler.processInput(inputField.getText());
+                    case KeyEvent.VK_TAB:
+                        autofillHandler.autofill();
+                        break;
+                }
             }
         });
 
         // TODO - load values from possible subjects
-        String[] subjectOptions = { "command" };
+        String[] subjectOptions = {"command"};
         subjectDropdown = new JComboBox<String>(subjectOptions);
         subjectDropdown.setRenderer(new DefaultListCellRenderer() {
             @Override
@@ -127,6 +146,21 @@ public class CommandInput implements ViewComponent {
         outerPanel.add(inputField, BorderLayout.CENTER);
         outerPanel.add(subjectDropdown, BorderLayout.WEST);
         return outerPanel;
+    }
+
+    public void autofill(String word) {
+        String currentCommand = inputField.getText();
+
+        int i = currentCommand.lastIndexOf(" ");
+        if (i > 0) {
+            // only interested in the last word fragment of the input
+            inputField.setText(currentCommand.substring(0, i) + " " + word);
+        } else {
+            inputField.setText(word);
+        }
+
+        // clear word prompts
+        wordPromptHandler.processInput("*");
     }
 
     @Override

@@ -5,11 +5,12 @@ import com.ddxlabs.consola.view.WordPromptRow;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- *  Processes any typed letter (or space) input that is sent from the CommandInput view.
+ *  Responsible for type-ahead word prompting for the command input.
  */
 public class WordPromptHandler {
 
@@ -24,8 +25,6 @@ public class WordPromptHandler {
      *  Current set of words that the entry can resolve to
      */
     private Set<String> availableWords;
-
-    private WordPromptRow wordPromptRow;
 
     WordPromptHandler(ViewContainer app) {
         this.app = app;
@@ -45,6 +44,7 @@ public class WordPromptHandler {
             row.updateWords(Collections.emptyList());
             this.currentInput = "";
         } else if (newInput.length()<=2) {
+            // clear the prompt if the fragment is less than 3 characters
             row.updateWords(Collections.emptyList());
         }
 
@@ -52,15 +52,9 @@ public class WordPromptHandler {
         if (newInput.length()>2 && !newInput.equalsIgnoreCase(currentInput)) {
             this.currentInput = newInput;
 
-            String formingWord = currentInput;
-            int i = currentInput.lastIndexOf(" ");
-            if (i>0) {
-                // only interested in the last word fragment of the input
-                formingWord = currentInput.substring(i+1);
-                System.out.println("chopping input to " + formingWord);
-            }
+            String formingWord = getFormingWord();
 
-            // only start word prompt if you have at least 2 characters in the word
+            // only provide word prompt if you have at least 2 characters in the word
             if (formingWord.length()>2) {
                 row.updateWords(getPromptWordsFromStub(formingWord));
             }
@@ -68,10 +62,41 @@ public class WordPromptHandler {
         }
     }
 
+    /**
+     *  Retrieves the last word that is just forming in the current command.
+     *
+     * @return
+     */
+    private String getFormingWord() {
+        String formingWord = currentInput;
+
+        // only resolve for the currently forming word
+        int i = currentInput.lastIndexOf(" ");
+        if (i>0) {
+            // only interested in the last word fragment of the input
+            formingWord = currentInput.substring(i+1);
+        }
+
+        return formingWord;
+    }
+
     private Collection<String> getPromptWordsFromStub(String formingWord) {
         // TODO - logic for prompt resolution goes here
 
         return availableWords.stream().filter(word -> word.startsWith(formingWord)).collect(Collectors.toUnmodifiableList());
+    }
+
+    /**
+     *  If there is only one possible prompt available, return it, otherwise return empty.
+     *
+     * @return
+     */
+    Optional<String> onlyWord() {
+        Collection<String> prompts = getPromptWordsFromStub(getFormingWord());
+        if (prompts.size()==1) {
+            return Optional.of(prompts.iterator().next());
+        }
+        return Optional.empty();
     }
 
 }

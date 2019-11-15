@@ -70,11 +70,9 @@ public class WordPromptRow implements ViewComponent {
 
     public void updateWords(Collection<String> wordsList) {
         if (wordsList!=null && !wordsList.isEmpty()) {
-            System.out.println("updating prompt words with " + wordsList.size() + " words");
             wordsField.setText(String.join(" ", wordsList));
             wordsField.setForeground(currentTheme.getColorTheme().sysColor);
         } else {
-            System.out.println("updating prompt words to empty");
             wordsField.setText("***");
             // hide the text
             wordsField.setForeground(currentTheme.getColorTheme().bgColor);

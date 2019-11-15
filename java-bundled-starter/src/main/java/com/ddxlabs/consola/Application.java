@@ -30,6 +30,7 @@ public class Application implements Runnable, ViewContainer {
     private WordPromptHandler wordPromptHandler;
     private MenuItemHandler menuItemHandler;
     private UserPreferencesHandler userPreferencesHandler;
+    private AutofillHandler autofillHandler;
 
     public Application() {
         // initialize preferences with defaults
@@ -41,12 +42,13 @@ public class Application implements Runnable, ViewContainer {
         this.commandHandler = new EchoCommandHandler(this);
         this.menuItemHandler = new StandardMenuItemHandler(this, userPreferencesHandler);
         this.wordPromptHandler = new WordPromptHandler(this);
+        this.autofillHandler = new AutofillHandler(this, wordPromptHandler);
 
         // initialize the view components that make up the GUI for this application
         //   views can reference handlers, but not app or other views directly
         //   pass in the default userPreferences (read-only methods)
         this.console = new Console(defaultPrefs);
-        this.commandInput = new CommandInput(defaultPrefs, commandHandler, wordPromptHandler);
+        this.commandInput = new CommandInput(defaultPrefs, commandHandler, wordPromptHandler, autofillHandler);
         this.menu = new Menu(defaultPrefs, menuItemHandler);
         this.wordPromptRow = new WordPromptRow(defaultPrefs);
     }
