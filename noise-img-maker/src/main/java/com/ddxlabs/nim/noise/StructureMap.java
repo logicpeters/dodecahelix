@@ -55,6 +55,15 @@ public class StructureMap {
         this.moduleQualifiers.put(rootModuleId, rootModuleQualifier);
     }
 
+    public void setRootModule(String moduleId) {
+        this.rootModuleId = moduleId;
+    }
+
+    public void addNewModule(NmType type, String moduleId, String qualifier) {
+        this.moduleTypes.put(moduleId, type);
+        this.moduleQualifiers.put(moduleId, qualifier);
+    }
+
     public void addModifier(String baseModuleId, String modifierModuleId, String modifiderQualifier) {
         this.moduleTypes.put(modifierModuleId, NmType.MODIFIER);
         this.moduleQualifiers.put(modifierModuleId, modifiderQualifier);

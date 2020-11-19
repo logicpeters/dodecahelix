@@ -16,14 +16,19 @@ public class Controllers {
 
     public Controllers(UserPreferences preferences) {
         this.preferences = preferences;
+        this.moduleHandler = new ModuleHandler(preferences);
+        this.userPreferencesHandler = new UserPreferencesHandler(preferences);
+        this.menuItemHandler = new MenuItemHandler(preferences);
+        this.imageGenerationHandler = new ImageGenerationHandler(preferences);
+        this.systemHandler = new SystemHandler(preferences);
     }
 
     public void init(Views views, Models models, Application application) {
-        this.moduleHandler = new ModuleHandler(this, views, models, preferences);
-        this.userPreferencesHandler = new UserPreferencesHandler(this, views, models, preferences);
-        this.menuItemHandler = new MenuItemHandler(this, views, models, preferences);
-        this.imageGenerationHandler = new ImageGenerationHandler(this, views, models, preferences);
-        this.systemHandler = new SystemHandler(this, views, models, preferences);
+        this.moduleHandler.init(this, views, models);
+        this.userPreferencesHandler.init(this, views, models);
+        this.menuItemHandler.init(this, views, models);
+        this.imageGenerationHandler.init(this, views, models);
+        this.systemHandler.init(this, views, models);
     }
 
     public ImageGenerationHandler getImageGenerationHandler() {

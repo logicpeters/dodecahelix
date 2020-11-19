@@ -17,14 +17,17 @@ import java.io.IOException;
 
 public class ImageGenerationHandler implements ControllerComponent {
 
-    private UserPreferences prefs;
+    private final UserPreferences prefs;
     private NmBuilder moduleBuilder;
 
     private JFrame reusableFrame;
     private JLabel imageLabel;
 
-    public ImageGenerationHandler(Controllers controllers, Views views, Models models, UserPreferences prefs) {
+    public ImageGenerationHandler(UserPreferences prefs) {
         this.prefs = prefs;
+    }
+
+    public void init(Controllers controllers, Views views, Models models) {
         this.moduleBuilder = models.getNmBuilder();
     }
 

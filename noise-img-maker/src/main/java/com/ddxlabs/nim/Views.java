@@ -14,12 +14,15 @@ public class Views {
 
     public Views(UserPreferences preferences) {
         this.preferences = preferences;
+        this.menu = new Menu(preferences);
+        this.generatorRow = new GeneratorRow(preferences);
+        this.moduleTabs = new ModuleTabs(preferences);
     }
 
     public void init(Controllers controllers) {
-        this.menu = new Menu(preferences, controllers);
-        this.moduleTabs = new ModuleTabs(preferences, controllers);
-        this.generatorRow = new GeneratorRow(preferences, controllers);
+        this.menu.init(controllers);
+        this.moduleTabs.init(controllers);
+        this.generatorRow.init(controllers);
     }
 
     public Menu getMenu() {
@@ -41,8 +44,8 @@ public class Views {
      *   to reflect possible changes to these preferences.
      */
     public void applyPreferences() {
-        menu.applyPreferences(preferences);
-        moduleTabs.applyPreferences(preferences);
-        generatorRow.applyPreferences(preferences);
+        menu.applyPreferences();
+        moduleTabs.applyPreferences();
+        generatorRow.applyPreferences();
     }
 }

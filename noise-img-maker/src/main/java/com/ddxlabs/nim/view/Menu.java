@@ -15,6 +15,8 @@ import java.awt.event.KeyEvent;
  */
 public class Menu implements ViewComponent {
 
+    private UserPreferences preferences;
+
     public static final String FILE_OPEN = "file_open";
     public static final String FILE_SAVE = "file_save";
     public static final String APP_EXIT = "app_exit";
@@ -31,7 +33,11 @@ public class Menu implements ViewComponent {
 
     private JMenuBar menuBar;
 
-    public Menu(UserPreferences preferences, Controllers controllers) {
+    public Menu(UserPreferences preferences) {
+        this.preferences = preferences;
+    }
+
+    public void init(Controllers controllers) {
         this.menuHandler = controllers.getMenuItemHandler();
     }
 
@@ -75,8 +81,7 @@ public class Menu implements ViewComponent {
     }
 
     @Override
-    public void applyPreferences(UserPreferences preferences) {
-
+    public void applyPreferences() {
     }
 
     private void addMenuItem(JMenu menu, String itemTitle, String itemId, int mnemonic) {

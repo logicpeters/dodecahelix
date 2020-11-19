@@ -8,13 +8,18 @@ import com.ddxlabs.nim.view.Menu;
 
 public class MenuItemHandler implements ControllerComponent {
 
-    private final Views allViews;
-    private final UserPreferencesHandler prefsHandler;
-    private final SystemHandler systemHandler;
+    private Views allViews;
+    private UserPreferencesHandler prefsHandler;
+    private SystemHandler systemHandler;
+    private ModuleHandler moduleHandler;
 
-    public MenuItemHandler(Controllers controllers, Views views, Models models, UserPreferences prefs) {
+    public MenuItemHandler(UserPreferences prefs) {
+    }
+
+    public void init(Controllers controllers, Views views, Models models) {
         this.prefsHandler = controllers.getUserPreferencesHandler();
         this.systemHandler = controllers.getSystemHandler();
+        this.moduleHandler = controllers.getModuleHandler();
         this.allViews = views;
     }
 
@@ -27,7 +32,7 @@ public class MenuItemHandler implements ControllerComponent {
 
         if (menuItemId.startsWith(Menu.MODULE_ADD)) {
             int lastUnderscore = menuItemId.lastIndexOf("_");
-            String qualName = menuItemId.substring(lastUnderscore).toUpperCase();
+            String qualName = menuItemId.substring(lastUnderscore + 1).toUpperCase();
             addModule(menuItemId, qualName);
             return;
         }
@@ -45,9 +50,11 @@ public class MenuItemHandler implements ControllerComponent {
     private void addModule(String menuItemId, String qualName) {
         if (menuItemId.startsWith(Menu.MODULE_ADD_COMBO)) {
             ComboQualifier comboQualifier = ComboQualifier.valueOf(qualName);
+            moduleHandler.addComboModule(comboQualifier);
         }
-        if (menuItemId.startsWith(Menu.MODULE_ADD_COMBO)) {
+        if (menuItemId.startsWith(Menu.MODULE_ADD_SOURCE)) {
             SourceQualifier sourceQualifier = SourceQualifier.valueOf(qualName);
+            moduleHandler.addSourceModule(sourceQualifier);
         }
     }
 

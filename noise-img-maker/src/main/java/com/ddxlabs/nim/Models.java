@@ -10,10 +10,10 @@ public class Models {
 
     public Models(UserPreferences preferences) {
         this.preferences = preferences;
+        this.nmBuilder = new NmBuilder();
     }
 
     public void init() {
-        nmBuilder = new NmBuilder();
     }
 
     public NmBuilder getNmBuilder() {

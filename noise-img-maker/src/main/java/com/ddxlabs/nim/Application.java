@@ -49,7 +49,7 @@ public class Application implements Runnable {
         NmBuilder builder = models.getNmBuilder();
         builder.build();
         String rootModuleId = builder.getStructure().getRootModuleId();
-        views.getModuleTabs().addModule(NmType.SOURCE, rootModuleId, builder.getStructure(), builder.getParams());
+        views.getModuleTabs().addModule(NmType.SOURCE, rootModuleId);
         views.getGeneratorRow().setBaseSeed(builder.getBaseSeed());
     }
 

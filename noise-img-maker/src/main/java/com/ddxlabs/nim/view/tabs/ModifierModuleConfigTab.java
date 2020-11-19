@@ -4,7 +4,7 @@ import com.ddxlabs.nim.noise.ParamsMap;
 
 public class ModifierModuleConfigTab extends ModuleConfigTab {
 
-    public ModifierModuleConfigTab(String moduleId, String qualifier, ParamsMap params) {
-        super(moduleId, qualifier, params);
+    public ModifierModuleConfigTab(String moduleId) {
+        super(moduleId);
     }
 }

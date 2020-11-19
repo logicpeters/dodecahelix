@@ -132,6 +132,7 @@ public class NoiseArtGenerator {
             Module module = (new NmBuilder(structure, params)).build();
             boolean genImg = ImageGenerator.generateImage(module, true, 5, filename + ".png",
                     1024, 1024, 128, 128, 10, 1000);
+
             if (genImg) {
                 NoiseFileBuilder.writeNoiseTreeToFile(structure, params, filename + ".csv");
                 long endTime = Calendar.getInstance().getTimeInMillis();

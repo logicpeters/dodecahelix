@@ -21,8 +21,12 @@ public class UserPreferencesHandler implements ControllerComponent {
 
     private UserPreferences prefs;
 
-    public UserPreferencesHandler(Controllers controllers, Views views, Models models, UserPreferences prefs) {
+    public UserPreferencesHandler(UserPreferences prefs) {
         this.prefs = prefs;
+    }
+
+    public void init(Controllers controllers, Views views, Models models) {
+
     }
 
     public UserPreferences getPrefs() {

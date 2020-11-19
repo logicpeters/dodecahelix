@@ -27,9 +27,13 @@ public class GeneratorRow implements ViewComponent, ActionListener {
 
     private ImageGenerationHandler imageGenHandler;
 
-    public GeneratorRow(UserPreferences defaultPrefs, Controllers controllers) {
+    public GeneratorRow(UserPreferences defaultPrefs) {
         this.textTheme = new TextTheme(defaultPrefs);
-        randomizer = new SecureRandom();
+        this.randomizer = new SecureRandom();
+    }
+
+    @Override
+    public void init(Controllers controllers) {
         this.imageGenHandler = controllers.getImageGenerationHandler();
     }
 
@@ -52,7 +56,7 @@ public class GeneratorRow implements ViewComponent, ActionListener {
     }
 
     @Override
-    public void applyPreferences(UserPreferences preferences) {
+    public void applyPreferences() {
     }
 
     public void actionPerformed(ActionEvent e) {

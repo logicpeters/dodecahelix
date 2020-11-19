@@ -20,13 +20,20 @@ public class ModuleTabs implements ViewComponent {
 
     private TextTheme textTheme;
 
+    private Controllers controllers;
+
     private Map<String, ModuleConfigTab> tabMap;
 
     private JTabbedPane tabbedPane;
 
-    public ModuleTabs(UserPreferences preferences, Controllers controllers) {
+    public ModuleTabs(UserPreferences preferences) {
         this.textTheme = new TextTheme(preferences);
         this.tabMap = new HashMap<>();
+    }
+
+    @Override
+    public void init(Controllers controllers) {
+        this.controllers = controllers;
     }
 
     @Override
@@ -36,17 +43,15 @@ public class ModuleTabs implements ViewComponent {
     }
 
     public void addModule(NmType type,
-                          String moduleId,
-                          StructureMap structure,
-                          ParamsMap params) {
+                          String moduleId) {
 
         ModuleConfigTab configTab;
-        String qualifier = structure.getQualifier(moduleId);
         switch (type) {
-            case COMBO: configTab = new CombinerModuleConfigTab(moduleId, qualifier, params); break;
-            case MODIFIER: configTab = new ModifierModuleConfigTab(moduleId, qualifier, params); break;
-            default: configTab = new SourceModuleConfigTab(moduleId, qualifier, params);
+            case COMBO: configTab = new CombinerModuleConfigTab(moduleId); break;
+            case MODIFIER: configTab = new ModifierModuleConfigTab(moduleId); break;
+            default: configTab = new SourceModuleConfigTab(moduleId);
         }
+        configTab.init(controllers);
         tabMap.put(moduleId, configTab);
         String title = moduleId.substring(0, moduleId.indexOf("-"));
         tabbedPane.addTab(title, null, configTab.buildUI(), moduleId);
@@ -57,6 +62,6 @@ public class ModuleTabs implements ViewComponent {
     }
 
     @Override
-    public void applyPreferences(UserPreferences preferences) {
+    public void applyPreferences() {
     }
 }
