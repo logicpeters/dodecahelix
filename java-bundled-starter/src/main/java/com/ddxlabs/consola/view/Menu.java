@@ -1,8 +1,7 @@
 package com.ddxlabs.consola.view;
 
-import com.ddxlabs.consola.Application;
 import com.ddxlabs.consola.MenuItemHandler;
-import com.ddxlabs.consola.UserPreferences;
+import com.ddxlabs.consola.prefs.UserPreferences;
 
 import javax.swing.*;
 import java.awt.*;

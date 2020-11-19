@@ -1,9 +1,14 @@
 package com.ddxlabs.consola;
 
+import com.ddxlabs.consola.command.AutofillHandler;
+import com.ddxlabs.consola.command.CommandHandler;
+import com.ddxlabs.consola.command.WordPromptHandler;
+import com.ddxlabs.consola.ext.EchoCommandHandler;
+import com.ddxlabs.consola.prefs.UserPreferences;
+import com.ddxlabs.consola.prefs.UserPreferencesHandler;
 import com.ddxlabs.consola.response.StyledLine;
 import com.ddxlabs.consola.response.TextStyle;
-import com.ddxlabs.consola.system.EchoCommandHandler;
-import com.ddxlabs.consola.system.StandardMenuItemHandler;
+import com.ddxlabs.consola.ext.StandardMenuItemHandler;
 import com.ddxlabs.consola.view.*;
 import com.ddxlabs.consola.view.Menu;
 
@@ -31,6 +36,7 @@ public class Application implements Runnable, ViewContainer {
     private MenuItemHandler menuItemHandler;
     private UserPreferencesHandler userPreferencesHandler;
     private AutofillHandler autofillHandler;
+    private ExitHandler exitHandler;
 
     public Application() {
         // initialize preferences with defaults
@@ -38,10 +44,11 @@ public class Application implements Runnable, ViewContainer {
 
         // initialize handlers for the various backends
         //   handlers can call app for views and other handlers
-        this.userPreferencesHandler = new UserPreferencesHandler(defaultPrefs);
-        this.commandHandler = new EchoCommandHandler(this);
-        this.menuItemHandler = new StandardMenuItemHandler(this, userPreferencesHandler);
+        this.exitHandler = new ExitHandler(this);
         this.wordPromptHandler = new WordPromptHandler(this);
+        this.commandHandler = new EchoCommandHandler(this, wordPromptHandler, exitHandler);
+        this.userPreferencesHandler = new UserPreferencesHandler(defaultPrefs);
+        this.menuItemHandler = new StandardMenuItemHandler(this, userPreferencesHandler, exitHandler);
         this.autofillHandler = new AutofillHandler(this, wordPromptHandler);
 
         // initialize the view components that make up the GUI for this application
@@ -73,15 +80,15 @@ public class Application implements Runnable, ViewContainer {
             console.addLine(new StyledLine("This is BIG!", TextStyle.LARGE));
             console.addLine(new StyledLine("This is tiny!", TextStyle.SMALL));
             console.addLine(new StyledLine("Enter 'exit' to close the application.", TextStyle.SYSTEM));
+            console.addLine(new StyledLine(""));
+
         } catch (BadLocationException e) {
             e.printStackTrace();
         }
 
         // should the following happen in the buildUI section before setVisible?
         UserPreferences loadedPrefs = userPreferencesHandler.loadPreferences();
-        if (!loadedPrefs.getProperties().isEmpty()) {
-            refreshViews(loadedPrefs);
-        }
+        refreshViews(loadedPrefs);
     }
 
     protected void buildUI() {
@@ -117,10 +124,6 @@ public class Application implements Runnable, ViewContainer {
         allViews().forEach(view -> view.applyPreferences(loadedPrefs));
     }
 
-    public void exitApp() {
-        frame.dispose();
-    }
-
     public Console getConsole() {
         return console;
     }
@@ -146,4 +149,7 @@ public class Application implements Runnable, ViewContainer {
         return views;
     }
 
+    public void disposeUI() {
+        frame.dispose();
+    }
 }

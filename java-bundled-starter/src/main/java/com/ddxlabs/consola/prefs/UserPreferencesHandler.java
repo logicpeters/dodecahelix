@@ -1,4 +1,4 @@
-package com.ddxlabs.consola;
+package com.ddxlabs.consola.prefs;
 
 import java.io.File;
 import java.io.FileOutputStream;

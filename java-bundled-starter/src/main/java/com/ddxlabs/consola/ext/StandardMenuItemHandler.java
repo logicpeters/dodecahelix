@@ -1,19 +1,21 @@
-package com.ddxlabs.consola.system;
+package com.ddxlabs.consola.ext;
 
-import com.ddxlabs.consola.Application;
+import com.ddxlabs.consola.ExitHandler;
 import com.ddxlabs.consola.MenuItemHandler;
-import com.ddxlabs.consola.UserPreferences;
-import com.ddxlabs.consola.UserPreferencesHandler;
+import com.ddxlabs.consola.prefs.UserPreferences;
+import com.ddxlabs.consola.prefs.UserPreferencesHandler;
 import com.ddxlabs.consola.view.*;
 
 public class StandardMenuItemHandler implements MenuItemHandler {
 
     private ViewContainer app;
     private UserPreferencesHandler prefsHandler;
+    private ExitHandler exitHandler;
 
-    public StandardMenuItemHandler(ViewContainer app, UserPreferencesHandler prefsHandler) {
+    public StandardMenuItemHandler(ViewContainer app, UserPreferencesHandler prefsHandler, ExitHandler exitHandler) {
         this.app = app;
         this.prefsHandler = prefsHandler;
+        this.exitHandler = exitHandler;
     }
 
     /**
@@ -24,7 +26,7 @@ public class StandardMenuItemHandler implements MenuItemHandler {
     public void processMenuItem(String menuItemId) {
         switch (menuItemId) {
             // TODO - get rid of this cast/app dependency
-            case Menu.APP_EXIT: ((Application)app).exitApp(); break;
+            case Menu.APP_EXIT: exitHandler.exit(); break;
 
             case Menu.THEME_STD_DARK: updateTheme(ColorTheme.STD_DARK); break;
             case Menu.THEME_STD_LIGHT: updateTheme(ColorTheme.STD_LIGHT); break;
@@ -38,8 +40,6 @@ public class StandardMenuItemHandler implements MenuItemHandler {
 
     private void updateTheme(ColorTheme theme) {
         prefsHandler.setPreference(UserPreferences.KEY_COLOR_THEME, theme.name());
-        //prefsHandler.savePreferences();
-
         for (ViewComponent view: this.app.allViews()) {
             view.applyPreferences(prefsHandler.getPrefs());
         }
@@ -49,8 +49,6 @@ public class StandardMenuItemHandler implements MenuItemHandler {
         int currentFontSize = prefsHandler.getPrefs().getIntPreference(UserPreferences.KEY_BASE_FONT_SIZE);
         int newFontSize = currentFontSize + 2 * incrementAmount;
         prefsHandler.setPreference(UserPreferences.KEY_BASE_FONT_SIZE, String.valueOf(newFontSize));
-        //prefsHandler.savePreferences();
-
         for (ViewComponent view: this.app.allViews()) {
             view.applyPreferences(prefsHandler.getPrefs());
         }

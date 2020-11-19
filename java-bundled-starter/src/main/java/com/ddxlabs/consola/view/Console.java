@@ -1,6 +1,7 @@
 package com.ddxlabs.consola.view;
 
 import com.ddxlabs.consola.*;
+import com.ddxlabs.consola.prefs.UserPreferences;
 import com.ddxlabs.consola.response.StyledFragment;
 import com.ddxlabs.consola.response.StyledLine;
 import com.ddxlabs.consola.response.TextStyle;

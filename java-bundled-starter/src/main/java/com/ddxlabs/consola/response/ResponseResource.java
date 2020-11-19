@@ -13,7 +13,7 @@ public class ResponseResource {
     private String category;
 
     /**
-     * Which subjects (name) has access to this resource.
+     * Which subjects (name) have access to this resource.
      *
      * Empty set indicates ALL subjects have access.
      */
@@ -32,4 +32,27 @@ public class ResponseResource {
         this.commands = new HashSet<>();
     }
 
+    public void addSubject(String subject) {
+        this.subjects.add(subject);
+    }
+
+    public void addCommand(String command) {
+        this.commands.add(command);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public Set<String> getSubjects() {
+        return subjects;
+    }
+
+    public Set<String> getCommands() {
+        return commands;
+    }
 }

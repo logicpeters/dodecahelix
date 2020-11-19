@@ -1,4 +1,4 @@
-package com.ddxlabs.consola.system;
+package com.ddxlabs.consola.ext;
 
 import com.ddxlabs.consola.Application;
 import com.ddxlabs.consola.view.IconUtils;

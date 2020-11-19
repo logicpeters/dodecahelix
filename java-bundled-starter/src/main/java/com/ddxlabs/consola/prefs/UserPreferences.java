@@ -1,4 +1,4 @@
-package com.ddxlabs.consola;
+package com.ddxlabs.consola.prefs;
 
 import com.ddxlabs.consola.view.ColorTheme;
 

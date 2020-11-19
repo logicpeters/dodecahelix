@@ -15,11 +15,11 @@ dependencies {
     implementation 'org.pushing-pixels:radiance-substance:2.0.1'
 }
 
-mainClassName = 'com.ddxlabs.consola/com.ddxlabs.consola.Application'
+mainClassName = 'com.ddxlabs.consola/com.ddxlabs.consola.ext.GridApplication'
 jar {
     manifest {
         attributes 'Implementation-Title': "consola",
-                'Main-Class': 'com.ddxlabs.consola.Application'
+                'Main-Class': 'com.ddxlabs.consola.ext.GridApplication'
     }
 }
 

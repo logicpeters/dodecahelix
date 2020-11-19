@@ -1,4 +1,4 @@
-package com.ddxlabs.consola;
+package com.ddxlabs.consola.command;
 
 import com.ddxlabs.consola.response.Response;
 

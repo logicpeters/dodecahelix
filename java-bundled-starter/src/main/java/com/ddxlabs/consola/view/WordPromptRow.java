@@ -1,6 +1,6 @@
 package com.ddxlabs.consola.view;
 
-import com.ddxlabs.consola.UserPreferences;
+import com.ddxlabs.consola.prefs.UserPreferences;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

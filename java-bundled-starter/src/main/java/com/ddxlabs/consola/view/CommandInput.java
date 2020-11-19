@@ -1,15 +1,17 @@
 package com.ddxlabs.consola.view;
 
-import com.ddxlabs.consola.AutofillHandler;
-import com.ddxlabs.consola.CommandHandler;
-import com.ddxlabs.consola.WordPromptHandler;
-import com.ddxlabs.consola.UserPreferences;
+import com.ddxlabs.consola.command.AutofillHandler;
+import com.ddxlabs.consola.command.CommandHandler;
+import com.ddxlabs.consola.command.WordPromptHandler;
+import com.ddxlabs.consola.prefs.Constants;
+import com.ddxlabs.consola.prefs.UserPreferences;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Collection;
 import java.util.LinkedList;
 
 /**
@@ -43,10 +45,13 @@ public class CommandInput implements ViewComponent {
     private LinkedList<String> commandHistory;
     private int backPointer = 0;
 
+    private String defaultSubject = Constants.DEFAULT_SUBJECT;
+
     public CommandInput(UserPreferences defaultPrefs,
                         CommandHandler commandHandler,
                         WordPromptHandler wordPromptHandler,
                         AutofillHandler autofillHandler) {
+
         this.commandHandler = commandHandler;
         this.wordPromptHandler = wordPromptHandler;
         this.commandHistory = new LinkedList<>();
@@ -131,7 +136,7 @@ public class CommandInput implements ViewComponent {
         });
 
         // TODO - load values from possible subjects
-        String[] subjectOptions = {"command"};
+        String[] subjectOptions = {this.defaultSubject};
         subjectDropdown = new JComboBox<String>(subjectOptions);
         subjectDropdown.setRenderer(new DefaultListCellRenderer() {
             @Override
@@ -144,7 +149,9 @@ public class CommandInput implements ViewComponent {
         subjectDropdown.setFont(inputFont);
 
         outerPanel.add(inputField, BorderLayout.CENTER);
-        outerPanel.add(subjectDropdown, BorderLayout.WEST);
+        if (Constants.SUBJECT_OPTIONS_ENABLED) {
+            outerPanel.add(subjectDropdown, BorderLayout.WEST);
+        }
         return outerPanel;
     }
 
@@ -172,4 +179,13 @@ public class CommandInput implements ViewComponent {
         inputField.requestFocus();
     }
 
+    public void updateSubjects(Collection<String> subjects) {
+        subjectDropdown.removeAllItems();
+        if (!subjects.isEmpty()) {
+            subjects.stream().forEach(subject -> subjectDropdown.addItem(subject));
+        } else {
+            // no subjects, use default
+            subjectDropdown.addItem(this.defaultSubject);
+        }
+    }
 }

@@ -1,12 +1,10 @@
-package com.ddxlabs.consola;
+package com.ddxlabs.consola.command;
 
+import com.ddxlabs.consola.prefs.Constants;
 import com.ddxlabs.consola.view.ViewContainer;
 import com.ddxlabs.consola.view.WordPromptRow;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -26,9 +24,9 @@ public class WordPromptHandler {
      */
     private Set<String> availableWords;
 
-    WordPromptHandler(ViewContainer app) {
+    public WordPromptHandler(ViewContainer app) {
         this.app = app;
-        this.availableWords = Set.of("cathy","catheter","category");
+        this.availableWords = new HashSet<String>(Arrays.asList(Constants.DEFAULT_COMMAND_WORDS));
     }
 
     public void setAvailableWords(Collection<String> words) {
@@ -83,11 +81,13 @@ public class WordPromptHandler {
     private Collection<String> getPromptWordsFromStub(String formingWord) {
         // TODO - logic for prompt resolution goes here
 
-        return availableWords.stream().filter(word -> word.startsWith(formingWord)).collect(Collectors.toUnmodifiableList());
+        return availableWords.stream().filter(word -> word.startsWith(formingWord)).collect(Collectors.toSet());
     }
 
     /**
      *  If there is only one possible prompt available, return it, otherwise return empty.
+     *
+     *  Used in autofill.
      *
      * @return
      */
