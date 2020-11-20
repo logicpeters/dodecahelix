@@ -1,13 +1,11 @@
 package com.ddxlabs.nim.view.tabs;
 
-import com.ddxlabs.nim.noise.ParamsMap;
 import com.ddxlabs.nim.noise.modules.ModifierQualifier;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 /**
  *  Configures a source module
@@ -21,6 +19,8 @@ public class SourceModuleConfigTab extends ModuleConfigTab {
 
     private JComboBox<String> modifierList;
 
+    private JLabel modifierLabel;
+
     public SourceModuleConfigTab(String moduleId) {
         super(moduleId);
     }
@@ -28,6 +28,16 @@ public class SourceModuleConfigTab extends ModuleConfigTab {
     @Override
     public JComponent buildUI() {
         JComponent panel = super.buildUI();
+
+        Optional<String> modifierModuleId = this.moduleHandler.getModifierFor(moduleId);
+        String modifier = "None";
+        if (modifierModuleId.isPresent()) {
+            modifier = modifierModuleId.get();
+        }
+        // TODO - update this if modifier added
+        modifierLabel = new JLabel("MODIFIER: " + modifier);
+        modifierLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+        extraLabels.add(modifierLabel);
 
         JButton makeRootButton = new JButton("Make Root");
         makeRootButton.setActionCommand("make_root");
@@ -60,4 +70,15 @@ public class SourceModuleConfigTab extends ModuleConfigTab {
         }
     }
 
+    @Override
+    public void refreshTabData() {
+        super.refreshTabData();
+
+        Optional<String> modifierModuleId = this.moduleHandler.getModifierFor(moduleId);
+        String modifier = "None";
+        if (modifierModuleId.isPresent()) {
+            modifier = modifierModuleId.get();
+        }
+        modifierLabel.setText("MODIFIER: " + modifier);
+    }
 }

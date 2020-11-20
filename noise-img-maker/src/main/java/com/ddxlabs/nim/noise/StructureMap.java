@@ -1,9 +1,6 @@
 package com.ddxlabs.nim.noise;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class StructureMap {
@@ -98,7 +95,36 @@ public class StructureMap {
     }
 
     public List<String> getChildren(String moduleId) {
-        return this.comboChildren.get(moduleId);
+        List<String> children = comboChildren.get(moduleId);
+        if (children==null) {
+            children = new ArrayList<>();
+        }
+        return children;
+    }
+
+    public List<String> getUnattachedModules() {
+        return this.moduleTypes.keySet().stream()
+                .filter(m -> !rootModuleId.equalsIgnoreCase(m))
+                .filter(m -> getParent(m).isEmpty())
+                .collect(Collectors.toList());
+    }
+
+    public Optional<String> getParent(String moduleId) {
+        for (Map.Entry<String, List<String>> entry : comboChildren.entrySet()) {
+            if (entry.getValue().contains(moduleId)) {
+                return Optional.of(entry.getKey());
+            }
+        }
+        return Optional.empty();
+    }
+
+    public Optional<String> getModified(String modifierModuleId) {
+        for (Map.Entry<String, String> entry: modifiers.entrySet()) {
+            if (entry.getValue().equalsIgnoreCase(modifierModuleId)) {
+                return Optional.of(entry.getKey());
+            }
+        }
+        return Optional.empty();
     }
 
     public List<String> asCsvList() {
@@ -147,4 +173,6 @@ public class StructureMap {
             }
         }
     }
+
+
 }

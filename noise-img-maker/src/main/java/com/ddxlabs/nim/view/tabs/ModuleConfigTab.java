@@ -1,9 +1,7 @@
 package com.ddxlabs.nim.view.tabs;
 
 import com.ddxlabs.nim.Controllers;
-import com.ddxlabs.nim.UserPreferences;
 import com.ddxlabs.nim.controller.ModuleHandler;
-import com.ddxlabs.nim.noise.ParamsMap;
 import com.ddxlabs.nim.view.ViewComponent;
 
 import javax.swing.*;
@@ -33,8 +31,13 @@ public abstract class ModuleConfigTab implements ViewComponent, TableModelListen
 
     private ParamsMapTableModel tableModel;
 
+    protected JPanel extraLabels;
+
     protected JPanel actionsRow;
-    private JLabel modifierLabel;
+
+    private ClickableModuleIdLabel parentLabel;
+
+    private JLabel isRootLabel;
 
     public ModuleConfigTab(String moduleId) {
         this.moduleId = moduleId;
@@ -51,29 +54,41 @@ public abstract class ModuleConfigTab implements ViewComponent, TableModelListen
         panel.setLayout(layout);
 
         JLabel moduleLabel = new JLabel("ID: " + moduleId);
+        moduleLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
         panel.add(moduleLabel);
 
         String qualifier = this.moduleHandler.getQualifierForModule(moduleId);
         JLabel qualifierLabel = new JLabel("TYPE: " + qualifier);
+        qualifierLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
         panel.add(qualifierLabel);
 
-        Optional<String> modifierModuleId = this.moduleHandler.getModifierModuleId(moduleId);
-        String modifier = "None";
-        if (modifierModuleId.isPresent()) {
-            modifier = modifierModuleId.get();
-        }
-        // TODO - update this if modifier added
-        modifierLabel = new JLabel("MODIFIER: " + modifier);
-        panel.add(modifierLabel);
+        boolean isRoot = this.moduleHandler.isModuleRoot(moduleId);
+        isRootLabel = new JLabel("IS ROOT: " + isRoot);
+        isRootLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+        panel.add(isRootLabel);
 
-        FlowLayout flowLayout = new FlowLayout();
-        flowLayout.setHgap(10);
-        actionsRow = new JPanel(flowLayout);
+        // whether ot not this module is attached to the structure?
+
+        parentLabel = new ClickableModuleIdLabel("PARENT: %s", this.moduleHandler);
+        Optional<String> parent = this.moduleHandler.getParent(moduleId);
+        parent.ifPresent(s -> parentLabel.setModuleId(s));
+        parentLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+        panel.add(parentLabel);
+
+        // this should be populated in the subclass
+        extraLabels = new JPanel();
+        extraLabels.setLayout(new BoxLayout(extraLabels, BoxLayout.Y_AXIS));
+        extraLabels.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+        panel.add(extraLabels);
+
+        actionsRow = new JPanel();
+        actionsRow.setLayout(new BoxLayout(actionsRow, BoxLayout.X_AXIS));
         actionsRow.setAlignmentX( Component.LEFT_ALIGNMENT );//0.0
         JButton validateButton = new JButton("Validate");
         validateButton.setActionCommand("validate");
         validateButton.addActionListener(this);
         actionsRow.add(validateButton);
+        actionsRow.setAlignmentX(JLabel.LEFT_ALIGNMENT);
         panel.add(actionsRow);
 
         panel.add(buildParamsMapTable());
@@ -149,4 +164,20 @@ public abstract class ModuleConfigTab implements ViewComponent, TableModelListen
             this.moduleHandler.setRootModule(moduleId);
         }
     }
+
+    public void refreshTabData() {
+        // refresh the tab fields following a model change, such as adding a new module
+        boolean isRoot = this.moduleHandler.isModuleRoot(moduleId);
+        isRootLabel.setText("IS ROOT: " + isRoot);
+
+        Optional<String> parent = this.moduleHandler.getParent(moduleId);
+        if (parent.isPresent()) {
+            parentLabel.setModuleId(parent.get());
+        } else {
+            parentLabel.setNoModule();
+        }
+
+        // TODO - refresh table
+    }
+
 }
