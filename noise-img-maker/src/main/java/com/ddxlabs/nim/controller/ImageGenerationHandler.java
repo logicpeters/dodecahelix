@@ -35,10 +35,17 @@ public class ImageGenerationHandler implements ControllerComponent {
         Module module = moduleBuilder.build();
         String imageFolder = prefs.getPreference(UserPreferences.KEY_IMAGE_FOLDER) + System.getProperty("file.separator");
         String imageFilePath = imageFolder + moduleBuilder.getStructure().getRootModuleId() + ".png";
-        // TODO - get all these params from UserPrefs
+
+        boolean color = Boolean.valueOf(prefs.getPreference(UserPreferences.KEY_IMAGE_COLOR));
+        int chop = prefs.getIntPreference(UserPreferences.KEY_IMAGE_CHOP);
+        int size = prefs.getIntPreference(UserPreferences.KEY_IMAGE_PIXEL_SIZE);
+        int period = prefs.getIntPreference(UserPreferences.KEY_IMAGE_PERIOD);
+        int llkb = prefs.getIntPreference(UserPreferences.KEY_IMAGE_LOW_LIMIT_KB);
+        int hlkb = prefs.getIntPreference(UserPreferences.KEY_IMAGE_HIGH_LIMIT_KB);
+
         ImageGenerator.generateImage(module,
-                true, 5, imageFilePath,
-                1024, 1024, 128, 128, 0, 5000);
+                true, chop, imageFilePath,
+                size, size, period, period, llkb, hlkb);
         try {
             popupImage(imageFilePath, true);
         } catch (IOException e) {

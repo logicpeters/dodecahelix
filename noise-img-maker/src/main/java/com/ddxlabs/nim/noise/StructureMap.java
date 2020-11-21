@@ -78,6 +78,10 @@ public class StructureMap {
         this.comboChildren.put(comboModuleId, currentChildren);
     }
 
+    public void resetComboChildren(String comboModuleId, List<String> children) {
+        this.comboChildren.put(comboModuleId, children);
+    }
+
     public String getRootModuleId() {
         return rootModuleId;
     }
@@ -104,6 +108,7 @@ public class StructureMap {
 
     public List<String> getUnattachedModules() {
         return this.moduleTypes.keySet().stream()
+                .filter(m -> getTypeFor(m) != NmType.MODIFIER)
                 .filter(m -> !rootModuleId.equalsIgnoreCase(m))
                 .filter(m -> getParent(m).isEmpty())
                 .collect(Collectors.toList());

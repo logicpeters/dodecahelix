@@ -10,4 +10,5 @@ public class ModifierModuleConfigTab extends ModuleConfigTab {
     public void refreshTabData() {
         super.refreshTabData();
     }
+
 }

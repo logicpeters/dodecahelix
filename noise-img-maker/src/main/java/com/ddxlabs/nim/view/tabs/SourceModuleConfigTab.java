@@ -3,6 +3,7 @@ package com.ddxlabs.nim.view.tabs;
 import com.ddxlabs.nim.noise.modules.ModifierQualifier;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
 import java.util.Optional;
@@ -19,7 +20,7 @@ public class SourceModuleConfigTab extends ModuleConfigTab {
 
     private JComboBox<String> modifierList;
 
-    private JLabel modifierLabel;
+    private ClickableModuleIdLabel modifierLabel;
 
     public SourceModuleConfigTab(String moduleId) {
         super(moduleId);
@@ -34,30 +35,38 @@ public class SourceModuleConfigTab extends ModuleConfigTab {
         if (modifierModuleId.isPresent()) {
             modifier = modifierModuleId.get();
         }
-        // TODO - update this if modifier added
-        modifierLabel = new JLabel("MODIFIER: " + modifier);
+        modifierLabel = new ClickableModuleIdLabel("MODIFIER: %s", moduleHandler);
+        Optional<String> modifierOpt = this.moduleHandler.getModifierFor(moduleId);
+        modifierOpt.ifPresent(s -> modifierLabel.setModuleId(s));
         modifierLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
         extraLabels.add(modifierLabel);
 
+        // gap
+        actionsRow.add(Box.createRigidArea(new Dimension(15,0)));
+
         JButton makeRootButton = new JButton("Make Root");
+        makeRootButton.setAlignmentX(Component.LEFT_ALIGNMENT);
         makeRootButton.setActionCommand("make_root");
         makeRootButton.addActionListener(this);
         actionsRow.add(makeRootButton);
 
+        // gap
+        actionsRow.add(Box.createRigidArea(new Dimension(15,0)));
+
         // add modifier
-        JPanel addModPanel = new JPanel();
         String[] modifierOptions = Arrays.stream(ModifierQualifier.values()).sequential()
                 .map(m -> m.name().toLowerCase())
                 .toArray(String[]::new);
         modifierList = new JComboBox<>(modifierOptions);
-        addModPanel.add(modifierList);
+        modifierList.setPreferredSize(new Dimension(30,10));
+        actionsRow.add(modifierList);
 
         JButton modifyButton = new JButton("Add Modifier");
         modifyButton.setActionCommand("add_modifier");
         modifyButton.addActionListener(this);
-        addModPanel.add(modifyButton);
+        actionsRow.add(modifyButton);
 
-        actionsRow.add(addModPanel);
+        actionsRow.add(Box.createHorizontalGlue());
 
         return panel;
     }
@@ -75,10 +84,10 @@ public class SourceModuleConfigTab extends ModuleConfigTab {
         super.refreshTabData();
 
         Optional<String> modifierModuleId = this.moduleHandler.getModifierFor(moduleId);
-        String modifier = "None";
         if (modifierModuleId.isPresent()) {
-            modifier = modifierModuleId.get();
+            modifierLabel.setModuleId(modifierModuleId.get());
+        } else {
+            modifierLabel.setNoModule();
         }
-        modifierLabel.setText("MODIFIER: " + modifier);
     }
 }

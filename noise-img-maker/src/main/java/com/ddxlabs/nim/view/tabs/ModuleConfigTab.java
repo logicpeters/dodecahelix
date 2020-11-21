@@ -2,6 +2,7 @@ package com.ddxlabs.nim.view.tabs;
 
 import com.ddxlabs.nim.Controllers;
 import com.ddxlabs.nim.controller.ModuleHandler;
+import com.ddxlabs.nim.noise.NmType;
 import com.ddxlabs.nim.view.ViewComponent;
 
 import javax.swing.*;
@@ -53,12 +54,15 @@ public abstract class ModuleConfigTab implements ViewComponent, TableModelListen
         BoxLayout layout = new BoxLayout(panel, BoxLayout.Y_AXIS);
         panel.setLayout(layout);
 
+        panel.add(Box.createRigidArea(new Dimension(0, 15)));
+
         JLabel moduleLabel = new JLabel("ID: " + moduleId);
         moduleLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
         panel.add(moduleLabel);
 
         String qualifier = this.moduleHandler.getQualifierForModule(moduleId);
-        JLabel qualifierLabel = new JLabel("TYPE: " + qualifier);
+        NmType type = this.moduleHandler.getTypeForModule(moduleId);
+        JLabel qualifierLabel = new JLabel(String.format("TYPE: %s (%s)", qualifier, type.name().toLowerCase()));
         qualifierLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
         panel.add(qualifierLabel);
 
@@ -77,19 +81,24 @@ public abstract class ModuleConfigTab implements ViewComponent, TableModelListen
 
         // this should be populated in the subclass
         extraLabels = new JPanel();
-        extraLabels.setLayout(new BoxLayout(extraLabels, BoxLayout.Y_AXIS));
         extraLabels.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+        extraLabels.setLayout(new BoxLayout(extraLabels, BoxLayout.Y_AXIS));
         panel.add(extraLabels);
+
+        panel.add(Box.createRigidArea(new Dimension(0, 15)));
 
         actionsRow = new JPanel();
         actionsRow.setLayout(new BoxLayout(actionsRow, BoxLayout.X_AXIS));
-        actionsRow.setAlignmentX( Component.LEFT_ALIGNMENT );//0.0
+        actionsRow.setAlignmentX(Component.LEFT_ALIGNMENT);
+
         JButton validateButton = new JButton("Validate");
         validateButton.setActionCommand("validate");
         validateButton.addActionListener(this);
         actionsRow.add(validateButton);
-        actionsRow.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+
         panel.add(actionsRow);
+
+        panel.add(Box.createRigidArea(new Dimension(0, 15)));
 
         panel.add(buildParamsMapTable());
 
@@ -160,6 +169,7 @@ public abstract class ModuleConfigTab implements ViewComponent, TableModelListen
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        System.out.println(String.format("incoming action : %s", e));
         if ("make_root".equals(e.getActionCommand())) {
             this.moduleHandler.setRootModule(moduleId);
         }

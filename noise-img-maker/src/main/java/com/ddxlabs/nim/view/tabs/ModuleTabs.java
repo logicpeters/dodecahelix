@@ -84,8 +84,8 @@ public class ModuleTabs implements ViewComponent {
 
     private String titleForModule(String moduleId) {
         String title = moduleId;
-        if (title.length()>8) {
-            title = title.substring(0,7);
+        if (title.length()>9) {
+            title = title.substring(0,8);
         }
         return title;
     }

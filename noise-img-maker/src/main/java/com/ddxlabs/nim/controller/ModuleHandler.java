@@ -11,6 +11,7 @@ import com.ddxlabs.nim.noise.StructureMap;
 import com.ddxlabs.nim.noise.modules.*;
 import com.ddxlabs.nim.view.tabs.ModuleTabs;
 
+import javax.print.DocFlavor;
 import java.util.*;
 
 public class ModuleHandler implements ControllerComponent {
@@ -142,5 +143,14 @@ public class ModuleHandler implements ControllerComponent {
 
     public void showModuleInTabView(String moduleId) {
         this.moduleTabs.showTabForModule(moduleId);
+    }
+
+    public NmType getTypeForModule(String moduleId) {
+        return this.moduleBuilder.getStructure().getTypeFor(moduleId);
+    }
+
+    public void setSourceModulesForCombo(String comboModuleId, List<String> children) {
+        StructureMap structure = this.moduleBuilder.getStructure();
+        structure.resetComboChildren(comboModuleId, children);
     }
 }
