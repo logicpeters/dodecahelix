@@ -115,8 +115,10 @@ public class StructureMap {
     }
 
     public Optional<String> getParent(String moduleId) {
+        System.out.println("getting parent of " + moduleId);
         for (Map.Entry<String, List<String>> entry : comboChildren.entrySet()) {
             if (entry.getValue().contains(moduleId)) {
+                System.out.println("  parent is " + entry.getKey());
                 return Optional.of(entry.getKey());
             }
         }

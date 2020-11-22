@@ -1,6 +1,7 @@
 package com.ddxlabs.nim;
 
 import com.ddxlabs.nim.view.GeneratorRow;
+import com.ddxlabs.nim.view.ImagePreviewView;
 import com.ddxlabs.nim.view.Menu;
 import com.ddxlabs.nim.view.tabs.ModuleTabs;
 
@@ -11,18 +12,21 @@ public class Views {
     private Menu menu;
     private GeneratorRow generatorRow;
     private ModuleTabs moduleTabs;
+    private ImagePreviewView imageView;
 
     public Views(UserPreferences preferences) {
         this.preferences = preferences;
         this.menu = new Menu(preferences);
         this.generatorRow = new GeneratorRow(preferences);
         this.moduleTabs = new ModuleTabs(preferences);
+        this.imageView = new ImagePreviewView(preferences);
     }
 
     public void init(Controllers controllers) {
         this.menu.init(controllers);
         this.moduleTabs.init(controllers);
         this.generatorRow.init(controllers);
+        this.imageView.init(controllers);
     }
 
     public Menu getMenu() {
@@ -37,6 +41,10 @@ public class Views {
         return moduleTabs;
     }
 
+    public ImagePreviewView getImageView() {
+        return imageView;
+    }
+
     /**
      *   These views should already have a reference to the preferences object with its changes
      *
@@ -47,5 +55,6 @@ public class Views {
         menu.applyPreferences();
         moduleTabs.applyPreferences();
         generatorRow.applyPreferences();
+        imageView.applyPreferences();
     }
 }

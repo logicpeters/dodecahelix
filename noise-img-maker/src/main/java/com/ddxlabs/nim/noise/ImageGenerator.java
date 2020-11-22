@@ -10,9 +10,20 @@ import java.io.IOException;
 
 public class ImageGenerator {
 
-    public static boolean generateImage(Module module, boolean color, int chop, String filename,
-                                        int width, int height, double xPeriod, double yPeriod,
-                                        int lowLimitKb, int highLimitKb) {
+    /**
+     *  Generate image from Noise module.
+     *
+     * @param module
+     * @param color
+     * @param chop
+     * @param width
+     * @param height
+     * @param xPeriod
+     * @param yPeriod
+     * @return - true or false: whether or not the file was written (may be outside file size limit)
+     */
+    public static BufferedImage generateImage(Module module, boolean color, int chop,
+                                        int width, int height, double xPeriod, double yPeriod) {
 
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_USHORT_GRAY);
         if (color) {
@@ -28,6 +39,10 @@ public class ImageGenerator {
             }
         }
 
+        return image;
+    }
+
+    public static boolean writeImageToFile(String filename, int lowLimitKb, int highLimitKb, BufferedImage image) {
         try {
             File file = new File(filename);
             if (file.exists()) {
@@ -41,7 +56,7 @@ public class ImageGenerator {
                 return true;
             } else {
                 file.delete();
-                System.out.println("file is outside size limits");
+                System.out.println("file is outside size limits - deleting");
             }
         } catch (IOException e) {
             e.printStackTrace();

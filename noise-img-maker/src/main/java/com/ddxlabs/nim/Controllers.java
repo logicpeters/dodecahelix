@@ -6,8 +6,6 @@ public class Controllers {
 
     private UserPreferences preferences;
 
-    private Application application;
-
     private ImageGenerationHandler imageGenerationHandler;
     private MenuItemHandler menuItemHandler;
     private ModuleHandler moduleHandler;
@@ -23,7 +21,7 @@ public class Controllers {
         this.systemHandler = new SystemHandler(preferences);
     }
 
-    public void init(Views views, Models models, Application application) {
+    public void init(Views views, Models models) {
         this.moduleHandler.init(this, views, models);
         this.userPreferencesHandler.init(this, views, models);
         this.menuItemHandler.init(this, views, models);
@@ -51,7 +49,4 @@ public class Controllers {
         return userPreferencesHandler;
     }
 
-    public Application getApplication() {
-        return application;
-    }
 }

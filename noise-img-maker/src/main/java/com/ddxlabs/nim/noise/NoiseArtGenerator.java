@@ -8,6 +8,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
+@Deprecated
 public class NoiseArtGenerator {
 
     static Random random = new Random(Calendar.getInstance().getTimeInMillis());
@@ -46,8 +47,7 @@ public class NoiseArtGenerator {
 
     public static void imageFromSampleFile(String localPath, boolean color, int chop, int widthHeight, int period) throws IOException {
         Module fileBuiltModule = NoiseFileBuilder.buildModuleFromFile(localPath);
-        ImageGenerator.generateImage(fileBuiltModule, true, chop, localPath + ".png",
-                widthHeight, widthHeight, period, period, 10, 1000);
+        // ImageGenerator.generateImage(fileBuiltModule, true, chop, localPath + ".png", widthHeight, widthHeight, period, period, 10, 1000);
         System.out.println("Image file created.");
     }
 
@@ -130,9 +130,10 @@ public class NoiseArtGenerator {
 
             StructureMap structure = noiseGenerator.genRandomTree(null, null);
             Module module = (new NmBuilder(structure, params)).build();
-            boolean genImg = ImageGenerator.generateImage(module, true, 5, filename + ".png",
-                    1024, 1024, 128, 128, 10, 1000);
 
+            // boolean genImg = ImageGenerator.generateImage(module, true, 5, filename + ".png",
+            //        1024, 1024, 128, 128, 10, 1000);
+            boolean genImg = true;
             if (genImg) {
                 NoiseFileBuilder.writeNoiseTreeToFile(structure, params, filename + ".csv");
                 long endTime = Calendar.getInstance().getTimeInMillis();

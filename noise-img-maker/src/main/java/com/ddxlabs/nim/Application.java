@@ -1,6 +1,7 @@
 package com.ddxlabs.nim;
 
 import com.ddxlabs.nim.io.IconUtils;
+import com.ddxlabs.nim.io.ScreenUtils;
 import com.ddxlabs.nim.noise.NmBuilder;
 import com.ddxlabs.nim.noise.NmType;
 
@@ -31,7 +32,7 @@ public class Application implements Runnable {
         models.init();
 
         // link the controllers to views, models and the Application itself
-        controllers.init(views, models, this);
+        controllers.init(views, models);
 
         // link the views to controllers
         views.init(controllers);
@@ -42,6 +43,7 @@ public class Application implements Runnable {
     }
 
     public void run() {
+        this.controllers.getSystemHandler().setApp(this);
         buildUI();
 
         // create a single SOURCE structure as a beginning
@@ -57,11 +59,10 @@ public class Application implements Runnable {
         JFrame.setDefaultLookAndFeelDecorated(true);
 
         frame = new JFrame("Noise Image Maker");
-
         try {
             frame.setIconImage(IconUtils.getIcon("bluedot.png").getImage());
         } catch (IOException e) {
-            // if you cant load the icon -- oh well
+            // if you cant load the icon -- no biggie
             e.printStackTrace();
         }
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -74,17 +75,36 @@ public class Application implements Runnable {
                 System.exit(0);
             }
         });
-
         frame.setJMenuBar(views.getMenu().buildUI());
-        frame.add(views.getModuleTabs().buildUI(), BorderLayout.CENTER);
-        frame.add(views.getGeneratorRow().buildUI(), BorderLayout.SOUTH);
 
-        frame.setSize(800, 640);
+        JPanel leftPanel = new JPanel(new BorderLayout());
+        leftPanel.add(views.getModuleTabs().buildUI(), BorderLayout.CENTER);
+        leftPanel.add(views.getGeneratorRow().buildUI(), BorderLayout.SOUTH);
+
+        JPanel rightPanel = new JPanel(new BorderLayout());
+        rightPanel.add(views.getImageView().buildUI(), BorderLayout.CENTER);
+
+        JPanel framePanel = new JPanel(new GridLayout(1,2));
+        framePanel.add(leftPanel);
+        framePanel.add(rightPanel);
+
+        frame.add(framePanel, BorderLayout.CENTER);
+
+        int recommendedSquareSize = ScreenUtils.recommendSquareSize(128, 0.8);
+        int appWidth = 2 * recommendedSquareSize + 20;
+        int appHeight = recommendedSquareSize + 50;
+        frame.setSize(appWidth, appHeight);
+        frame.setLocation(25, 25);
         frame.setVisible(true);
     }
 
     public void exitApp() {
         frame.dispose();
+    }
+
+    public int getFrameHeight() {
+        Dimension contentPaneSize = frame.getContentPane().getSize();
+        return (int)contentPaneSize.getHeight();
     }
 
 }

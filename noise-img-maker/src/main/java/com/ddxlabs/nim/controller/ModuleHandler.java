@@ -152,5 +152,6 @@ public class ModuleHandler implements ControllerComponent {
     public void setSourceModulesForCombo(String comboModuleId, List<String> children) {
         StructureMap structure = this.moduleBuilder.getStructure();
         structure.resetComboChildren(comboModuleId, children);
+        moduleTabs.refreshTabData();
     }
 }

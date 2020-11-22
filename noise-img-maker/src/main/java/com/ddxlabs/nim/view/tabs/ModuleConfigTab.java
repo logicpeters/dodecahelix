@@ -108,17 +108,18 @@ public abstract class ModuleConfigTab implements ViewComponent, TableModelListen
     public JComponent buildParamsMapTable() {
         //headers for the table
         String[] columns = new String[] {
-                "Parameter", "Value"
+                "Parameter", "Value", "Actions"
         };
 
         //actual data for the table in a 2d array
         Map<String, String> paramsForModule = moduleHandler.getParamsForModule(moduleId);
 
-        Object[][] data = new Object[paramsForModule.size()][2];
+        Object[][] data = new Object[paramsForModule.size()][3];
         int keyNum = 0;
         for (String key: paramsForModule.keySet()) {
             data[keyNum][0] = key;
             data[keyNum][1] = paramsForModule.get(key);
+            data[keyNum][2] = "";
             keyNum++;
         }
 

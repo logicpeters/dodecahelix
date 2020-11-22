@@ -40,18 +40,24 @@ public class GeneratorRow implements ViewComponent, ActionListener {
     @Override
     public JComponent buildUI() {
         JPanel row = new JPanel();
-        seedField = new JTextField(16);
-        long initialSeed = Math.abs(randomizer.nextLong());
-        seedField.setText(String.valueOf(initialSeed));
-        JButton seedGenerator = new JButton("Reset Seed");
-        seedGenerator.setActionCommand("refresh_seed");
-        seedGenerator.addActionListener(this);
-        JButton generateArt = new JButton("Generate Art");
-        generateArt.setActionCommand("generate_art");
-        generateArt.addActionListener(this);
-        row.add(seedField);
-        row.add(seedGenerator);
-        row.add(generateArt);
+        //        seedField = new JTextField(16);
+        //        long initialSeed = Math.abs(randomizer.nextLong());
+        //        seedField.setText(String.valueOf(initialSeed));
+        //        JButton seedGenerator = new JButton("Reset Seed");
+        //        seedGenerator.setActionCommand("refresh_seed");
+        //        seedGenerator.addActionListener(this);
+        JButton preview = new JButton("Preview");
+        preview.setActionCommand("preview");
+        preview.addActionListener(this);
+
+        JButton writeFile = new JButton("Export To File");
+        writeFile.setActionCommand("write_file");
+        writeFile.addActionListener(this);
+        // row.add(seedField);
+        // row.add(seedGenerator);
+        row.add(preview);
+        row.add(writeFile);
+
         return row;
     }
 
@@ -63,12 +69,14 @@ public class GeneratorRow implements ViewComponent, ActionListener {
         if ("refresh_seed".equals(e.getActionCommand())) {
             long initialSeed = Math.abs(randomizer.nextLong());
             seedField.setText(String.valueOf(initialSeed));
-        } else if ("generate_art".equals(e.getActionCommand())) {
+        } else if ("preview".equals(e.getActionCommand())) {
             imageGenHandler.generateAndShowImage();
+        } else if ("write_file".equals(e.getActionCommand())) {
+            imageGenHandler.generateAndWriteFile();
         }
     }
 
     public void setBaseSeed(int seed) {
-        seedField.setText(String.valueOf(seed));
+        // seedField.setText(String.valueOf(seed));
     }
 }

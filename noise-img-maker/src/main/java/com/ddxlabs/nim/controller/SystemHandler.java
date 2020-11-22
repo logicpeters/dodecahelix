@@ -11,10 +11,18 @@ public class SystemHandler implements ControllerComponent {
 
     @Override
     public void init(Controllers controllers, Views views, Models models) {
-        this.app = controllers.getApplication();
+    }
+
+    public void setApp(Application app) {
+        this.app = app;
     }
 
     public void exitApp() {
         app.exitApp();
     }
+
+    public int getCurrentAppHeight() {
+        return app.getFrameHeight();
+    }
+
 }

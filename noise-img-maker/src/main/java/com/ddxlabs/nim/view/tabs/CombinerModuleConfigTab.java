@@ -33,6 +33,8 @@ public class CombinerModuleConfigTab extends ModuleConfigTab {
         populateSourceModules();
         extraLabels.add(sourceModulesPanel);
 
+        extraLabels.add(Box.createRigidArea(new Dimension(0,10)));
+
         // choices to add to source modules
         List<String> choices = this.moduleHandler.getUnattachedModules();
         choices.remove(moduleId);
@@ -108,7 +110,7 @@ public class CombinerModuleConfigTab extends ModuleConfigTab {
             label.setAlignmentX(Component.LEFT_ALIGNMENT);
             label.setModuleId(newChild);
             sourceModulesPanel.add(label);
-            sourceModulesPanel.repaint();
+            sourceModulesPanel.revalidate();
             this.moduleHandler.setSourceModulesForCombo(moduleId, currentChildren);
         }
     }
