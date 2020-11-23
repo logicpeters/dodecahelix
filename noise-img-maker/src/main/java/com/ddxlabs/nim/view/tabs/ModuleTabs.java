@@ -2,7 +2,9 @@ package com.ddxlabs.nim.view.tabs;
 
 import com.ddxlabs.nim.Controllers;
 import com.ddxlabs.nim.UserPreferences;
+import com.ddxlabs.nim.controller.ModuleHandler;
 import com.ddxlabs.nim.noise.NmType;
+import com.ddxlabs.nim.noise.StructureMap;
 import com.ddxlabs.nim.view.TextTheme;
 import com.ddxlabs.nim.view.ViewComponent;
 
@@ -15,6 +17,7 @@ public class ModuleTabs implements ViewComponent {
 
     private TextTheme textTheme;
 
+    // add to all new module config tabs
     private Controllers controllers;
 
     private Map<String, ModuleConfigTab> tabMap;
@@ -88,5 +91,20 @@ public class ModuleTabs implements ViewComponent {
             title = title.substring(0,8);
         }
         return title;
+    }
+
+    public void clearAllTabs() {
+        this.tabMap.clear();
+        this.tabbedPane.removeAll();
+    }
+
+    public void reloadStructure() {
+        clearAllTabs();
+
+        ModuleHandler moduleHandler = this.controllers.getModuleHandler();
+        Map<String, NmType> moduleTypes = moduleHandler.getModuleTypes();
+        for (String moduleId: moduleTypes.keySet()) {
+            addModule(moduleTypes.get(moduleId), moduleId);
+        }
     }
 }

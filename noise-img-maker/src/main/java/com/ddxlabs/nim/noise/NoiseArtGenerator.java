@@ -4,6 +4,7 @@ import org.spongepowered.noise.module.Module;
 
 import java.io.*;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.stream.IntStream;
@@ -46,7 +47,8 @@ public class NoiseArtGenerator {
     }
 
     public static void imageFromSampleFile(String localPath, boolean color, int chop, int widthHeight, int period) throws IOException {
-        Module fileBuiltModule = NoiseFileBuilder.buildModuleFromFile(localPath);
+        NmBuilder builder = NoiseFileBuilder.buildModuleFromFile(localPath);
+        Module fileBuiltModule = builder.build();
         // ImageGenerator.generateImage(fileBuiltModule, true, chop, localPath + ".png", widthHeight, widthHeight, period, period, 10, 1000);
         System.out.println("Image file created.");
     }
@@ -135,7 +137,9 @@ public class NoiseArtGenerator {
             //        1024, 1024, 128, 128, 10, 1000);
             boolean genImg = true;
             if (genImg) {
-                NoiseFileBuilder.writeNoiseTreeToFile(structure, params, filename + ".csv");
+                List<String> structureCsv = structure.asCsvList();
+                List<String> paramsCsv = params.asCsvList();
+                NoiseFileBuilder.writeNoiseTreeToFile(structureCsv, paramsCsv, filename + ".csv");
                 long endTime = Calendar.getInstance().getTimeInMillis();
                 double secs = (endTime - startTime) / 1000.0;
                 System.out.println("generated new image in " + secs + " seconds");

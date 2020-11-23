@@ -39,6 +39,8 @@ public class MenuItemHandler implements ControllerComponent {
 
         switch (menuItemId) {
             // TODO - get rid of this cast/app dependency
+            case Menu.FILE_OPEN: systemHandler.importFile(); break;
+            case Menu.FILE_SAVE: systemHandler.exportFile(); break;
             case Menu.APP_EXIT: systemHandler.exitApp(); break;
             case Menu.THEME_STD_DARK: updateTheme(ColorTheme.STD_DARK); break;
             case Menu.THEME_STD_LIGHT: updateTheme(ColorTheme.STD_LIGHT); break;

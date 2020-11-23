@@ -107,4 +107,7 @@ public class Application implements Runnable {
         return (int)contentPaneSize.getHeight();
     }
 
+    public Component getFrame() {
+        return frame;
+    }
 }

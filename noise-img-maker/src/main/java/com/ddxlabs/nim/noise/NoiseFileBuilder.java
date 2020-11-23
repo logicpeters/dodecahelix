@@ -69,12 +69,11 @@ public class NoiseFileBuilder {
         return new ParamsMap(params);
     }
 
-    public static Module buildModuleFromFile(String fileName) throws IOException {
-        fileName = System.getProperty("user.dir") + File.separator + fileName;
-        fileName = fileName.replace("\\", "/");
-        fileName = fileName.replace("/", "\\\\");
+    public static NmBuilder buildModuleFromFile(String fileName) throws IOException {
+//        fileName = System.getProperty("user.dir") + File.separator + fileName;
+//        fileName = fileName.replace("\\", "/");
+//        fileName = fileName.replace("/", "\\\\");
         System.out.println("reading from file " + fileName);
-
         try (FileReader fileReader = new FileReader(fileName);
              BufferedReader br = new BufferedReader(fileReader);
         ) {
@@ -88,7 +87,7 @@ public class NoiseFileBuilder {
 
             StructureMap structureMap = structureFromFileLines(stringList);
             ParamsMap paramsMap = paramsFromFileLines(stringList);
-            return (new NmBuilder(structureMap, paramsMap)).build();
+            return new NmBuilder(structureMap, paramsMap);
         }
     }
 
@@ -103,11 +102,10 @@ public class NoiseFileBuilder {
         bw.close();
     }
 
-    public static void writeNoiseTreeToFile(StructureMap structure, ParamsMap params, String filePath) throws IOException {
-        List<String> lines = structure.asCsvList();
-        lines.add("# PARAMS");
-        lines.addAll(params.asCsvList());
-        writeFile(filePath, lines);
+    public static void writeNoiseTreeToFile(List<String> structureCsv, List<String> paramsCsv, String filePath) throws IOException {
+        structureCsv.add("# PARAMS");
+        structureCsv.addAll(paramsCsv);
+        writeFile(filePath, structureCsv);
     }
 
 }

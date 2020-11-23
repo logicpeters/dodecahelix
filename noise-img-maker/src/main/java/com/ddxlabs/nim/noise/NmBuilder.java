@@ -39,6 +39,11 @@ public class NmBuilder implements ModelComponent {
         this.params = params;
     }
 
+    public void replaceStructure(StructureMap replacementStructure, ParamsMap replacementParams) {
+        this.params.replaceParams(replacementParams);
+        this.structure.fromStructure(replacementStructure);
+    }
+
     public Module build() {
         return this.buildModuleNode(structure.getRootModuleId());
     }
@@ -89,10 +94,12 @@ public class NmBuilder implements ModelComponent {
     }
 
     public StructureMap getStructure() {
+        // TODO - make immutable, and only allow edits from this class
         return structure;
     }
 
     public ParamsMap getParams() {
+        // TODO - make immutable, and only allow edits from this class
         return params;
     }
 

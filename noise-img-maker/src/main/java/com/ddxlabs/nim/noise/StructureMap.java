@@ -52,6 +52,21 @@ public class StructureMap {
         this.moduleQualifiers.put(rootModuleId, rootModuleQualifier);
     }
 
+    public void fromStructure(StructureMap from) {
+        // reload state from another structure
+        this.modifiers.clear();
+        this.moduleQualifiers.clear();
+        this.comboChildren.clear();
+        this.moduleTypes.clear();
+
+        // TODO - do I need to use immutable maps??
+        this.rootModuleId = from.rootModuleId;
+        this.modifiers.putAll(from.modifiers);
+        this.moduleQualifiers.putAll(from.moduleQualifiers);
+        this.comboChildren.putAll(from.comboChildren);
+        this.moduleTypes.putAll(from.moduleTypes);
+    }
+
     public void setRootModule(String moduleId) {
         this.rootModuleId = moduleId;
     }
@@ -182,4 +197,7 @@ public class StructureMap {
     }
 
 
+    public Map<String, NmType> getModuleTypes() {
+        return Collections.unmodifiableMap(this.moduleTypes);
+    }
 }

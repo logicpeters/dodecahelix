@@ -154,4 +154,20 @@ public class ModuleHandler implements ControllerComponent {
         structure.resetComboChildren(comboModuleId, children);
         moduleTabs.refreshTabData();
     }
+
+    public List<String> getStructureAsCsv() {
+        return this.moduleBuilder.getStructure().asCsvList();
+    }
+
+    public List<String> getParamsAsCsv() {
+        return this.moduleBuilder.getParams().asCsvList();
+    }
+
+    public void loadNewBuilderStructure(StructureMap structure, ParamsMap params) {
+        this.moduleBuilder.replaceStructure(structure, params);
+    }
+
+    public Map<String, NmType> getModuleTypes() {
+        return this.moduleBuilder.getStructure().getModuleTypes();
+    }
 }

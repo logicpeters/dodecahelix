@@ -50,7 +50,7 @@ public class GeneratorRow implements ViewComponent, ActionListener {
         preview.setActionCommand("preview");
         preview.addActionListener(this);
 
-        JButton writeFile = new JButton("Export To File");
+        JButton writeFile = new JButton("Save Image");
         writeFile.setActionCommand("write_file");
         writeFile.addActionListener(this);
         // row.add(seedField);

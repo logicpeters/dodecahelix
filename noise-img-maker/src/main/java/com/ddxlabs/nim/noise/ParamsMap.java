@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 public class ParamsMap {
 
     // whether or not to generate random values if they do not exist
+    // TODO - shouldn't this always be true??
     private boolean generator = false;
 
     private List<Double> dblPool = new ArrayList<>();
@@ -169,9 +170,18 @@ public class ParamsMap {
     /**
      * Manually sets the generator function to true/false.
      *
+     * TODO - should this be allowed??
+     *
      * @param generator
      */
     public void lockGenerator(boolean generator) {
         this.generator = generator;
+    }
+
+    public void replaceParams(ParamsMap replacementParams) {
+        // Can still generate after replacing
+        this.generator = true;
+        this.usages.clear();
+        this.usages.putAll(replacementParams.usages);
     }
 }
