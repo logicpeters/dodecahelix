@@ -1,6 +1,5 @@
 package com.ddxlabs.nim.noise;
 
-import com.ddxlabs.nim.ModelComponent;
 import com.ddxlabs.nim.noise.modules.ComboModuleBuilder;
 import com.ddxlabs.nim.noise.modules.ModifierModuleBuilder;
 import com.ddxlabs.nim.noise.modules.SourceModuleBuilder;
@@ -105,5 +104,13 @@ public class NmBuilder implements ModelComponent {
 
     public int getBaseSeed() {
         return seed;
+    }
+
+    public String getParamValue(String moduleId, String paramKey) {
+        return params.getModuleValue(moduleId, paramKey);
+    }
+
+    public void updateParamValue(String moduleId, String paramKey, String newValue) {
+        params.resetValue(moduleId, paramKey, newValue);
     }
 }

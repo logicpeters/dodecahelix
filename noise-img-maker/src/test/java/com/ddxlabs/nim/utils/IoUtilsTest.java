@@ -1,4 +1,4 @@
-package com.ddxlabs.nim.io;
+package com.ddxlabs.nim.utils;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

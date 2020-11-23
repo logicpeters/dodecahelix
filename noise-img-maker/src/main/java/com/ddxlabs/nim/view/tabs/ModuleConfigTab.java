@@ -1,19 +1,15 @@
 package com.ddxlabs.nim.view.tabs;
 
-import com.ddxlabs.nim.Controllers;
+import com.ddxlabs.nim.controller.Controllers;
+import com.ddxlabs.nim.controller.ImageGenerationHandler;
 import com.ddxlabs.nim.controller.ModuleHandler;
 import com.ddxlabs.nim.noise.NmType;
 import com.ddxlabs.nim.view.ViewComponent;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -24,13 +20,15 @@ import java.util.Optional;
  *  Ability to add a new key/value pair, or delete an existing k/v pair
  *
  */
-public abstract class ModuleConfigTab implements ViewComponent, TableModelListener, ActionListener {
+public abstract class ModuleConfigTab implements ViewComponent, ActionListener {
 
     protected ModuleHandler moduleHandler;
 
+    protected ImageGenerationHandler imageGenerationHandler;
+
     protected String moduleId;
 
-    private ParamsMapTableModel tableModel;
+    protected ParamsMapTableView paramsTable;
 
     protected JPanel extraLabels;
 
@@ -46,6 +44,7 @@ public abstract class ModuleConfigTab implements ViewComponent, TableModelListen
 
     public void init(Controllers controllers) {
         this.moduleHandler = controllers.getModuleHandler();
+        this.imageGenerationHandler = controllers.getImageGenerationHandler();
     }
 
     @Override
@@ -100,68 +99,14 @@ public abstract class ModuleConfigTab implements ViewComponent, TableModelListen
 
         panel.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        panel.add(buildParamsMapTable());
+        paramsTable = new ParamsMapTableView();
+        panel.add(new JScrollPane(paramsTable.buildTable(moduleId, moduleHandler, imageGenerationHandler)));
 
         return panel;
     }
 
-    public JComponent buildParamsMapTable() {
-        //headers for the table
-        String[] columns = new String[] {
-                "Parameter", "Value", "Actions"
-        };
-
-        //actual data for the table in a 2d array
-        Map<String, String> paramsForModule = moduleHandler.getParamsForModule(moduleId);
-
-        Object[][] data = new Object[paramsForModule.size()][3];
-        int keyNum = 0;
-        for (String key: paramsForModule.keySet()) {
-            data[keyNum][0] = key;
-            data[keyNum][1] = paramsForModule.get(key);
-            data[keyNum][2] = "";
-            keyNum++;
-        }
-
-        //create table with data
-        tableModel = new ParamsMapTableModel(data, columns);
-        JTable table = new JTable(tableModel);
-        table.setRowHeight(30);
-
-        DefaultTableCellRenderer tableCellRenderer = new DefaultTableCellRenderer() {
-            Border padding = BorderFactory.createEmptyBorder(0, 10, 0, 0);
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                                                           boolean hasFocus, int row, int column) {
-                super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                setBorder(BorderFactory.createCompoundBorder(getBorder(), padding));
-                return this;
-            }
-        };
-        table.setDefaultRenderer(Object.class, tableCellRenderer);
-        tableModel.addTableModelListener(this);
-
-        //add the table to the frame
-        return new JScrollPane(table);
-    }
-
     @Override
     public void applyPreferences() {
-    }
-
-    public void tableChanged(TableModelEvent e) {
-        int row = e.getFirstRow();
-        int column = e.getColumn();
-        if (column==1) {
-            String paramName = tableModel.getValueAt(row, 0).toString();
-            String paramValue = tableModel.getValueAt(row, 1).toString();
-            String previousValue = moduleHandler.getParamValueForModule(moduleId, paramName);
-
-            // TODO - make sure new value is the same format
-
-            System.out.printf("changing value of %s from %s to %s%n", paramName, previousValue, paramValue);
-            moduleHandler.setParamValueForModule(moduleId, paramName, paramValue);
-        }
     }
 
     public String getModuleId() {
@@ -170,9 +115,11 @@ public abstract class ModuleConfigTab implements ViewComponent, TableModelListen
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println(String.format("incoming action : %s", e));
-        if ("make_root".equals(e.getActionCommand())) {
-            this.moduleHandler.setRootModule(moduleId);
+        String command = e.getActionCommand();
+        if (command!=null) {
+            if ("make_root".equals(command)) {
+                this.moduleHandler.setRootModule(moduleId);
+            }
         }
     }
 
@@ -188,7 +135,7 @@ public abstract class ModuleConfigTab implements ViewComponent, TableModelListen
             parentLabel.setNoModule();
         }
 
-        // TODO - refresh table
+        paramsTable.refreshParams();
     }
 
 }

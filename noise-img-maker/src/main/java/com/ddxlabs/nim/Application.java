@@ -1,9 +1,12 @@
 package com.ddxlabs.nim;
 
-import com.ddxlabs.nim.io.IconUtils;
-import com.ddxlabs.nim.io.ScreenUtils;
+import com.ddxlabs.nim.controller.Controllers;
+import com.ddxlabs.nim.noise.Models;
+import com.ddxlabs.nim.utils.IconUtils;
+import com.ddxlabs.nim.utils.ScreenUtils;
 import com.ddxlabs.nim.noise.NmBuilder;
 import com.ddxlabs.nim.noise.NmType;
+import com.ddxlabs.nim.view.Views;
 
 import javax.swing.*;
 import java.awt.*;
@@ -107,7 +110,7 @@ public class Application implements Runnable {
         return (int)contentPaneSize.getHeight();
     }
 
-    public Component getFrame() {
+    public JFrame getFrame() {
         return frame;
     }
 }

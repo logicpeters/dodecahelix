@@ -1,15 +1,8 @@
 package com.ddxlabs.nim.controller;
 
-import com.ddxlabs.nim.Controllers;
-import com.ddxlabs.nim.Models;
+import com.ddxlabs.nim.noise.Models;
 import com.ddxlabs.nim.UserPreferences;
-import com.ddxlabs.nim.Views;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Properties;
+import com.ddxlabs.nim.view.Views;
 
 /**
  *  Manage the state of UserPreferences

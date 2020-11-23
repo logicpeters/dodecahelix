@@ -1,6 +1,6 @@
 package com.ddxlabs.nim.view;
 
-import com.ddxlabs.nim.Controllers;
+import com.ddxlabs.nim.controller.Controllers;
 import com.ddxlabs.nim.controller.MenuItemHandler;
 import com.ddxlabs.nim.UserPreferences;
 import com.ddxlabs.nim.noise.modules.ComboQualifier;
@@ -28,6 +28,11 @@ public class Menu implements ViewComponent {
     public static final String MODULE_ADD = "add_module_";
     public static final String MODULE_ADD_SOURCE = "add_module_source_";
     public static final String MODULE_ADD_COMBO = "add_module_combo_";
+
+    public static final String PREFS_USE_COLOR = "prefs_use_color";
+    public static final String PREFS_USE_BW = "prefs_use_bw";
+    public static final String PREFS_SET_IMAGE_EXPORT_DIR = "prefs_set_image_dir";
+    public static final String PREFS_SET_EXPORT_DIR = "prefs_set_file_dir";
 
     private MenuItemHandler menuHandler;
 
@@ -67,6 +72,13 @@ public class Menu implements ViewComponent {
 
         JMenu presetsMenu = new JMenu("Presets");
         menuBar.add(presetsMenu);
+
+        JMenu prefsMenu = new JMenu("Preferences");
+        menuBar.add(prefsMenu);
+        this.addMenuItem(prefsMenu, "Use Color", PREFS_USE_COLOR, 0);
+        this.addMenuItem(prefsMenu, "Use B/W", PREFS_USE_BW, 0);
+        this.addMenuItem(prefsMenu, "Set File Export Directory", PREFS_SET_EXPORT_DIR, 0);
+        this.addMenuItem(prefsMenu, "Set Image Export Directory", PREFS_SET_IMAGE_EXPORT_DIR, 0);
 
         JMenu viewMenu = new JMenu("View");
         JMenu themeMenu = new JMenu("Themes");

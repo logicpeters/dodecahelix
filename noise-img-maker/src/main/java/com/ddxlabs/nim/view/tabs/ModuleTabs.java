@@ -1,10 +1,9 @@
 package com.ddxlabs.nim.view.tabs;
 
-import com.ddxlabs.nim.Controllers;
+import com.ddxlabs.nim.controller.Controllers;
 import com.ddxlabs.nim.UserPreferences;
 import com.ddxlabs.nim.controller.ModuleHandler;
 import com.ddxlabs.nim.noise.NmType;
-import com.ddxlabs.nim.noise.StructureMap;
 import com.ddxlabs.nim.view.TextTheme;
 import com.ddxlabs.nim.view.ViewComponent;
 

@@ -1,20 +1,16 @@
 package com.ddxlabs.nim.controller;
 
-import com.ddxlabs.nim.Controllers;
-import com.ddxlabs.nim.Models;
+import com.ddxlabs.nim.noise.Models;
 import com.ddxlabs.nim.UserPreferences;
-import com.ddxlabs.nim.Views;
+import com.ddxlabs.nim.view.Views;
 import com.ddxlabs.nim.noise.ImageGenerator;
 
 import com.ddxlabs.nim.noise.NmBuilder;
 import com.ddxlabs.nim.view.ImagePreviewView;
 import org.spongepowered.noise.module.Module;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 public class ImageGenerationHandler implements ControllerComponent {

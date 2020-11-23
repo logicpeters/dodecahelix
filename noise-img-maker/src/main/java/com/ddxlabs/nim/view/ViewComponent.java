@@ -1,7 +1,6 @@
 package com.ddxlabs.nim.view;
 
-import com.ddxlabs.nim.Controllers;
-import com.ddxlabs.nim.UserPreferences;
+import com.ddxlabs.nim.controller.Controllers;
 
 import javax.swing.*;
 

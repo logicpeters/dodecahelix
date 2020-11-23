@@ -68,6 +68,7 @@ public class CombinerModuleConfigTab extends ModuleConfigTab {
 
         sourceModuleChooser = new JComboBox<String>(choices.toArray(new String[0]));
         sourceModuleChooser.addActionListener(this);
+        sourceModuleChooser.setMaximumSize(new Dimension(50,30));
         choosePanel.add(sourceModuleChooser);
 
         choosePanel.add(Box.createRigidArea(new Dimension(10, 0)));

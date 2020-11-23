@@ -1,5 +1,6 @@
-package com.ddxlabs.nim;
+package com.ddxlabs.nim.noise;
 
+import com.ddxlabs.nim.UserPreferences;
 import com.ddxlabs.nim.noise.NmBuilder;
 
 public class Models {

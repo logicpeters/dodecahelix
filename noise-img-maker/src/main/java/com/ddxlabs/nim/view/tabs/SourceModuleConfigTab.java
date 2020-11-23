@@ -5,6 +5,7 @@ import com.ddxlabs.nim.noise.modules.ModifierQualifier;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -58,7 +59,8 @@ public class SourceModuleConfigTab extends ModuleConfigTab {
                 .map(m -> m.name().toLowerCase())
                 .toArray(String[]::new);
         modifierList = new JComboBox<>(modifierOptions);
-        modifierList.setPreferredSize(new Dimension(30,10));
+        modifierList.setMaximumSize(new Dimension(50,30));
+        // modifierList.setPreferredSize(new Dimension(30,0));
         actionsRow.add(modifierList);
 
         JButton modifyButton = new JButton("Add Modifier");
@@ -90,4 +92,5 @@ public class SourceModuleConfigTab extends ModuleConfigTab {
             modifierLabel.setNoModule();
         }
     }
+
 }

@@ -1,5 +1,7 @@
-package com.ddxlabs.nim;
+package com.ddxlabs.nim.view;
 
+import com.ddxlabs.nim.UserPreferences;
+import com.ddxlabs.nim.controller.Controllers;
 import com.ddxlabs.nim.view.GeneratorRow;
 import com.ddxlabs.nim.view.ImagePreviewView;
 import com.ddxlabs.nim.view.Menu;

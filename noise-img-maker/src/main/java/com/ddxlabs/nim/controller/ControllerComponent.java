@@ -1,8 +1,7 @@
 package com.ddxlabs.nim.controller;
 
-import com.ddxlabs.nim.Controllers;
-import com.ddxlabs.nim.Models;
-import com.ddxlabs.nim.Views;
+import com.ddxlabs.nim.noise.Models;
+import com.ddxlabs.nim.view.Views;
 
 public interface ControllerComponent {
 

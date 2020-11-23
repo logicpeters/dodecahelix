@@ -1,4 +1,4 @@
-package com.ddxlabs.nim;
+package com.ddxlabs.nim.noise;
 
 public interface ModelComponent {
 }

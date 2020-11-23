@@ -1,4 +1,4 @@
-package com.ddxlabs.nim.io;
+package com.ddxlabs.nim.utils;
 
 import java.awt.*;
 

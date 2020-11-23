@@ -1,8 +1,11 @@
 package com.ddxlabs.nim.controller;
 
 import com.ddxlabs.nim.*;
+import com.ddxlabs.nim.noise.Models;
 import com.ddxlabs.nim.noise.NmBuilder;
 import com.ddxlabs.nim.noise.NoiseFileBuilder;
+import com.ddxlabs.nim.utils.FileChooseUtils;
+import com.ddxlabs.nim.view.Views;
 import com.ddxlabs.nim.view.tabs.ModuleTabs;
 
 import javax.swing.*;
@@ -30,6 +33,10 @@ public class SystemHandler implements ControllerComponent {
         this.app = app;
     }
 
+    public JFrame getFrame() {
+        return this.app.getFrame();
+    }
+
     public void exitApp() {
         app.exitApp();
     }
@@ -39,7 +46,7 @@ public class SystemHandler implements ControllerComponent {
     }
 
     public void importFile() {
-        Optional<File> chosenFile = openFileChooserAndReturnFile(false, "NIM files", "nim");
+        Optional<File> chosenFile = FileChooseUtils.openFileChooserAndReturnFile(getFrame(),false, false,"NIM files", "nim");
         if (chosenFile.isPresent()) {
             System.out.println("Importing from " + chosenFile.get());
             try {
@@ -55,7 +62,7 @@ public class SystemHandler implements ControllerComponent {
     }
 
     public void exportFile() {
-        Optional<File> chosenFile = openFileChooserAndReturnFile(true,null, null);
+        Optional<File> chosenFile = FileChooseUtils.openFileChooserAndReturnFile(getFrame(), true, false, null, (String[]) null);
         if (chosenFile.isPresent()) {
             File exportFile = chosenFile.get();
             String exportFilePath = exportFile.getAbsolutePath();
@@ -75,25 +82,5 @@ public class SystemHandler implements ControllerComponent {
         }
     }
 
-    private Optional<File> openFileChooserAndReturnFile(boolean save,
-                                                        String description,
-                                                        String... extensions) {
-        // open up a file chooser
-        JFileChooser chooser = new JFileChooser();
-        int returnVal;
-        if (save) {
-            // chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            returnVal = chooser.showSaveDialog(app.getFrame());
-        } else {
-            FileNameExtensionFilter filter = new FileNameExtensionFilter(description, extensions);
-            chooser.setFileFilter(filter);
-            returnVal = chooser.showOpenDialog(app.getFrame());
-        }
 
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            return Optional.of(chooser.getSelectedFile());
-        } else {
-            return Optional.empty();
-        }
-    }
 }

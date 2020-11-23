@@ -1,9 +1,9 @@
 package com.ddxlabs.nim.controller;
 
-import com.ddxlabs.nim.Controllers;
-import com.ddxlabs.nim.Models;
+import com.ddxlabs.nim.noise.Models;
 import com.ddxlabs.nim.UserPreferences;
-import com.ddxlabs.nim.Views;
+import com.ddxlabs.nim.view.Views;
+import com.ddxlabs.nim.utils.NumberUtils;
 import com.ddxlabs.nim.noise.NmBuilder;
 import com.ddxlabs.nim.noise.NmType;
 import com.ddxlabs.nim.noise.ParamsMap;
@@ -11,7 +11,6 @@ import com.ddxlabs.nim.noise.StructureMap;
 import com.ddxlabs.nim.noise.modules.*;
 import com.ddxlabs.nim.view.tabs.ModuleTabs;
 
-import javax.print.DocFlavor;
 import java.util.*;
 
 public class ModuleHandler implements ControllerComponent {
@@ -170,4 +169,14 @@ public class ModuleHandler implements ControllerComponent {
     public Map<String, NmType> getModuleTypes() {
         return this.moduleBuilder.getStructure().getModuleTypes();
     }
+
+    public void incrementParam(String moduleId, String paramKey, boolean decrementInstead, int factor) {
+        String paramValue = this.moduleBuilder.getParamValue(moduleId, paramKey);
+        String newValue = NumberUtils.increment(paramValue, decrementInstead, factor);
+        // TODO - make sure new value does not violate constraints
+        this.moduleBuilder.updateParamValue(moduleId, paramKey, newValue);
+        moduleTabs.refreshTabData();
+        // TODO - preview??
+    }
+
 }

@@ -22,17 +22,23 @@ Creating and executing a custom runtime image:
     cd build/image/bin
     ./nim
     
-    
 ### TODO
 
-- add a new source module
-- designate the root module
-- add a modifier to a source
-- change the type of a source module
+- import complex structures - combos and multipliers
+- actions buttons: increment/decrement param and preview
 - validate a module (via button)
-- validate all modules in a tree
-- add another source
-- combine two sources
-- link between modules
+- validate all modules in a tree (bottom button)
+- convenience menu option to add COMBO + SOURCE (various qualifiers) to an existing SOURCE
+- presets dropdown to import from local nim files in src/main/resources
+- video mode: tweak random param and update preview pane; pause to stop (button on bottom)
+- easy button to swap between color and BW modes
+- themes
+- swing alternative look and feel
+- allow you to delete "orphan" modules
+- allow you to delete combo sources
+- have doubles resolve between 0.1 and 3
+- have octaves resolve between 1 and 4
+
+
 
 

@@ -1,10 +1,16 @@
 package com.ddxlabs.nim.controller;
 
 import com.ddxlabs.nim.*;
+import com.ddxlabs.nim.noise.Models;
 import com.ddxlabs.nim.noise.modules.ComboQualifier;
 import com.ddxlabs.nim.noise.modules.SourceQualifier;
+import com.ddxlabs.nim.utils.FileChooseUtils;
 import com.ddxlabs.nim.view.ColorTheme;
 import com.ddxlabs.nim.view.Menu;
+import com.ddxlabs.nim.view.Views;
+
+import java.io.File;
+import java.util.Optional;
 
 public class MenuItemHandler implements ControllerComponent {
 
@@ -45,7 +51,29 @@ public class MenuItemHandler implements ControllerComponent {
             case Menu.THEME_STD_DARK: updateTheme(ColorTheme.STD_DARK); break;
             case Menu.THEME_STD_LIGHT: updateTheme(ColorTheme.STD_LIGHT); break;
             case Menu.THEME_OCEAN: updateTheme(ColorTheme.OCEAN_DARK); break;
+            case Menu.PREFS_USE_BW:
+            case Menu.PREFS_USE_COLOR:
+            case Menu.PREFS_SET_IMAGE_EXPORT_DIR:
+            case Menu.PREFS_SET_EXPORT_DIR:
+                updatePref(menuItemId); break;
             default: System.err.println("Menu action " + menuItemId + " not implemented");
+        }
+    }
+
+    private void updatePref(String menuItemId) {
+        switch (menuItemId) {
+            case Menu.PREFS_USE_BW: prefsHandler.setPreference(UserPreferences.KEY_IMAGE_COLOR, "false"); break;
+            case Menu.PREFS_USE_COLOR: prefsHandler.setPreference(UserPreferences.KEY_IMAGE_COLOR, "true"); break;
+            case Menu.PREFS_SET_EXPORT_DIR: {
+                Optional<File> folder = FileChooseUtils.openFileChooserAndReturnFile(systemHandler.getFrame(),
+                        false, true, "Folder", null);
+                folder.ifPresent(file -> prefsHandler.setPreference(UserPreferences.KEY_IMAGE_FILE_FOLDER, file.getAbsolutePath()));
+            }; break;
+            case Menu.PREFS_SET_IMAGE_EXPORT_DIR: {
+                Optional<File> folder = FileChooseUtils.openFileChooserAndReturnFile(systemHandler.getFrame(),
+                        false, true, "Folder", null);
+                folder.ifPresent(file -> prefsHandler.setPreference(UserPreferences.KEY_IMAGE_FOLDER, file.getAbsolutePath()));
+            }; break;
         }
     }
 
