@@ -1,5 +1,6 @@
 package com.ddxlabs.nim.controller;
 
+import com.ddxlabs.nim.NimException;
 import com.ddxlabs.nim.noise.Models;
 import com.ddxlabs.nim.UserPreferences;
 import com.ddxlabs.nim.view.Views;
@@ -21,6 +22,7 @@ public class ModuleHandler implements ControllerComponent {
 
     // views
     private ModuleTabs moduleTabs;
+    private SystemHandler systemHandler;
 
     public ModuleHandler(UserPreferences prefs) {
         this.prefs = prefs;
@@ -30,6 +32,7 @@ public class ModuleHandler implements ControllerComponent {
     public void init(Controllers controllers, Views views, Models models) {
         this.moduleBuilder = models.getNmBuilder();
         this.moduleTabs = views.getModuleTabs();
+        this.systemHandler = controllers.getSystemHandler();
     }
 
     public String addComboModule(ComboQualifier comboQualifier) {
@@ -83,6 +86,7 @@ public class ModuleHandler implements ControllerComponent {
     }
 
     public void setParamValueForModule(String moduleId, String paramName, String paramValue) {
+        // TODO - dont let parameter fall outside constraints
         this.moduleBuilder.getParams().resetValue(moduleId, paramName, paramValue);
     }
 
@@ -177,6 +181,24 @@ public class ModuleHandler implements ControllerComponent {
         this.moduleBuilder.updateParamValue(moduleId, paramKey, newValue);
         moduleTabs.refreshTabData();
         // TODO - preview??
+    }
+
+    public void deleteModule(String moduleId) {
+        // remove from structure
+        try {
+            this.moduleBuilder.getStructure().removeModule(moduleId);
+        } catch (NimException e) {
+            e.printStackTrace();
+            this.systemHandler.popupMessage(e.getMessage());
+            return;
+        }
+
+        // remove params
+        this.moduleBuilder.getParams().removeModuleParams(moduleId);
+
+        // UI changes
+        this.moduleTabs.removeModuleTab(moduleId);
+        this.moduleTabs.refreshTabData();
     }
 
 }

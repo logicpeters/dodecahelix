@@ -13,6 +13,7 @@ public class Controllers {
     private ModuleHandler moduleHandler;
     private SystemHandler systemHandler;
     private UserPreferencesHandler userPreferencesHandler;
+    private ImportExportHandler importExportHandler;
 
     public Controllers(UserPreferences preferences) {
         this.preferences = preferences;
@@ -21,6 +22,7 @@ public class Controllers {
         this.menuItemHandler = new MenuItemHandler(preferences);
         this.imageGenerationHandler = new ImageGenerationHandler(preferences);
         this.systemHandler = new SystemHandler(preferences);
+        this.importExportHandler = new ImportExportHandler(preferences);
     }
 
     public void init(Views views, Models models) {
@@ -29,6 +31,7 @@ public class Controllers {
         this.menuItemHandler.init(this, views, models);
         this.imageGenerationHandler.init(this, views, models);
         this.systemHandler.init(this, views, models);
+        this.importExportHandler.init(this, views, models);
     }
 
     public ImageGenerationHandler getImageGenerationHandler() {
@@ -51,4 +54,7 @@ public class Controllers {
         return userPreferencesHandler;
     }
 
+    public ImportExportHandler getImportExportHandler() {
+        return importExportHandler;
+    }
 }

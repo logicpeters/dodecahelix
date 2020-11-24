@@ -1,5 +1,7 @@
 package com.ddxlabs.nim.noise;
 
+import com.ddxlabs.nim.NimException;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -199,5 +201,27 @@ public class StructureMap {
 
     public Map<String, NmType> getModuleTypes() {
         return Collections.unmodifiableMap(this.moduleTypes);
+    }
+
+    public void removeModule(String moduleId) throws NimException {
+        // check if parent
+        if (rootModuleId.equalsIgnoreCase(moduleId)) {
+            throw new NimException("Cant remove the root module!  Assign another module as root first.");
+        }
+        if (comboChildren.containsKey(moduleId) && !comboChildren.get(moduleId).isEmpty()) {
+            throw new NimException("Can't remove a parent module.  Remove any source/modifier modules first.");
+        }
+        if (modifiers.containsKey(moduleId)) {
+            throw new NimException("Can't remove a modified module.  Remove the modifier module first.");
+        }
+
+        for (List<String> childSet : comboChildren.values()) {
+            childSet.remove(moduleId);
+        }
+
+        modifiers.entrySet().removeIf(qualifier -> qualifier.getValue().equalsIgnoreCase(moduleId));
+        moduleTypes.remove(moduleId);
+        moduleQualifiers.remove(moduleId);
+        comboChildren.remove(moduleId);
     }
 }

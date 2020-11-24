@@ -23,19 +23,19 @@ Creating and executing a custom runtime image:
     ./nim
     
 ### TODO
-
-- import complex structures - combos and multipliers
-- actions buttons: increment/decrement param and preview
+- allow you to delete combo sources
+- convenience menu option to add COMBO + SOURCE (various qualifiers) to an existing SOURCE
+- input a seed and randomize all current module/structure values from that seed
+  reset the pools in the ParamsMap from the seed
+  go through each current usage, get the parameter and randomize from the parameter (if<1 double 0.1 - 1.0; if <5 double, 0.1-5.0, etc..)
+- randomize values for the current module
+- export file should bring up a dialog
 - validate a module (via button)
 - validate all modules in a tree (bottom button)
-- convenience menu option to add COMBO + SOURCE (various qualifiers) to an existing SOURCE
-- presets dropdown to import from local nim files in src/main/resources
 - video mode: tweak random param and update preview pane; pause to stop (button on bottom)
-- easy button to swap between color and BW modes
 - themes
+- configurable titles for tabs
 - swing alternative look and feel
-- allow you to delete "orphan" modules
-- allow you to delete combo sources
 - have doubles resolve between 0.1 and 3
 - have octaves resolve between 1 and 4
 

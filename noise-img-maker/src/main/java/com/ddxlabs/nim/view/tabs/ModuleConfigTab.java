@@ -90,8 +90,8 @@ public abstract class ModuleConfigTab implements ViewComponent, ActionListener {
         actionsRow.setLayout(new BoxLayout(actionsRow, BoxLayout.X_AXIS));
         actionsRow.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JButton validateButton = new JButton("Validate");
-        validateButton.setActionCommand("validate");
+        JButton validateButton = new JButton("Delete");
+        validateButton.setActionCommand("delete_tab");
         validateButton.addActionListener(this);
         actionsRow.add(validateButton);
 
@@ -119,6 +119,9 @@ public abstract class ModuleConfigTab implements ViewComponent, ActionListener {
         if (command!=null) {
             if ("make_root".equals(command)) {
                 this.moduleHandler.setRootModule(moduleId);
+            }
+            if ("delete_tab".equals(command)) {
+                this.moduleHandler.deleteModule(moduleId);
             }
         }
     }

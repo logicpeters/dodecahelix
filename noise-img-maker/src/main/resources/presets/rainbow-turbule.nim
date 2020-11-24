@@ -1,0 +1,23 @@
+# ROOT
+dc6288de-5fce-4d94-9a90-a37e0444e559
+# TYPES
+5b4055e0-17fa-46f8-b214-eda567ed64fa,MODIFIER
+dc6288de-5fce-4d94-9a90-a37e0444e559,SOURCE
+34b31495-96b2-4e25-b268-20eeb38889ba,MODIFIER
+# QUALIFIERS
+5b4055e0-17fa-46f8-b214-eda567ed64fa,turbule
+dc6288de-5fce-4d94-9a90-a37e0444e559,perlin
+34b31495-96b2-4e25-b268-20eeb38889ba,terrace
+# CHILDREN
+# MODIFIERS
+dc6288de-5fce-4d94-9a90-a37e0444e559,5b4055e0-17fa-46f8-b214-eda567ed64fa
+# PARAMS
+dc6288de-5fce-4d94-9a90-a37e0444e559-octaves,7
+dc6288de-5fce-4d94-9a90-a37e0444e559-lacunarity,0.3235
+dc6288de-5fce-4d94-9a90-a37e0444e559-seed,1161514052
+34b31495-96b2-4e25-b268-20eeb38889ba-control-points,3
+5b4055e0-17fa-46f8-b214-eda567ed64fa-frequency,0.3723
+dc6288de-5fce-4d94-9a90-a37e0444e559-persistence,4.3545
+dc6288de-5fce-4d94-9a90-a37e0444e559-frequency,0.1661
+5b4055e0-17fa-46f8-b214-eda567ed64fa-roughness,7
+5b4055e0-17fa-46f8-b214-eda567ed64fa-power,0.4029

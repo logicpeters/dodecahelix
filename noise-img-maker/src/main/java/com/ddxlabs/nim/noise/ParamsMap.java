@@ -5,32 +5,60 @@ import java.util.stream.Collectors;
 
 public class ParamsMap {
 
-    // whether or not to generate random values if they do not exist
-    // TODO - shouldn't this always be true??
-    private boolean generator = false;
+    private final List<Double> dblPool = new ArrayList<>();
+    private final List<Integer> thouPool = new ArrayList<>();
+    private final List<Boolean> boolPool = new ArrayList<>();
+    private final List<Integer> seedPool = new ArrayList<>();
 
-    private List<Double> dblPool = new ArrayList<>();
-    private List<Integer> thouPool = new ArrayList<>();
-    private List<Boolean> boolPool = new ArrayList<>();
-    private List<Integer> seedPool = new ArrayList<>();
-
-    private int moduleSeed; // special seed for this module
-
+    // maintain pointers to the last instance of the
     private int dblPtr = -1;
     private int thouPtr = -1;
     private int boolPtr = -1;
     private int seedPtr = -1;
 
+    // how many numbers to maintain in the pools
+    private int maxDoubles = 100;
+    private int maxInts = 100;
+    private int maxBools = 100;
+    private int maxSeeds = 100;
+
+    // as parameters are generated, they are fixed in this map.
     private Map<String, String> usages;
 
     public ParamsMap(Map<String, String> usages) {
-        generator = false;
         this.usages = usages;
+
+        int seed = (new Random()).nextInt();
+        setOrResetPools(seed);
     }
 
+    /**
+     * This initializes a pool of random numbers using a "seed" number from which to build future parameters.
+     *
+     * @param seed - seed for generating the initial random number pools.
+     *
+     * @param maxDoubles -- how many random doubles that you want to generate
+     * @param maxInts -- how many random 1-1000 integers that you want to generate
+     * @param maxBools -- how many random booleans that you want to generate
+     * @param maxSeeds -- how many random 'seed' integers that you want to generate
+     */
     public ParamsMap(int seed, int maxDoubles, int maxInts, int maxBools, int maxSeeds) {
-        generator = true;
         usages = new HashMap<>();
+
+        this.maxDoubles = maxDoubles;
+        this.maxInts = maxInts;
+        this.maxBools = maxBools;
+        this.maxSeeds = maxSeeds;
+
+        setOrResetPools(seed);
+    }
+
+    private void setOrResetPools(int seed) {
+        dblPool.clear();
+        thouPool.clear();
+        boolPool.clear();
+        seedPool.clear();
+
         Random random = new Random(seed);
         for (int i=0; i<maxDoubles; i++) {
             dblPool.add(random.nextDouble());
@@ -54,37 +82,51 @@ public class ParamsMap {
         return getDob(moduleId, param, 1);
     }
 
+    /**
+     *
+     * @param moduleId
+     * @param param
+     * @param multiplier - multiply the result by this amount
+     * @return
+     */
     public double getDob(String moduleId, String param, double multiplier) {
         String pkey = tokey(moduleId, param);
-        if (generator && !usages.containsKey(pkey)) {
+
+        // if the key doesn't exist (i.e; you are creating a new module)
+        //   create one using a random value from the pool
+        if (!usages.containsKey(pkey)) {
             dblPtr++;
             if (dblPtr >= dblPool.size()) {
                 dblPtr = 0;
             }
             double value = multiplier * dblPool.get(dblPtr);
-            // limit precision of double
+            // limit precision of double values
             String formatted = String.format("%.4f", value);
             usages.put(pkey, formatted);
         }
+
         return Double.parseDouble(usages.get(pkey));
     }
 
     /**
      *
-     * @param divver = number to divide value by, i.e; 1 for 1-1000, 10 for 1-100, 100 for 1-10
+     * @param divver = number to divide random value for result, i.e; 1 for 1-1000, 10 for 1-100, 100 for 1-10
      * @param moduleId
      * @param param
-     * @return
+     * @return randome number from 1-1000 (divided by the 'divver')
      */
     public int getInt(int divver, String moduleId, String param) {
         String pkey = tokey(moduleId, param);
-        if (generator && !usages.containsKey(pkey)) {
+
+        if (!usages.containsKey(pkey)) {
             thouPtr++;
             if (thouPtr >= thouPool.size()) {
                 thouPtr = 0;
             }
             int value = thouPool.get(thouPtr);
-            value = Math.round(value / divver);
+            value = value / divver;
+            // add 1 to get true 1-1000 value (non-zero)
+            value++;
             usages.put(pkey, String.valueOf(value));
         }
         return Integer.parseInt(usages.get(pkey));
@@ -92,7 +134,8 @@ public class ParamsMap {
 
     public int getSeed(String moduleId) {
         String pkey = tokey(moduleId, "seed");
-        if (generator && !usages.containsKey(pkey)) {
+
+        if (!usages.containsKey(pkey)) {
             seedPtr++;
             if (seedPtr >= seedPool.size()) {
                 seedPtr = 0;
@@ -105,7 +148,8 @@ public class ParamsMap {
 
     public boolean getBool(String moduleId, String param) {
         String pkey = tokey(moduleId, param);
-        if (generator && !usages.containsKey(pkey) ) {
+
+        if (!usages.containsKey(pkey) ) {
             boolPtr++;
             if (boolPtr >= boolPool.size()) {
                 boolPtr = 0;
@@ -162,26 +206,16 @@ public class ParamsMap {
      * @param entries
      */
     public void addForModule(String moduleId, Map<String, String> entries) {
-        entries.entrySet().forEach(entry -> {
-            usages.put(tokey(moduleId, entry.getKey()), entry.getValue());
-        });
-    }
-
-    /**
-     * Manually sets the generator function to true/false.
-     *
-     * TODO - should this be allowed??
-     *
-     * @param generator
-     */
-    public void lockGenerator(boolean generator) {
-        this.generator = generator;
+        entries.forEach((key, value) -> usages.put(tokey(moduleId, key), value));
     }
 
     public void replaceParams(ParamsMap replacementParams) {
         // Can still generate after replacing
-        this.generator = true;
         this.usages.clear();
         this.usages.putAll(replacementParams.usages);
+    }
+
+    public void removeModuleParams(String moduleId) {
+        usages.entrySet().removeIf(entry -> entry.getKey().startsWith(moduleId));
     }
 }

@@ -106,4 +106,10 @@ public class ModuleTabs implements ViewComponent {
             addModule(moduleTypes.get(moduleId), moduleId);
         }
     }
+
+    public void removeModuleTab(String moduleId) {
+        this.tabMap.remove(moduleId);
+        int tabIndex = tabbedPane.indexOfTab(titleForModule(moduleId));
+        this.tabbedPane.removeTabAt(tabIndex);
+    }
 }

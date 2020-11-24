@@ -18,6 +18,7 @@ public class MenuItemHandler implements ControllerComponent {
     private UserPreferencesHandler prefsHandler;
     private SystemHandler systemHandler;
     private ModuleHandler moduleHandler;
+    private ImportExportHandler importExportHandler;
 
     public MenuItemHandler(UserPreferences prefs) {
     }
@@ -26,6 +27,8 @@ public class MenuItemHandler implements ControllerComponent {
         this.prefsHandler = controllers.getUserPreferencesHandler();
         this.systemHandler = controllers.getSystemHandler();
         this.moduleHandler = controllers.getModuleHandler();
+        this.importExportHandler = controllers.getImportExportHandler();
+
         this.allViews = views;
     }
 
@@ -41,18 +44,19 @@ public class MenuItemHandler implements ControllerComponent {
             String qualName = menuItemId.substring(lastUnderscore + 1).toUpperCase();
             addModule(menuItemId, qualName);
             return;
+
         }
         if (menuItemId.startsWith("PRESET_")) {
             String presetName = menuItemId.substring(menuItemId.indexOf("_")+1);
             Preset preset = Preset.valueOf(presetName);
-            this.systemHandler.importPreset(preset);
+            this.importExportHandler.importPreset(preset);
             return;
         }
 
         switch (menuItemId) {
             // TODO - get rid of this cast/app dependency
-            case Menu.FILE_OPEN: systemHandler.importFile(); break;
-            case Menu.FILE_SAVE: systemHandler.exportFile(); break;
+            case Menu.FILE_OPEN: importExportHandler.importFile(); break;
+            case Menu.FILE_SAVE: importExportHandler.exportFile(); break;
             case Menu.APP_EXIT: systemHandler.exitApp(); break;
             case Menu.THEME_STD_DARK: updateTheme(ColorTheme.STD_DARK); break;
             case Menu.THEME_STD_LIGHT: updateTheme(ColorTheme.STD_LIGHT); break;
