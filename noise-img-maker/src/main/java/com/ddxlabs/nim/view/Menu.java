@@ -1,5 +1,6 @@
 package com.ddxlabs.nim.view;
 
+import com.ddxlabs.nim.Preset;
 import com.ddxlabs.nim.controller.Controllers;
 import com.ddxlabs.nim.controller.MenuItemHandler;
 import com.ddxlabs.nim.UserPreferences;
@@ -71,6 +72,10 @@ public class Menu implements ViewComponent {
         menuBar.add(moduleMenu);
 
         JMenu presetsMenu = new JMenu("Presets");
+        for (Preset preset: Preset.values()) {
+            this.addMenuItem(presetsMenu, preset.getDisplay(), "PRESET_" + preset.name(), 0);
+        }
+
         menuBar.add(presetsMenu);
 
         JMenu prefsMenu = new JMenu("Preferences");

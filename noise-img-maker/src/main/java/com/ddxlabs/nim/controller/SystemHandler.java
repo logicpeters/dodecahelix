@@ -9,14 +9,16 @@ import com.ddxlabs.nim.view.Views;
 import com.ddxlabs.nim.view.tabs.ModuleTabs;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Optional;
 
 public class SystemHandler implements ControllerComponent {
 
     private Application app;
+    private ImageGenerationHandler imgeGenHandler;
     private ModuleHandler moduleHandler;
     private ModuleTabs moduleTabs;
 
@@ -27,6 +29,7 @@ public class SystemHandler implements ControllerComponent {
     public void init(Controllers controllers, Views views, Models models) {
         this.moduleHandler = controllers.getModuleHandler();
         this.moduleTabs = views.getModuleTabs();
+        this.imgeGenHandler = controllers.getImageGenerationHandler();
     }
 
     public void setApp(Application app) {
@@ -83,4 +86,21 @@ public class SystemHandler implements ControllerComponent {
     }
 
 
+    public void importPreset(Preset preset) {
+        System.out.println("loading preset from path " + preset.getPath());
+        try {
+            String presetPath = preset.getPath();
+            URL resource = this.getClass().getResource(presetPath);
+            System.out.println("URI is " + resource.toURI());
+            File file = new File(resource.toURI());
+            NmBuilder builder = NoiseFileBuilder.buildModuleFromFile(file.getAbsolutePath());
+            // clear all tabs
+            this.moduleHandler.loadNewBuilderStructure(builder.getStructure(), builder.getParams());
+            this.moduleTabs.reloadStructure();
+            this.imgeGenHandler.generateAndShowImage();
+        } catch (IOException | URISyntaxException e) {
+            // TODO - present a dialog to user
+            e.printStackTrace();
+        }
+    }
 }

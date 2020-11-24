@@ -42,6 +42,12 @@ public class MenuItemHandler implements ControllerComponent {
             addModule(menuItemId, qualName);
             return;
         }
+        if (menuItemId.startsWith("PRESET_")) {
+            String presetName = menuItemId.substring(menuItemId.indexOf("_")+1);
+            Preset preset = Preset.valueOf(presetName);
+            this.systemHandler.importPreset(preset);
+            return;
+        }
 
         switch (menuItemId) {
             // TODO - get rid of this cast/app dependency
