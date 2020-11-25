@@ -34,7 +34,10 @@ public class ImageGenerator {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 double noise = module.getValue(x / xPeriod, y / yPeriod, 0) / 2;
-                noise = Math.ceil(noise * chop) / chop;
+                if (chop>0) {
+                    // chop is a way of producing discreet values for noise
+                    noise = Math.ceil(noise * chop) / chop;
+                }
                 data[y * width + x] = (short) (noise * 65_535);
             }
         }

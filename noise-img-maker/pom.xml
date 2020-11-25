@@ -36,6 +36,11 @@
             <artifactId>noise</artifactId>
             <version>${spongepowered.noise.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.jtattoo</groupId>
+            <artifactId>JTattoo</artifactId>
+            <version>1.6.13</version>
+        </dependency>
 
         <!-- Test dependencies -->
         <dependency>

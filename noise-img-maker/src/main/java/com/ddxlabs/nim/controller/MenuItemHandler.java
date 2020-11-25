@@ -60,6 +60,7 @@ public class MenuItemHandler implements ControllerComponent {
             ComboQualifier cQual = ComboQualifier.valueOf(splits[2].toUpperCase());
             SourceQualifier sQual = SourceQualifier.valueOf(splits[3].toUpperCase());
             buildComboModule(cQual, sQual);
+            return;
         }
 
         switch (menuItemId) {

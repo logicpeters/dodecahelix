@@ -49,6 +49,7 @@ public class CombinerModuleConfigTab extends ModuleConfigTab {
         makeRootButton.setActionCommand("make_root");
         makeRootButton.addActionListener(this);
         actionsRow.add(makeRootButton);
+
         return panel;
     }
 
@@ -77,6 +78,13 @@ public class CombinerModuleConfigTab extends ModuleConfigTab {
         addSourceButton.setActionCommand("add_source_module");
         addSourceButton.addActionListener(this);
         choosePanel.add(addSourceButton);
+
+        choosePanel.add(Box.createRigidArea(new Dimension(15, 0)));
+
+        JButton removeSourcesButton = new JButton("Clear Sources");
+        removeSourcesButton.setActionCommand("clear_sources");
+        removeSourcesButton.addActionListener(this);
+        choosePanel.add(removeSourcesButton);
 
         choosePanel.add(Box.createHorizontalGlue());
         return choosePanel;
@@ -113,6 +121,9 @@ public class CombinerModuleConfigTab extends ModuleConfigTab {
             sourceModulesPanel.add(label);
             sourceModulesPanel.revalidate();
             this.moduleHandler.setSourceModulesForCombo(moduleId, currentChildren);
+        }
+        if ("clear_sources".equalsIgnoreCase(e.getActionCommand())) {
+            this.moduleHandler.setSourceModulesForCombo(moduleId, new ArrayList<>());
         }
     }
 }

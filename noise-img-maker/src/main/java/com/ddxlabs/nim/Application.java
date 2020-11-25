@@ -8,6 +8,8 @@ import com.ddxlabs.nim.noise.NmBuilder;
 import com.ddxlabs.nim.noise.NmType;
 import com.ddxlabs.nim.view.Views;
 
+import com.jtattoo.plaf.aluminium.AluminiumLookAndFeel;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -42,6 +44,21 @@ public class Application implements Runnable {
     }
 
     public static void main(String[] args) {
+        String slaf = "com.jtattoo.plaf.smart.SmartLookAndFeel";
+        String alaf = "com.jtattoo.plaf.acryl.AcrylLookAndFeel";
+        String aelaf = "com.jtattoo.plaf.aero.AeroLookAndFeel";
+        String hflaf = "com.jtattoo.plaf.hifi.HiFiLookAndFeel";
+        String flaf = "com.jtattoo.plaf.fast.FastLookAndFeel";
+        String mlaf = "com.jtattoo.plaf.mint.MintLookAndFeel";
+        String llaf = "com.jtattoo.plaf.luna.LunaLookAndFeel";
+        String mcwinLaf = "com.jtattoo.plaf.mcwin.McWinLookAndFeel";
+        String alumLaf = "com.jtattoo.plaf.aluminium.AluminiumLookAndFeel";
+        try {
+            UIManager.setLookAndFeel(slaf);
+            // UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         SwingUtilities.invokeLater(new Application());
     }
 
