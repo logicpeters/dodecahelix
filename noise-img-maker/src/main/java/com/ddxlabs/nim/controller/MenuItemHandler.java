@@ -10,6 +10,8 @@ import com.ddxlabs.nim.view.Menu;
 import com.ddxlabs.nim.view.Views;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class MenuItemHandler implements ControllerComponent {
@@ -53,6 +55,13 @@ public class MenuItemHandler implements ControllerComponent {
             return;
         }
 
+        if (menuItemId.startsWith(Menu.MODULE_BUILD_COMBO)) {
+            String[] splits = menuItemId.split("_");
+            ComboQualifier cQual = ComboQualifier.valueOf(splits[2].toUpperCase());
+            SourceQualifier sQual = SourceQualifier.valueOf(splits[3].toUpperCase());
+            buildComboModule(cQual, sQual);
+        }
+
         switch (menuItemId) {
             // TODO - get rid of this cast/app dependency
             case Menu.FILE_OPEN: importExportHandler.importFile(); break;
@@ -85,6 +94,19 @@ public class MenuItemHandler implements ControllerComponent {
                 folder.ifPresent(file -> prefsHandler.setPreference(UserPreferences.KEY_IMAGE_FOLDER, file.getAbsolutePath()));
             }; break;
         }
+    }
+
+    private void buildComboModule(ComboQualifier cQual, SourceQualifier sQual) {
+        String comboModuleId = moduleHandler.addComboModule(cQual);
+        String sourceModuleId = moduleHandler.addSourceModule(sQual);
+        String currentRootId = moduleHandler.getRootModule();
+        // make the cQual the root
+        // add the previous root to the combo
+        moduleHandler.setRootModule(comboModuleId);
+        List<String> sourceModules = new ArrayList<>();
+        sourceModules.add(currentRootId);
+        sourceModules.add(sourceModuleId);
+        moduleHandler.setSourceModulesForCombo(comboModuleId, sourceModules);
     }
 
     private void addModule(String menuItemId, String qualName) {

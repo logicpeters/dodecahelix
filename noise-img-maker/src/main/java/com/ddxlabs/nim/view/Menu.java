@@ -29,6 +29,7 @@ public class Menu implements ViewComponent {
     public static final String MODULE_ADD = "add_module_";
     public static final String MODULE_ADD_SOURCE = "add_module_source_";
     public static final String MODULE_ADD_COMBO = "add_module_combo_";
+    public static final String MODULE_BUILD_COMBO = "build_combo";
 
     public static final String PREFS_USE_COLOR = "prefs_use_color";
     public static final String PREFS_USE_BW = "prefs_use_bw";
@@ -69,6 +70,18 @@ public class Menu implements ViewComponent {
         for (ComboQualifier cqual : ComboQualifier.values()) {
             this.addMenuItem(addComboMenu, cqual.name(), MODULE_ADD_COMBO + cqual.name().toLowerCase(), 0);
         }
+
+        JMenu buildComboMenu = new JMenu("Combine");
+        for (ComboQualifier cqual : ComboQualifier.values()) {
+            JMenu buildComboSubmenu = new JMenu(cqual.name());
+            for (SourceQualifier squal : SourceQualifier.values()) {
+                String menuItemId = String.format("%s_%s_%s", MODULE_BUILD_COMBO, cqual.name().toLowerCase(), squal.name().toLowerCase());
+                this.addMenuItem(buildComboSubmenu, squal.name(), menuItemId, 0);
+            }
+            buildComboMenu.add(buildComboSubmenu);
+        }
+        moduleMenu.add(buildComboMenu);
+
         menuBar.add(moduleMenu);
 
         JMenu presetsMenu = new JMenu("Presets");

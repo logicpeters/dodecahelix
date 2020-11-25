@@ -201,4 +201,7 @@ public class ModuleHandler implements ControllerComponent {
         this.moduleTabs.refreshTabData();
     }
 
+    public String getRootModule() {
+        return moduleBuilder.getStructure().getRootModuleId();
+    }
 }
