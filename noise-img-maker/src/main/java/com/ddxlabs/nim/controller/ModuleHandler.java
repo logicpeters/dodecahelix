@@ -1,14 +1,10 @@
 package com.ddxlabs.nim.controller;
 
 import com.ddxlabs.nim.NimException;
-import com.ddxlabs.nim.noise.Models;
+import com.ddxlabs.nim.noise.*;
 import com.ddxlabs.nim.UserPreferences;
 import com.ddxlabs.nim.view.Views;
 import com.ddxlabs.nim.utils.NumberUtils;
-import com.ddxlabs.nim.noise.NmBuilder;
-import com.ddxlabs.nim.noise.NmType;
-import com.ddxlabs.nim.noise.ParamsMap;
-import com.ddxlabs.nim.noise.StructureMap;
 import com.ddxlabs.nim.noise.modules.*;
 import com.ddxlabs.nim.view.tabs.ModuleTabs;
 
@@ -22,7 +18,10 @@ public class ModuleHandler implements ControllerComponent {
 
     // views
     private ModuleTabs moduleTabs;
+
+    // controllers
     private SystemHandler systemHandler;
+    private ImageGenerationHandler imageGenerationHandler;
 
     public ModuleHandler(UserPreferences prefs) {
         this.prefs = prefs;
@@ -33,6 +32,7 @@ public class ModuleHandler implements ControllerComponent {
         this.moduleBuilder = models.getNmBuilder();
         this.moduleTabs = views.getModuleTabs();
         this.systemHandler = controllers.getSystemHandler();
+        this.imageGenerationHandler = controllers.getImageGenerationHandler();
     }
 
     public String addComboModule(ComboQualifier comboQualifier) {
@@ -166,8 +166,8 @@ public class ModuleHandler implements ControllerComponent {
         return this.moduleBuilder.getParams().asCsvList();
     }
 
-    public void loadNewBuilderStructure(StructureMap structure, ParamsMap params) {
-        this.moduleBuilder.replaceStructure(structure, params);
+    public void loadNewBuilderStructure(StructureMap structure, ParamsMap params, ImageTweaks tweaks) {
+        this.moduleBuilder.replaceStructure(structure, params, tweaks);
     }
 
     public Map<String, NmType> getModuleTypes() {
@@ -203,5 +203,26 @@ public class ModuleHandler implements ControllerComponent {
 
     public String getRootModule() {
         return moduleBuilder.getStructure().getRootModuleId();
+    }
+
+    public List<String> getTweaksAsCsv() {
+        return moduleBuilder.getTweaks().asCsvList();
+    }
+
+    public void incOrSetChopForStructure(int setChop, int incAmt) {
+        int chop;
+        Optional<Integer> chopOpt = this.moduleBuilder.getTweaks().getChop();
+        if (chopOpt.isPresent()) {
+            chop = chopOpt.get() + incAmt;
+        } else {
+            chop = prefs.getIntPreference(UserPreferences.KEY_IMAGE_CHOP);
+            chop += incAmt;
+        }
+        if (setChop>=0) {
+            chop = setChop;
+        }
+        this.moduleBuilder.getTweaks().setChop(chop);
+        this.moduleTabs.refreshTabData();
+        this.imageGenerationHandler.generateAndShowImage();
     }
 }

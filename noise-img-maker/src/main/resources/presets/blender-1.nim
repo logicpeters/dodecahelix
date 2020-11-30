@@ -29,3 +29,5 @@ dddc57ce-c29c-4bc9-bed9-2e6609b6aeed-persistence,0.2181
 0dc15c24-f767-497c-8e4b-83d5a23c0bdb-lacunarity,0.6825
 cd583159-64e9-4025-b68d-fb47a43be830-lacunarity,1.4932
 dddc57ce-c29c-4bc9-bed9-2e6609b6aeed-lacunarity,4.9888
+# TWEAKS
+chop,5

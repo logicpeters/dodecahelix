@@ -23,6 +23,7 @@ Creating and executing a custom runtime image:
     ./nim
     
 ### TODO
+- persist 'chop' and 'period' to the structure
 - allow you to delete combo sources
 - convenience menu option to add COMBO + SOURCE (various qualifiers) to an existing SOURCE
 - input a seed and randomize all current module/structure values from that seed

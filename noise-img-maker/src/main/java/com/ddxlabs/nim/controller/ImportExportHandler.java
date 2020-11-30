@@ -40,9 +40,10 @@ public class ImportExportHandler implements ControllerComponent {
         if (chosenFile.isPresent()) {
             System.out.println("Importing from " + chosenFile.get());
             try {
-                NmBuilder builder = NoiseFileBuilder.buildModuleFromFile(chosenFile.get().getAbsolutePath());
+                NoiseFileBuilder fileBuilder = new NoiseFileBuilder();
+                NmBuilder builder = fileBuilder.buildModuleFromFile(chosenFile.get().getAbsolutePath());
                 // clear all tabs
-                this.moduleHandler.loadNewBuilderStructure(builder.getStructure(), builder.getParams());
+                this.moduleHandler.loadNewBuilderStructure(builder.getStructure(), builder.getParams(), builder.getTweaks());
                 this.moduleTabs.reloadStructure();
             } catch (IOException e) {
                 // TODO - present a dialog to user
@@ -65,6 +66,7 @@ public class ImportExportHandler implements ControllerComponent {
             try {
                 NoiseFileBuilder.writeNoiseTreeToFile(this.moduleHandler.getStructureAsCsv(),
                         this.moduleHandler.getParamsAsCsv(),
+                        this.moduleHandler.getTweaksAsCsv(),
                         exportFilePath);
             } catch (IOException e) {
                 // TODO - show error to user
@@ -79,9 +81,10 @@ public class ImportExportHandler implements ControllerComponent {
             URL resource = this.getClass().getResource(presetPath);
             System.out.println("URI is " + resource.toURI());
             File file = new File(resource.toURI());
-            NmBuilder builder = NoiseFileBuilder.buildModuleFromFile(file.getAbsolutePath());
+            NoiseFileBuilder fileBuilder = new NoiseFileBuilder();
+            NmBuilder builder = fileBuilder.buildModuleFromFile(file.getAbsolutePath());
             // clear all tabs
-            this.moduleHandler.loadNewBuilderStructure(builder.getStructure(), builder.getParams());
+            this.moduleHandler.loadNewBuilderStructure(builder.getStructure(), builder.getParams(), builder.getTweaks());
             this.moduleTabs.reloadStructure();
             this.imgeGenHandler.generateAndShowImage();
         } catch (IOException | URISyntaxException e) {

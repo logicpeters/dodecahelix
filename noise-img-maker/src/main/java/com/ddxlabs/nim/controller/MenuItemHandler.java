@@ -40,25 +40,39 @@ public class MenuItemHandler implements ControllerComponent {
      * @param menuItemId
      */
     public void processMenuItem(String menuItemId) {
+        String[] idParts = menuItemId.split("_");
 
-        if (menuItemId.startsWith(Menu.MODULE_ADD)) {
-            int lastUnderscore = menuItemId.lastIndexOf("_");
-            String qualName = menuItemId.substring(lastUnderscore + 1).toUpperCase();
-            addModule(menuItemId, qualName);
+        if (idParts[0].equalsIgnoreCase("MODULE") && idParts[1].equals("ADD")) {
+            addModule(menuItemId, idParts[2]);
             return;
 
         }
-        if (menuItemId.startsWith("PRESET_")) {
-            String presetName = menuItemId.substring(menuItemId.indexOf("_")+1);
-            Preset preset = Preset.valueOf(presetName);
+
+        if (idParts[0].equalsIgnoreCase("PRESET")) {
+            Preset preset = Preset.valueOf(idParts[1]);
             this.importExportHandler.importPreset(preset);
             return;
         }
 
+        if (idParts[0].equalsIgnoreCase("CHOP")) {
+            int set = -1;
+            int incVal = 0;
+            if (idParts[1].equalsIgnoreCase("SET")) {
+                set = Integer.parseInt(idParts[2]);
+            }
+            if (idParts[1].equalsIgnoreCase("INC")) {
+                incVal = Integer.parseInt(idParts[2]);
+            }
+            if (idParts[1].equalsIgnoreCase("DEC")) {
+                incVal = -Integer.parseInt(idParts[2]);
+            }
+            this.moduleHandler.incOrSetChopForStructure(set, incVal);
+            return;
+        }
+
         if (menuItemId.startsWith(Menu.MODULE_BUILD_COMBO)) {
-            String[] splits = menuItemId.split("_");
-            ComboQualifier cQual = ComboQualifier.valueOf(splits[2].toUpperCase());
-            SourceQualifier sQual = SourceQualifier.valueOf(splits[3].toUpperCase());
+            ComboQualifier cQual = ComboQualifier.valueOf(idParts[2].toUpperCase());
+            SourceQualifier sQual = SourceQualifier.valueOf(idParts[3].toUpperCase());
             buildComboModule(cQual, sQual);
             return;
         }

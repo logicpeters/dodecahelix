@@ -82,6 +82,16 @@ public class Menu implements ViewComponent {
         }
         moduleMenu.add(buildComboMenu);
 
+        JMenu tweakMenu = new JMenu("Tweak Image");
+        this.addMenuItem(tweakMenu, "Set Chop 0", "CHOP_SET_0", 0);
+        this.addMenuItem(tweakMenu, "Inc Chop 1", "CHOP_INC_1", 0);
+        this.addMenuItem(tweakMenu, "Dec Chop 1", "CHOP_DEC_1", 0);
+        this.addMenuItem(tweakMenu, "Inc Chop 5", "CHOP_INC_5", 0);
+        this.addMenuItem(tweakMenu, "Dec Chop 5", "CHOP_DEC_5", 0);
+
+        moduleMenu.add(tweakMenu);
+
+
         menuBar.add(moduleMenu);
 
         JMenu presetsMenu = new JMenu("Presets");
@@ -127,8 +137,5 @@ public class Menu implements ViewComponent {
         );
         menu.add(menuItem);
     }
-
-
-
 
 }

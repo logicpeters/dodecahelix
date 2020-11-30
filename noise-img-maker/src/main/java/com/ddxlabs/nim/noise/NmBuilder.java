@@ -15,6 +15,9 @@ public class NmBuilder implements ModelComponent {
     private StructureMap structure;
     private ParamsMap params;
 
+    // TODO - may not be necessary if we use a Modifier module.
+    private ImageTweaks tweaks;
+
     /**
      *  Constructor - starts with a random seed
      */
@@ -31,16 +34,19 @@ public class NmBuilder implements ModelComponent {
         params = new ParamsMap(seed, 100, 100, 25, 100);
         String initialId = UUID.randomUUID().toString();
         structure = new StructureMap(initialId, NmType.SOURCE, rootSourceQualifier);
+        tweaks = new ImageTweaks();
     }
 
-    public NmBuilder(StructureMap structure, ParamsMap params) {
+    public NmBuilder(StructureMap structure, ParamsMap params, ImageTweaks tweaks) {
         this.structure = structure;
         this.params = params;
+        this.tweaks = tweaks;
     }
 
-    public void replaceStructure(StructureMap replacementStructure, ParamsMap replacementParams) {
+    public void replaceStructure(StructureMap replacementStructure, ParamsMap replacementParams, ImageTweaks tweaks) {
         this.params.replaceParams(replacementParams);
         this.structure.fromStructure(replacementStructure);
+        this.tweaks.updateTweaks(tweaks);
     }
 
     public Module build() {
@@ -100,6 +106,11 @@ public class NmBuilder implements ModelComponent {
     public ParamsMap getParams() {
         // TODO - make immutable, and only allow edits from this class
         return params;
+    }
+
+    public ImageTweaks getTweaks() {
+        // TODO - make immutable, and only allow edits from this class
+        return tweaks;
     }
 
     public int getBaseSeed() {

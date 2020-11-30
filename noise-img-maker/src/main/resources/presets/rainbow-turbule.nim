@@ -21,3 +21,5 @@ dc6288de-5fce-4d94-9a90-a37e0444e559-persistence,4.3545
 dc6288de-5fce-4d94-9a90-a37e0444e559-frequency,0.1661
 5b4055e0-17fa-46f8-b214-eda567ed64fa-roughness,7
 5b4055e0-17fa-46f8-b214-eda567ed64fa-power,0.4029
+# TWEAKS
+chop,5

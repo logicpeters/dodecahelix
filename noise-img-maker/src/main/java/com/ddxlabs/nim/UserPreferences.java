@@ -29,7 +29,11 @@ public class UserPreferences {
     public static final String KEY_IMAGE_CHOP = "image.chop";
     public static final String KEY_IMAGE_COLOR = "image.color";
     public static final String KEY_IMAGE_PIXEL_SIZE = "image.pixel.size";
+    public static final String KEY_IMAGE_PIXEL_WIDTH = "image.pixel.width";
+    public static final String KEY_IMAGE_PIXEL_HEIGHT = "image.pixel.height";
     public static final String KEY_IMAGE_PERIOD = "image.period";
+    public static final String KEY_IMAGE_PERIOD_X = "image.period.x";
+    public static final String KEY_IMAGE_PERIOD_Y = "image.period.y";
     public static final String KEY_IMAGE_LOW_LIMIT_KB = "image.low.limit.kb";
     public static final String KEY_IMAGE_HIGH_LIMIT_KB = "image.high.limit.kb";
 
@@ -44,10 +48,13 @@ public class UserPreferences {
         prefs.setProperty(KEY_MAX_HISTORY_LINES, "100");
         prefs.setProperty(KEY_BASE_PADDING, "5");
         prefs.setProperty(KEY_FONT_FAMILY, "Courier New");
-
         prefs.setProperty(KEY_IMAGE_CHOP, "5");
         prefs.setProperty(KEY_IMAGE_PIXEL_SIZE, "1024");
+        prefs.setProperty(KEY_IMAGE_PIXEL_HEIGHT, "1024");
+        prefs.setProperty(KEY_IMAGE_PIXEL_WIDTH, "1024");
         prefs.setProperty(KEY_IMAGE_PERIOD, "128");
+        prefs.setProperty(KEY_IMAGE_PERIOD_X, "128");
+        prefs.setProperty(KEY_IMAGE_PERIOD_Y, "128");
         prefs.setProperty(KEY_IMAGE_LOW_LIMIT_KB, "0");
         prefs.setProperty(KEY_IMAGE_HIGH_LIMIT_KB, "500");
         prefs.setProperty(KEY_IMAGE_COLOR, "true");

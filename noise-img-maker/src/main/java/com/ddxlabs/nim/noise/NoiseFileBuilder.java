@@ -1,15 +1,22 @@
 package com.ddxlabs.nim.noise;
 
-import org.spongepowered.noise.module.Module;
-
 import java.io.*;
 import java.util.*;
 
 public class NoiseFileBuilder {
 
-    private static StructureMap structureFromFileLines(List<String> fileLines) {
+    private StructureMap structureMap;
+    private ParamsMap paramsMap;
+    private ImageTweaks tweaks;
 
+    public NoiseFileBuilder() {
+        this.tweaks = new ImageTweaks();
+    }
+
+    private void buildFromFileLines(List<String> fileLines) {
         String rootModuleId = "invalid";
+
+        Map<String, String> params = new HashMap<>();
         Map<String, NmType> moduleTypes = new HashMap<>();
         Map<String, String> moduleQualifiers = new HashMap<>();
         Map<String, List<String>> comboChildren = new HashMap<>();
@@ -27,7 +34,8 @@ public class NoiseFileBuilder {
             } else if (!line.isBlank()) {
                 parts = line.split(",");
                 switch (context) {
-                    case "params": break;
+                    case "tweaks": this.tweaks.addTweak(parts[0], parts[1]); break;
+                    case "params": params.put(parts[0], parts[1]); break;
                     case "root": rootModuleId = line; break;
                     case "types": moduleTypes.put(parts[0], NmType.valueOf(parts[1])); break;
                     case "qualifiers": moduleQualifiers.put(parts[0], parts[1]); break;
@@ -43,36 +51,12 @@ public class NoiseFileBuilder {
             }
         }
 
-        return new StructureMap(rootModuleId, moduleTypes, moduleQualifiers, comboChildren, modifiers);
+        structureMap = new StructureMap(rootModuleId, moduleTypes, moduleQualifiers, comboChildren, modifiers);
+        paramsMap = new ParamsMap(params);
     }
 
-    private static ParamsMap paramsFromFileLines(List<String> fileLines) {
-        Map<String, String> params = new HashMap<>();
+    public NmBuilder buildModuleFromFile(String fileName) throws IOException {
 
-        Iterator<String> lines = fileLines.iterator();
-        String context = "none";
-        String line;
-        String[] parts;
-        while (lines.hasNext()) {
-            line = lines.next().trim();
-            if (line.startsWith("#")) {
-                // switch context
-                context = line.substring(1).trim().toLowerCase();
-            } else if (!line.isBlank()) {
-                parts = line.split(",");
-                if ("params".equals(context)) {
-                    params.put(parts[0], parts[1]);
-                }
-            }
-        }
-
-        return new ParamsMap(params);
-    }
-
-    public static NmBuilder buildModuleFromFile(String fileName) throws IOException {
-//        fileName = System.getProperty("user.dir") + File.separator + fileName;
-//        fileName = fileName.replace("\\", "/");
-//        fileName = fileName.replace("/", "\\\\");
         System.out.println("reading from file " + fileName);
         try (FileReader fileReader = new FileReader(fileName);
              BufferedReader br = new BufferedReader(fileReader);
@@ -85,9 +69,8 @@ public class NoiseFileBuilder {
                 }
             }
 
-            StructureMap structureMap = structureFromFileLines(stringList);
-            ParamsMap paramsMap = paramsFromFileLines(stringList);
-            return new NmBuilder(structureMap, paramsMap);
+            this.buildFromFileLines(stringList);
+            return new NmBuilder(structureMap, paramsMap, tweaks);
         }
     }
 
@@ -102,9 +85,13 @@ public class NoiseFileBuilder {
         bw.close();
     }
 
-    public static void writeNoiseTreeToFile(List<String> structureCsv, List<String> paramsCsv, String filePath) throws IOException {
+    public static void writeNoiseTreeToFile(List<String> structureCsv,
+                                            List<String> paramsCsv,
+                                            List<String> tweaksCsv, String filePath) throws IOException {
         structureCsv.add("# PARAMS");
         structureCsv.addAll(paramsCsv);
+        structureCsv.add("# TWEAKS");
+        structureCsv.addAll(tweaksCsv);
         writeFile(filePath, structureCsv);
     }
 
