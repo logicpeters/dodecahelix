@@ -43,11 +43,6 @@ public class ImageGenerationHandler implements ControllerComponent {
         int llkb = prefs.getIntPreference(UserPreferences.KEY_IMAGE_LOW_LIMIT_KB);
         int hlkb = prefs.getIntPreference(UserPreferences.KEY_IMAGE_HIGH_LIMIT_KB);
 
-        Optional<Integer> chopOpt = this.moduleBuilder.getTweaks().getChop();
-        if (chopOpt.isPresent()) {
-            chop = chopOpt.get();
-        }
-
         BufferedImage image = ImageGenerator.generateImage(module, color, chop,
                 size, size, period, period);
 
@@ -66,11 +61,6 @@ public class ImageGenerationHandler implements ControllerComponent {
         int chop = prefs.getIntPreference(UserPreferences.KEY_IMAGE_CHOP);
         int size = prefs.getIntPreference(UserPreferences.KEY_IMAGE_PIXEL_SIZE);
         int period = prefs.getIntPreference(UserPreferences.KEY_IMAGE_PERIOD);
-
-        Optional<Integer> chopOpt = this.moduleBuilder.getTweaks().getChop();
-        if (chopOpt.isPresent()) {
-            chop = chopOpt.get();
-        }
 
         // recalculate size for the preview, we will use this only for writing the file
         int appHeight = systemHandler.getCurrentAppHeight();

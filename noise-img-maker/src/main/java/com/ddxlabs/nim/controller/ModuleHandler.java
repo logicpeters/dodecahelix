@@ -166,8 +166,8 @@ public class ModuleHandler implements ControllerComponent {
         return this.moduleBuilder.getParams().asCsvList();
     }
 
-    public void loadNewBuilderStructure(StructureMap structure, ParamsMap params, ImageTweaks tweaks) {
-        this.moduleBuilder.replaceStructure(structure, params, tweaks);
+    public void loadNewBuilderStructure(StructureMap structure, ParamsMap params) {
+        this.moduleBuilder.replaceStructure(structure, params);
     }
 
     public Map<String, NmType> getModuleTypes() {
@@ -205,24 +205,4 @@ public class ModuleHandler implements ControllerComponent {
         return moduleBuilder.getStructure().getRootModuleId();
     }
 
-    public List<String> getTweaksAsCsv() {
-        return moduleBuilder.getTweaks().asCsvList();
-    }
-
-    public void incOrSetChopForStructure(int setChop, int incAmt) {
-        int chop;
-        Optional<Integer> chopOpt = this.moduleBuilder.getTweaks().getChop();
-        if (chopOpt.isPresent()) {
-            chop = chopOpt.get() + incAmt;
-        } else {
-            chop = prefs.getIntPreference(UserPreferences.KEY_IMAGE_CHOP);
-            chop += incAmt;
-        }
-        if (setChop>=0) {
-            chop = setChop;
-        }
-        this.moduleBuilder.getTweaks().setChop(chop);
-        this.moduleTabs.refreshTabData();
-        this.imageGenerationHandler.generateAndShowImage();
-    }
 }

@@ -40,39 +40,21 @@ public class MenuItemHandler implements ControllerComponent {
      * @param menuItemId
      */
     public void processMenuItem(String menuItemId) {
-        String[] idParts = menuItemId.split("_");
-
-        if (idParts[0].equalsIgnoreCase("MODULE") && idParts[1].equals("ADD")) {
-            addModule(menuItemId, idParts[2]);
+        String[] actionParts = menuItemId.split("_");
+        if ("add".equalsIgnoreCase(actionParts[0]) && "module".equalsIgnoreCase(actionParts[1])) {
+            addModule(actionParts);
             return;
-
         }
 
-        if (idParts[0].equalsIgnoreCase("PRESET")) {
-            Preset preset = Preset.valueOf(idParts[1]);
+        if ("preset".equalsIgnoreCase(actionParts[0])) {
+            Preset preset = Preset.valueOf(actionParts[1]);
             this.importExportHandler.importPreset(preset);
             return;
         }
 
-        if (idParts[0].equalsIgnoreCase("CHOP")) {
-            int set = -1;
-            int incVal = 0;
-            if (idParts[1].equalsIgnoreCase("SET")) {
-                set = Integer.parseInt(idParts[2]);
-            }
-            if (idParts[1].equalsIgnoreCase("INC")) {
-                incVal = Integer.parseInt(idParts[2]);
-            }
-            if (idParts[1].equalsIgnoreCase("DEC")) {
-                incVal = -Integer.parseInt(idParts[2]);
-            }
-            this.moduleHandler.incOrSetChopForStructure(set, incVal);
-            return;
-        }
-
         if (menuItemId.startsWith(Menu.MODULE_BUILD_COMBO)) {
-            ComboQualifier cQual = ComboQualifier.valueOf(idParts[2].toUpperCase());
-            SourceQualifier sQual = SourceQualifier.valueOf(idParts[3].toUpperCase());
+            ComboQualifier cQual = ComboQualifier.valueOf(actionParts[2].toUpperCase());
+            SourceQualifier sQual = SourceQualifier.valueOf(actionParts[3].toUpperCase());
             buildComboModule(cQual, sQual);
             return;
         }
@@ -124,20 +106,21 @@ public class MenuItemHandler implements ControllerComponent {
         moduleHandler.setSourceModulesForCombo(comboModuleId, sourceModules);
     }
 
-    private void addModule(String menuItemId, String qualName) {
-        if (menuItemId.startsWith(Menu.MODULE_ADD_COMBO)) {
-            ComboQualifier comboQualifier = ComboQualifier.valueOf(qualName);
+    private void addModule(String[] menuCommandParts) {
+        String addType = menuCommandParts[2];
+        String addQualifier = menuCommandParts[3].toUpperCase();
+        if ("combo".equalsIgnoreCase(addType)) {
+            ComboQualifier comboQualifier = ComboQualifier.valueOf(addQualifier);
             moduleHandler.addComboModule(comboQualifier);
         }
-        if (menuItemId.startsWith(Menu.MODULE_ADD_SOURCE)) {
-            SourceQualifier sourceQualifier = SourceQualifier.valueOf(qualName);
+        if ("source".equalsIgnoreCase(addType)) {
+            SourceQualifier sourceQualifier = SourceQualifier.valueOf(addQualifier);
             moduleHandler.addSourceModule(sourceQualifier);
         }
     }
 
     private void updateTheme(ColorTheme theme) {
         prefsHandler.setPreference(UserPreferences.KEY_COLOR_THEME, theme.name());
-
         allViews.applyPreferences();
     }
 

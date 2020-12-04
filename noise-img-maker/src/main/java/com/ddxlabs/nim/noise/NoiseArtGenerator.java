@@ -118,7 +118,6 @@ public class NoiseArtGenerator {
 
             // StructureMap structure = new StructureMap("root-111", NmType.COMBO, "add");
             // StructureMap structure = new StructureMap("root-111", NmType.SOURCE, "perlin");
-
             // structure.addComboChild("root-111", "ridged-111", NmType.SOURCE, "ridged");
             // structure.addComboChild("root-111", "const-111", NmType.SOURCE, "cylinders");
             // structure.addComboChild("root-111", "combo-111", NmType.COMBO, "add");
@@ -128,7 +127,7 @@ public class NoiseArtGenerator {
             // structure.addModifier("ridged-111", "terr-123", "terrace");
 
             StructureMap structure = noiseGenerator.genRandomTree(null, null);
-            Module module = (new NmBuilder(structure, params, new ImageTweaks())).build();
+            Module module = (new NmBuilder(structure, params)).build();
 
             // boolean genImg = ImageGenerator.generateImage(module, true, 5, filename + ".png",
             //        1024, 1024, 128, 128, 10, 1000);
@@ -136,7 +135,7 @@ public class NoiseArtGenerator {
             if (genImg) {
                 List<String> structureCsv = structure.asCsvList();
                 List<String> paramsCsv = params.asCsvList();
-                NoiseFileBuilder.writeNoiseTreeToFile(structureCsv, paramsCsv, new ArrayList<>(), filename + ".csv");
+                NoiseFileBuilder.writeNoiseTreeToFile(structureCsv, paramsCsv, filename + ".csv");
                 long endTime = Calendar.getInstance().getTimeInMillis();
                 double secs = (endTime - startTime) / 1000.0;
                 System.out.println("generated new image in " + secs + " seconds");

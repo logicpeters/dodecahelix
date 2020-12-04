@@ -7,10 +7,8 @@ public class NoiseFileBuilder {
 
     private StructureMap structureMap;
     private ParamsMap paramsMap;
-    private ImageTweaks tweaks;
 
     public NoiseFileBuilder() {
-        this.tweaks = new ImageTweaks();
     }
 
     private void buildFromFileLines(List<String> fileLines) {
@@ -34,7 +32,6 @@ public class NoiseFileBuilder {
             } else if (!line.isBlank()) {
                 parts = line.split(",");
                 switch (context) {
-                    case "tweaks": this.tweaks.addTweak(parts[0], parts[1]); break;
                     case "params": params.put(parts[0], parts[1]); break;
                     case "root": rootModuleId = line; break;
                     case "types": moduleTypes.put(parts[0], NmType.valueOf(parts[1])); break;
@@ -57,7 +54,6 @@ public class NoiseFileBuilder {
 
     public NmBuilder buildModuleFromFile(String fileName) throws IOException {
 
-        System.out.println("reading from file " + fileName);
         try (FileReader fileReader = new FileReader(fileName);
              BufferedReader br = new BufferedReader(fileReader);
         ) {
@@ -70,7 +66,7 @@ public class NoiseFileBuilder {
             }
 
             this.buildFromFileLines(stringList);
-            return new NmBuilder(structureMap, paramsMap, tweaks);
+            return new NmBuilder(structureMap, paramsMap);
         }
     }
 
@@ -87,11 +83,9 @@ public class NoiseFileBuilder {
 
     public static void writeNoiseTreeToFile(List<String> structureCsv,
                                             List<String> paramsCsv,
-                                            List<String> tweaksCsv, String filePath) throws IOException {
+                                            String filePath) throws IOException {
         structureCsv.add("# PARAMS");
         structureCsv.addAll(paramsCsv);
-        structureCsv.add("# TWEAKS");
-        structureCsv.addAll(tweaksCsv);
         writeFile(filePath, structureCsv);
     }
 

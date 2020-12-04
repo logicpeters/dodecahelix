@@ -15,9 +15,6 @@ public class NmBuilder implements ModelComponent {
     private StructureMap structure;
     private ParamsMap params;
 
-    // TODO - may not be necessary if we use a Modifier module.
-    private ImageTweaks tweaks;
-
     /**
      *  Constructor - starts with a random seed
      */
@@ -34,19 +31,16 @@ public class NmBuilder implements ModelComponent {
         params = new ParamsMap(seed, 100, 100, 25, 100);
         String initialId = UUID.randomUUID().toString();
         structure = new StructureMap(initialId, NmType.SOURCE, rootSourceQualifier);
-        tweaks = new ImageTweaks();
     }
 
-    public NmBuilder(StructureMap structure, ParamsMap params, ImageTweaks tweaks) {
+    public NmBuilder(StructureMap structure, ParamsMap params) {
         this.structure = structure;
         this.params = params;
-        this.tweaks = tweaks;
     }
 
-    public void replaceStructure(StructureMap replacementStructure, ParamsMap replacementParams, ImageTweaks tweaks) {
+    public void replaceStructure(StructureMap replacementStructure, ParamsMap replacementParams) {
         this.params.replaceParams(replacementParams);
         this.structure.fromStructure(replacementStructure);
-        this.tweaks.updateTweaks(tweaks);
     }
 
     public Module build() {
@@ -63,18 +57,9 @@ public class NmBuilder implements ModelComponent {
         NmType moduleType = structure.getTypeFor(moduleId);
         String qualifier = structure.getQualifier(moduleId);
         Module nodeModule = createModule(moduleId, moduleType, qualifier, params);
+        System.out.printf("building %s module type %s : %s%n", moduleType, qualifier, moduleId);
 
-        if (moduleType==NmType.SOURCE) {
-            String modifier = structure.getModifier(moduleId);
-            if (modifier!=null) {
-                // if it has a modifier, replace
-                Module modifierModule = buildModuleNode(modifier);
-                modifierModule.setSourceModule(0, nodeModule);
-                nodeModule = modifierModule;
-            }
-        } else if (moduleType==NmType.MODIFIER) {
-            // do nothing
-        } else if (moduleType==NmType.COMBO) {
+        if (moduleType==NmType.COMBO) {
             // child modules should be source
             int childCount = 0;
             for (String childModuleId : structure.getChildren(moduleId)) {
@@ -82,7 +67,16 @@ public class NmBuilder implements ModelComponent {
                 nodeModule.setSourceModule(childCount, builtChild);
                 childCount++;
             }
+
             // TODO displacement modules?
+        }
+
+        String modifier = structure.getModifier(moduleId);
+        if (modifier!=null) {
+            // if it has a modifier, replace
+            Module modifierModule = buildModuleNode(modifier);
+            modifierModule.setSourceModule(0, nodeModule);
+            nodeModule = modifierModule;
         }
 
         return nodeModule;
@@ -106,11 +100,6 @@ public class NmBuilder implements ModelComponent {
     public ParamsMap getParams() {
         // TODO - make immutable, and only allow edits from this class
         return params;
-    }
-
-    public ImageTweaks getTweaks() {
-        // TODO - make immutable, and only allow edits from this class
-        return tweaks;
     }
 
     public int getBaseSeed() {

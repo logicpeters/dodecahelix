@@ -12,10 +12,10 @@ public class SourceModuleBuilder {
         if ("perlin".equalsIgnoreCase(qualifier)) {
             module = new Perlin();
             ((Perlin)module).setNoiseQuality(NoiseQuality.BEST);  // TODO - parameterize
-            ((Perlin)module).setFrequency(params.getDob(moduleId, "frequency", 5));
-            ((Perlin)module).setOctaveCount(1 + params.getInt(100, moduleId, "octaves"));
-            ((Perlin)module).setLacunarity(params.getDob(moduleId, "lacunarity", 5));
-            ((Perlin)module).setPersistence(params.getDob(moduleId, "persistence", 5));
+            ((Perlin)module).setFrequency(params.getDob(moduleId, "frequency", 2));
+            ((Perlin)module).setOctaveCount(1 + params.getInt(200, moduleId, "octaves"));
+            ((Perlin)module).setLacunarity(params.getDob(moduleId, "lacunarity", 2));
+            ((Perlin)module).setPersistence(params.getDob(moduleId, "persistence", 2));
             ((Perlin)module).setSeed(params.getSeed(moduleId));
         }
         if ("voronoi".equalsIgnoreCase(qualifier)) {
@@ -29,18 +29,18 @@ public class SourceModuleBuilder {
         if ("billow".equalsIgnoreCase(qualifier)) {
             module = new Billow();
             ((Billow)module).setQuality(NoiseQuality.BEST);  // TODO - parameterize
-            ((Billow)module).setFrequency(params.getDob(moduleId, "frequency", 5));
-            ((Billow)module).setOctaveCount(1 + params.getInt(50, moduleId, "octaves"));
-            ((Billow)module).setLacunarity(params.getDob(moduleId, "lacunarity", 5));
-            ((Billow)module).setPersistence(params.getDob(moduleId, "persistence", 5));
+            ((Billow)module).setFrequency(params.getDob(moduleId, "frequency", 2));
+            ((Billow)module).setOctaveCount(1 + params.getInt(200, moduleId, "octaves"));
+            ((Billow)module).setLacunarity(params.getDob(moduleId, "lacunarity", 2));
+            ((Billow)module).setPersistence(params.getDob(moduleId, "persistence", 2));
             ((Billow)module).setSeed(params.getSeed(moduleId));
         }
         if ("ridged".equalsIgnoreCase(qualifier)) {
             module = new RidgedMulti();
             ((RidgedMulti)module).setNoiseQuality(NoiseQuality.BEST);  // TODO - parameterize
-            ((RidgedMulti)module).setFrequency(params.getDob(moduleId, "frequency", 5));
-            ((RidgedMulti)module).setOctaveCount(1 + params.getInt(50, moduleId, "octaves"));
-            ((RidgedMulti)module).setLacunarity(params.getDob(moduleId, "lacunarity", 5));
+            ((RidgedMulti)module).setFrequency(params.getDob(moduleId, "frequency", 2));
+            ((RidgedMulti)module).setOctaveCount(1 + params.getInt(200, moduleId, "octaves"));
+            ((RidgedMulti)module).setLacunarity(params.getDob(moduleId, "lacunarity", 2));
             ((RidgedMulti)module).setSeed(params.getSeed(moduleId));
         }
         if ("checkerboard".equalsIgnoreCase(qualifier)) {

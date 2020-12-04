@@ -1,0 +1,14 @@
+# ROOT
+9c7d2601-ae6d-4d44-bc80-5f7283ebb91c
+# TYPES
+9c7d2601-ae6d-4d44-bc80-5f7283ebb91c,SOURCE
+# QUALIFIERS
+9c7d2601-ae6d-4d44-bc80-5f7283ebb91c,perlin
+# CHILDREN
+# MODIFIERS
+# PARAMS
+9c7d2601-ae6d-4d44-bc80-5f7283ebb91c-lacunarity,0.9831
+9c7d2601-ae6d-4d44-bc80-5f7283ebb91c-octaves,4
+9c7d2601-ae6d-4d44-bc80-5f7283ebb91c-persistence,0.5135
+9c7d2601-ae6d-4d44-bc80-5f7283ebb91c-frequency,0.4300
+9c7d2601-ae6d-4d44-bc80-5f7283ebb91c-seed,2037190692

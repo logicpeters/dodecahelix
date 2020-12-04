@@ -9,25 +9,19 @@ public class ComboModuleBuilder {
     public static Module build(String moduleId, String qualifier, ParamsMap params) {
         Module comboModule;
         switch (qualifier) {
-            case "blend": comboModule = new Blend(); break;
-            case "displace": comboModule = new Displace(); break;
+            case "blend": comboModule = new Blend(); break;        // requires 3 source modules
+            case "displace": comboModule = new Displace(); break;  // requires 4 source modules
             case "max": comboModule = new Max(); break;
             case "min": comboModule = new Min(); break;
             case "multiply": comboModule = new Multiply(); break;
             case "power": comboModule = new Power(); break;
             case "select": {
                 comboModule = new Select();
-                double lwb = params.getDob(moduleId, "lowerbound");
+                double lwb = - params.getDob(moduleId, "lowerbound");
                 double ubb = params.getDob(moduleId, "upperbound");
-                if (ubb<=lwb) {
-                    double tmp = lwb;
-                    lwb = ubb;
-                    ubb = tmp;
-                    params.resetValue(moduleId,"lowerbound", String.valueOf(lwb));
-                    params.resetValue(moduleId,"upperbound", String.valueOf(ubb));
-                }
+                params.resetValue(moduleId, "edge-falloff", "0.0");
                 ((Select)comboModule).setBounds(ubb, lwb);
-                ((Select)comboModule).setEdgeFalloff(params.getDob(moduleId,"edge-falloff"));
+                // ((Select)comboModule).setEdgeFalloff(params.getDob(moduleId,"edge-falloff"));
             }; break;
             default: comboModule = new Add();
         }

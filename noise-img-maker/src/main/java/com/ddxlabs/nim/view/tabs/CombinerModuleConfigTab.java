@@ -1,10 +1,14 @@
 package com.ddxlabs.nim.view.tabs;
 
+import com.ddxlabs.nim.noise.modules.ModifierQualifier;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class CombinerModuleConfigTab extends ModuleConfigTab {
 
@@ -42,13 +46,15 @@ public class CombinerModuleConfigTab extends ModuleConfigTab {
         sourceModuleChooser.setAlignmentX(Component.LEFT_ALIGNMENT);
         extraLabels.add(sourceModuleChooser);
 
-        // add actions button
+        // add action buttons
         actionsRow.add(Box.createRigidArea(new Dimension(15, 0)));
 
         JButton makeRootButton = new JButton("Make Root");
         makeRootButton.setActionCommand("make_root");
         makeRootButton.addActionListener(this);
         actionsRow.add(makeRootButton);
+
+        actionsRow.add(Box.createHorizontalGlue());
 
         return panel;
     }
@@ -94,14 +100,13 @@ public class CombinerModuleConfigTab extends ModuleConfigTab {
     public void refreshTabData() {
         super.refreshTabData();
 
-        // refresh module choices
+        // refresh source module choices
         List<String> choices = this.moduleHandler.getUnattachedModules();
         choices.remove(moduleId);
         DefaultComboBoxModel<String> chooserModel = (DefaultComboBoxModel<String>) sourceModuleChooser.getModel();
         chooserModel.removeAllElements();
         chooserModel.addAll(choices);
 
-        // refresh combobox choices
         sourceModulesPanel.removeAll();
         populateSourceModules();
     }
@@ -125,5 +130,6 @@ public class CombinerModuleConfigTab extends ModuleConfigTab {
         if ("clear_sources".equalsIgnoreCase(e.getActionCommand())) {
             this.moduleHandler.setSourceModulesForCombo(moduleId, new ArrayList<>());
         }
+
     }
 }

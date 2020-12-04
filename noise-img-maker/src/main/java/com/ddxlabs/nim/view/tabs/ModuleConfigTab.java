@@ -4,12 +4,14 @@ import com.ddxlabs.nim.controller.Controllers;
 import com.ddxlabs.nim.controller.ImageGenerationHandler;
 import com.ddxlabs.nim.controller.ModuleHandler;
 import com.ddxlabs.nim.noise.NmType;
+import com.ddxlabs.nim.noise.modules.ModifierQualifier;
 import com.ddxlabs.nim.view.ViewComponent;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.Optional;
 
 /**
@@ -37,6 +39,10 @@ public abstract class ModuleConfigTab implements ViewComponent, ActionListener {
     private ClickableModuleIdLabel parentLabel;
 
     private JLabel isRootLabel;
+
+    private JComboBox<String> modifierList;
+
+    private ClickableModuleIdLabel modifierLabel;
 
     public ModuleConfigTab(String moduleId) {
         this.moduleId = moduleId;
@@ -78,6 +84,18 @@ public abstract class ModuleConfigTab implements ViewComponent, ActionListener {
         parentLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
         panel.add(parentLabel);
 
+        // whether or not this module has a modifier
+        Optional<String> modifierModuleId = this.moduleHandler.getModifierFor(moduleId);
+        String modifier = "None";
+        if (modifierModuleId.isPresent()) {
+            modifier = modifierModuleId.get();
+        }
+        modifierLabel = new ClickableModuleIdLabel("MODIFIER: %s", moduleHandler);
+        Optional<String> modifierOpt = this.moduleHandler.getModifierFor(moduleId);
+        modifierOpt.ifPresent(s -> modifierLabel.setModuleId(s));
+        modifierLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+        panel.add(modifierLabel);
+
         // this should be populated in the subclass
         extraLabels = new JPanel();
         extraLabels.setAlignmentX(JLabel.LEFT_ALIGNMENT);
@@ -94,6 +112,22 @@ public abstract class ModuleConfigTab implements ViewComponent, ActionListener {
         validateButton.setActionCommand("delete_tab");
         validateButton.addActionListener(this);
         actionsRow.add(validateButton);
+
+        // gap
+        actionsRow.add(Box.createRigidArea(new Dimension(15,0)));
+
+        // add modifier
+        String[] modifierOptions = Arrays.stream(ModifierQualifier.values()).sequential()
+                .map(m -> m.name().toLowerCase())
+                .toArray(String[]::new);
+        modifierList = new JComboBox<>(modifierOptions);
+        modifierList.setMaximumSize(new Dimension(50,30));
+        actionsRow.add(modifierList);
+
+        JButton modifyButton = new JButton("Add Modifier");
+        modifyButton.setActionCommand("add_modifier");
+        modifyButton.addActionListener(this);
+        actionsRow.add(modifyButton);
 
         panel.add(actionsRow);
 
@@ -123,6 +157,9 @@ public abstract class ModuleConfigTab implements ViewComponent, ActionListener {
             if ("delete_tab".equals(command)) {
                 this.moduleHandler.deleteModule(moduleId);
             }
+            if ("add_modifier".equals(command)) {
+                this.moduleHandler.addModifierModule(moduleId, (String)modifierList.getSelectedItem());
+            }
         }
     }
 
@@ -136,6 +173,13 @@ public abstract class ModuleConfigTab implements ViewComponent, ActionListener {
             parentLabel.setModuleId(parent.get());
         } else {
             parentLabel.setNoModule();
+        }
+
+        Optional<String> modifierModuleId = this.moduleHandler.getModifierFor(moduleId);
+        if (modifierModuleId.isPresent()) {
+            modifierLabel.setModuleId(modifierModuleId.get());
+        } else {
+            modifierLabel.setNoModule();
         }
 
         paramsTable.refreshParams();

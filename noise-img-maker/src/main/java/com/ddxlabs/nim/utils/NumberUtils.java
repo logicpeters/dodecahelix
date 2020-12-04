@@ -6,7 +6,10 @@ public class NumberUtils {
         try {
             int i = Integer.parseInt(value);
             if (decrementInstead) {
-                return String.valueOf(i - factor);
+                // dont decrement below 0
+                if ((i-factor)>=0) {
+                    return String.valueOf(i - factor);
+                }
             } else {
                 return String.valueOf(i + factor);
             }
@@ -19,8 +22,10 @@ public class NumberUtils {
             if (decrementInstead) {
                 newValue = i - (0.1d * factor);
             }
-            // limit precision of double
-            return String.format("%.4f", newValue);
+            if (newValue>=0.0d) {
+                // limit precision of double
+                return String.format("%.4f", newValue);
+            }
         } catch (NumberFormatException ignored) {
         }
 

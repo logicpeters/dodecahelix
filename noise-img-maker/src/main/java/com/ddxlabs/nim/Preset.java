@@ -2,11 +2,10 @@ package com.ddxlabs.nim;
 
 public enum Preset {
 
-    SIMPLE ("simple perlin", "/presets/simple-perlin-1.nim"),
-    RAINBOW ("rainbow", "/presets/rainbow-1.nim"),
-    MAPS ("map", "/presets/world.nim"),
-    ISLANDS ("islands", "/presets/islands.nim"),
-    BLENDED ("blended", "/presets/blender-1.nim"),
+    SIMPLE ("simple perlin", "/presets/simple-perlin-with-chop.nim"),
+    RAINBOW ("rainbow", "/presets/rainbow-chop.nim"),
+    MAPS ("islands map", "/presets/maps-chop-1.nim"),
+    BLENDED ("blended red", "/presets/blended-red.nim"),
     ;
 
     String display;

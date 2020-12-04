@@ -54,7 +54,7 @@ public class Application implements Runnable {
         String mcwinLaf = "com.jtattoo.plaf.mcwin.McWinLookAndFeel";
         String alumLaf = "com.jtattoo.plaf.aluminium.AluminiumLookAndFeel";
         try {
-            UIManager.setLookAndFeel(slaf);
+            UIManager.setLookAndFeel(flaf);
             // UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();

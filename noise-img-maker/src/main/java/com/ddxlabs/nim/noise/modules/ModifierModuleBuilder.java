@@ -1,6 +1,7 @@
 package com.ddxlabs.nim.noise.modules;
 
 import com.ddxlabs.nim.noise.ParamsMap;
+import com.ddxlabs.nim.noise.custom.Chop;
 import org.spongepowered.noise.module.Module;
 import org.spongepowered.noise.module.modifier.*;
 
@@ -54,6 +55,11 @@ public class ModifierModuleBuilder {
             module = new Terrace();
             int controlPoints = params.getInt(250, moduleId, "control-points");
             ((Terrace)module).makeControlPoints(2 + controlPoints);
+        }
+        if ("chop".equalsIgnoreCase(qualifier)) {
+            module = new Chop();
+            int chop = params.getInt(50, moduleId, "chop");
+            ((Chop)module).setChop(chop);
         }
 
         return module;

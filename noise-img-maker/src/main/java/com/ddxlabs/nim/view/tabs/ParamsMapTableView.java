@@ -135,7 +135,6 @@ public class ParamsMapTableView implements TableModelListener, MouseListener {
             String previousValue = String.valueOf(tableModel.getValueAt(row, 1));
             String newValue = params.get(paramName);
             if (!newValue.equalsIgnoreCase(previousValue)) {
-                System.out.println("resetting param " + paramName);
                 tableModel.setValueAt(params.get(paramName), row, 1);
             }
         }
