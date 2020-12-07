@@ -37,7 +37,7 @@ public class ModuleHandler implements ControllerComponent {
 
     public String addComboModule(ComboQualifier comboQualifier) {
         // TODO - cant build a combo without sources?
-        String newModuleId = UUID.randomUUID().toString();
+        String newModuleId = comboQualifier.name() + "_" + UUID.randomUUID().toString();
         StructureMap structure = moduleBuilder.getStructure();
         ParamsMap params = moduleBuilder.getParams();
         String qualifierName = comboQualifier.name().toLowerCase();
@@ -51,7 +51,7 @@ public class ModuleHandler implements ControllerComponent {
     }
 
     public String addSourceModule(SourceQualifier sourceQualifier) {
-        String newModuleId = UUID.randomUUID().toString();
+        String newModuleId = sourceQualifier.name() + "_" + UUID.randomUUID().toString();
         StructureMap structure = moduleBuilder.getStructure();
         ParamsMap params = moduleBuilder.getParams();
         String qualifierName = sourceQualifier.name().toLowerCase();
@@ -66,7 +66,7 @@ public class ModuleHandler implements ControllerComponent {
     }
 
     public String addModifierModule(String moduleId, String modifierQualifier) {
-        String modifierModuleId = UUID.randomUUID().toString();
+        String modifierModuleId = modifierQualifier + "_" + UUID.randomUUID().toString();
         this.moduleBuilder.getStructure().addModifier(moduleId, modifierModuleId, modifierQualifier);
 
         ModifierModuleBuilder.build(modifierModuleId, modifierQualifier, moduleBuilder.getParams());
@@ -74,6 +74,7 @@ public class ModuleHandler implements ControllerComponent {
         moduleTabs.addModule(NmType.MODIFIER, modifierModuleId);
 
         moduleTabs.refreshTabData();
+        this.imageGenerationHandler.generateAndShowImage();
         return modifierModuleId;
     }
 
@@ -199,6 +200,21 @@ public class ModuleHandler implements ControllerComponent {
         // UI changes
         this.moduleTabs.removeModuleTab(moduleId);
         this.moduleTabs.refreshTabData();
+    }
+
+    public void randomizeParams(String moduleId) {
+        Random random = new Random();
+        Map<String, String> moduleParams = this.moduleBuilder.getParams().getEntriesForModule(moduleId);
+        moduleParams.forEach((key, value) -> {
+            System.out.println("randomizing param : " + key);
+            if (!key.startsWith("seed")) {
+                String newValue = NumberUtils.randomize(value, random);
+                System.out.println("resetting to : " + newValue);
+                this.moduleBuilder.getParams().resetValue(moduleId, key, newValue);
+            }
+        });
+        this.moduleTabs.refreshTabData();
+        this.imageGenerationHandler.generateAndShowImage();
     }
 
     public String getRootModule() {

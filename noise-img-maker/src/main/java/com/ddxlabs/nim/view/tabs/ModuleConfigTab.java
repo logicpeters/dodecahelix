@@ -108,10 +108,10 @@ public abstract class ModuleConfigTab implements ViewComponent, ActionListener {
         actionsRow.setLayout(new BoxLayout(actionsRow, BoxLayout.X_AXIS));
         actionsRow.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JButton validateButton = new JButton("Delete");
-        validateButton.setActionCommand("delete_tab");
-        validateButton.addActionListener(this);
-        actionsRow.add(validateButton);
+        JButton deleteButton = new JButton("Delete");
+        deleteButton.setActionCommand("delete_tab");
+        deleteButton.addActionListener(this);
+        actionsRow.add(deleteButton);
 
         // gap
         actionsRow.add(Box.createRigidArea(new Dimension(15,0)));
@@ -128,6 +128,13 @@ public abstract class ModuleConfigTab implements ViewComponent, ActionListener {
         modifyButton.setActionCommand("add_modifier");
         modifyButton.addActionListener(this);
         actionsRow.add(modifyButton);
+
+        actionsRow.add(Box.createRigidArea(new Dimension(15,0)));
+
+        JButton randomizeButton = new JButton("Randomize");
+        randomizeButton.setActionCommand("randomize");
+        randomizeButton.addActionListener(this);
+        actionsRow.add(randomizeButton);
 
         panel.add(actionsRow);
 
@@ -159,6 +166,9 @@ public abstract class ModuleConfigTab implements ViewComponent, ActionListener {
             }
             if ("add_modifier".equals(command)) {
                 this.moduleHandler.addModifierModule(moduleId, (String)modifierList.getSelectedItem());
+            }
+            if ("randomize".equals(command)) {
+                this.moduleHandler.randomizeParams(moduleId);
             }
         }
     }

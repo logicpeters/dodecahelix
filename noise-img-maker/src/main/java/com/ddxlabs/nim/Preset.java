@@ -3,7 +3,7 @@ package com.ddxlabs.nim;
 public enum Preset {
 
     SIMPLE ("simple perlin", "/presets/simple-perlin-with-chop.nim"),
-    RAINBOW ("rainbow", "/presets/rainbow-chop.nim"),
+    RAINBOW ("chaos rainbow", "/presets/rainbow-chop.nim"),
     MAPS ("islands map", "/presets/maps-chop-1.nim"),
     BLENDED ("blended red", "/presets/blended-red.nim"),
     ;
@@ -23,4 +23,5 @@ public enum Preset {
     public String getPath() {
         return path;
     }
+
 }

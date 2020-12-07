@@ -53,10 +53,16 @@ public class GeneratorRow implements ViewComponent, ActionListener {
         JButton writeFile = new JButton("Save Image");
         writeFile.setActionCommand("write_file");
         writeFile.addActionListener(this);
+
+        JButton saveAs = new JButton("Save Image As...");
+        saveAs.setActionCommand("save_as_file");
+        saveAs.addActionListener(this);
+
         // row.add(seedField);
         // row.add(seedGenerator);
         row.add(preview);
         row.add(writeFile);
+        row.add(saveAs);
 
         return row;
     }
@@ -73,6 +79,8 @@ public class GeneratorRow implements ViewComponent, ActionListener {
             imageGenHandler.generateAndShowImage();
         } else if ("write_file".equals(e.getActionCommand())) {
             imageGenHandler.generateAndWriteFile();
+        } else if ("save_as_file".equals(e.getActionCommand())) {
+            imageGenHandler.generateAndSaveAsFile();
         }
     }
 

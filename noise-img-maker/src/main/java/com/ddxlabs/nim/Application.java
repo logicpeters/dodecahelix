@@ -73,6 +73,8 @@ public class Application implements Runnable {
         String rootModuleId = builder.getStructure().getRootModuleId();
         views.getModuleTabs().addModule(NmType.SOURCE, rootModuleId);
         views.getGeneratorRow().setBaseSeed(builder.getBaseSeed());
+
+        controllers.getImageGenerationHandler().generateAndShowImage();
     }
 
     protected void buildUI() {

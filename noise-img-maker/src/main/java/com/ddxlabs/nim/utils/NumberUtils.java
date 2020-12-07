@@ -1,6 +1,27 @@
 package com.ddxlabs.nim.utils;
 
+import java.util.Random;
+
 public class NumberUtils {
+
+    public static String randomize(String currentValue, Random random) {
+        try {
+            Integer.parseInt(currentValue);
+            return String.valueOf(random.nextInt(10));
+        } catch (NumberFormatException ignored) {
+        }
+
+        try {
+            Double.parseDouble(currentValue);
+            double newValue = random.nextDouble() * 5.0;
+            return String.format("%.4f", newValue);
+        } catch (NumberFormatException ignored) {
+        }
+
+        // TODO - flip a boolean??
+
+        return currentValue;
+    }
 
     public static String increment(String value, boolean decrementInstead, int factor) {
         try {

@@ -24,7 +24,6 @@ Creating and executing a custom runtime image:
     
 ### TODO
 - the randomizer: press play to tweak a param every X seconds; press pause to stop; 
-- dont let the "-" (decrement) option go below 0
 - presets for most standard structures
 - when adding a new combo module, make it the root
 - ability to designate a control module, or at least order the module children
@@ -41,8 +40,7 @@ Creating and executing a custom runtime image:
 - configurable titles / module ID's for tabs
   better defaults (i.e; perlin-##, etc..)
 - swing alternative look and feel
-- have doubles resolve between 0.1 and 3.0 by default
-- have octaves resolve between 1 and 4
+
 
 
 

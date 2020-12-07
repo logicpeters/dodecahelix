@@ -8,12 +8,14 @@ import java.util.Optional;
 public class FileChooseUtils {
 
     public static Optional<File> openFileChooserAndReturnFile(JFrame frame,
+                                                        File defaultPath,
                                                         boolean save,
                                                         boolean folder,
                                                         String description,
                                                         String... extensions) {
         // open up a file chooser
         JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(defaultPath);
         int returnVal;
         if (save) {
             returnVal = chooser.showSaveDialog(frame);

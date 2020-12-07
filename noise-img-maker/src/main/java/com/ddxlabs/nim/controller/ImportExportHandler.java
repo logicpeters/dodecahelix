@@ -17,12 +17,15 @@ import java.util.Optional;
 
 public class ImportExportHandler implements ControllerComponent {
 
+    private UserPreferences prefs;
+
     private SystemHandler systemHandler;
     private ImageGenerationHandler imgeGenHandler;
     private ModuleHandler moduleHandler;
     private ModuleTabs moduleTabs;
 
     public ImportExportHandler(UserPreferences prefs) {
+        this.prefs = prefs;
     }
 
     @Override
@@ -34,8 +37,9 @@ public class ImportExportHandler implements ControllerComponent {
     }
 
     public void importFile() {
+        File defaultPath = new File(prefs.getPreference(UserPreferences.KEY_IMAGE_FILE_FOLDER));
         Optional<File> chosenFile = FileChooseUtils.openFileChooserAndReturnFile(systemHandler.getFrame(),
-                false, false,"NIM files", "nim");
+                defaultPath, false, false,"NIM files", "nim");
         if (chosenFile.isPresent()) {
             System.out.println("Importing from " + chosenFile.get());
             try {
@@ -44,6 +48,7 @@ public class ImportExportHandler implements ControllerComponent {
                 // clear all tabs
                 this.moduleHandler.loadNewBuilderStructure(builder.getStructure(), builder.getParams());
                 this.moduleTabs.reloadStructure();
+                this.imgeGenHandler.generateAndShowImage();
             } catch (IOException e) {
                 // TODO - present a dialog to user
                 e.printStackTrace();
@@ -52,8 +57,9 @@ public class ImportExportHandler implements ControllerComponent {
     }
 
     public void exportFile() {
+        File defaultPath = new File(prefs.getPreference(UserPreferences.KEY_IMAGE_FILE_FOLDER));
         Optional<File> chosenFile = FileChooseUtils.openFileChooserAndReturnFile(systemHandler.getFrame(),
-                true, false, null, (String[]) null);
+                defaultPath, true, false, null, (String[]) null);
         if (chosenFile.isPresent()) {
             File exportFile = chosenFile.get();
             String exportFilePath = exportFile.getAbsolutePath();

@@ -29,7 +29,7 @@ public class NmBuilder implements ModelComponent {
     public NmBuilder(int seed, String rootSourceQualifier) {
         this.seed = seed;
         params = new ParamsMap(seed, 100, 100, 25, 100);
-        String initialId = UUID.randomUUID().toString();
+        String initialId = rootSourceQualifier + "_" + UUID.randomUUID().toString();
         structure = new StructureMap(initialId, NmType.SOURCE, rootSourceQualifier);
     }
 
@@ -57,7 +57,7 @@ public class NmBuilder implements ModelComponent {
         NmType moduleType = structure.getTypeFor(moduleId);
         String qualifier = structure.getQualifier(moduleId);
         Module nodeModule = createModule(moduleId, moduleType, qualifier, params);
-        System.out.printf("building %s module type %s : %s%n", moduleType, qualifier, moduleId);
+        // System.out.printf("building %s module type %s : %s%n", moduleType, qualifier, moduleId);
 
         if (moduleType==NmType.COMBO) {
             // child modules should be source

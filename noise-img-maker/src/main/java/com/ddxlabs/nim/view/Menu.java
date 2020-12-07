@@ -53,8 +53,8 @@ public class Menu implements ViewComponent {
         menuBar.setBorder(BorderFactory.createLineBorder(Color.black));
 
         JMenu fileMenu = new JMenu("File");
-        this.addMenuItem(fileMenu, "Open / Import", FILE_OPEN, KeyEvent.VK_O);
-        this.addMenuItem(fileMenu, "Save / Export", FILE_SAVE, KeyEvent.VK_S);
+        this.addMenuItem(fileMenu, "Import", FILE_OPEN, KeyEvent.VK_O);
+        this.addMenuItem(fileMenu, "Export", FILE_SAVE, KeyEvent.VK_S);
         fileMenu.add(new JSeparator());
         this.addMenuItem(fileMenu, "Exit", APP_EXIT, 0);
         menuBar.add(fileMenu);
@@ -95,7 +95,7 @@ public class Menu implements ViewComponent {
         this.addMenuItem(prefsMenu, "Use Color", PREFS_USE_COLOR, 0);
         this.addMenuItem(prefsMenu, "Use B/W", PREFS_USE_BW, 0);
         this.addMenuItem(prefsMenu, "Set File Export Directory", PREFS_SET_EXPORT_DIR, 0);
-        this.addMenuItem(prefsMenu, "Set Image Export Directory", PREFS_SET_IMAGE_EXPORT_DIR, 0);
+        this.addMenuItem(prefsMenu, "Set Image Save Directory", PREFS_SET_IMAGE_EXPORT_DIR, 0);
 
         JMenu viewMenu = new JMenu("View");
         JMenu themeMenu = new JMenu("Themes");

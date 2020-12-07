@@ -81,13 +81,17 @@ public class MenuItemHandler implements ControllerComponent {
             case Menu.PREFS_USE_BW: prefsHandler.setPreference(UserPreferences.KEY_IMAGE_COLOR, "false"); break;
             case Menu.PREFS_USE_COLOR: prefsHandler.setPreference(UserPreferences.KEY_IMAGE_COLOR, "true"); break;
             case Menu.PREFS_SET_EXPORT_DIR: {
+                String applicationPath = prefsHandler.getPrefs().getPreference(UserPreferences.KEY_APPLICATION_FOLDER);
+                File applicationFilePath = new File(applicationPath);
                 Optional<File> folder = FileChooseUtils.openFileChooserAndReturnFile(systemHandler.getFrame(),
-                        false, true, "Folder", null);
+                        applicationFilePath, false, true, "Folder", null);
                 folder.ifPresent(file -> prefsHandler.setPreference(UserPreferences.KEY_IMAGE_FILE_FOLDER, file.getAbsolutePath()));
             }; break;
             case Menu.PREFS_SET_IMAGE_EXPORT_DIR: {
+                String applicationPath = prefsHandler.getPrefs().getPreference(UserPreferences.KEY_APPLICATION_FOLDER);
+                File applicationFilePath = new File(applicationPath);
                 Optional<File> folder = FileChooseUtils.openFileChooserAndReturnFile(systemHandler.getFrame(),
-                        false, true, "Folder", null);
+                        applicationFilePath, false, true, "Folder", null);
                 folder.ifPresent(file -> prefsHandler.setPreference(UserPreferences.KEY_IMAGE_FOLDER, file.getAbsolutePath()));
             }; break;
         }

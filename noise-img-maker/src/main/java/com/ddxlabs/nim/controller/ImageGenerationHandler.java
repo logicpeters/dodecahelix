@@ -2,6 +2,7 @@ package com.ddxlabs.nim.controller;
 
 import com.ddxlabs.nim.noise.Models;
 import com.ddxlabs.nim.UserPreferences;
+import com.ddxlabs.nim.utils.FileChooseUtils;
 import com.ddxlabs.nim.view.Views;
 import com.ddxlabs.nim.noise.ImageGenerator;
 
@@ -11,6 +12,7 @@ import org.spongepowered.noise.module.Module;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -31,10 +33,28 @@ public class ImageGenerationHandler implements ControllerComponent {
         this.systemHandler = controllers.getSystemHandler();
     }
 
+    public void generateAndSaveAsFile() {
+        JFrame frame = systemHandler.getFrame();
+        String imageFolderPath = prefs.getPreference(UserPreferences.KEY_IMAGE_FOLDER);
+        File imageFolder = new File(imageFolderPath);
+        Optional<File> file = FileChooseUtils.openFileChooserAndReturnFile(frame, imageFolder, true, false, null);
+        if (file.isPresent()) {
+            String filePath = file.get().getAbsolutePath();
+            if (!filePath.contains(".")) {
+                filePath += ".png";
+            }
+            generateAndWriteFile(filePath);
+        }
+    }
+
     public void generateAndWriteFile() {
-        Module module = moduleBuilder.build();
         String imageFolder = prefs.getPreference(UserPreferences.KEY_IMAGE_FOLDER) + System.getProperty("file.separator");
         String imageFilePath = imageFolder + moduleBuilder.getStructure().getRootModuleId() + ".png";
+        generateAndWriteFile(imageFilePath);
+    }
+
+    private void generateAndWriteFile(String imageFilePath) {
+        Module module = moduleBuilder.build();
 
         boolean color = Boolean.parseBoolean(prefs.getPreference(UserPreferences.KEY_IMAGE_COLOR));
         int chop = prefs.getIntPreference(UserPreferences.KEY_IMAGE_CHOP);
@@ -50,7 +70,7 @@ public class ImageGenerationHandler implements ControllerComponent {
             // success
         } else {
             // image was either too large or too small and was not written
-            // TODO - popup warning
+            systemHandler.popupMessage("image size is outside of bounds");
         }
     }
 
