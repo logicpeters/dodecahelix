@@ -5,6 +5,7 @@ import org.spongepowered.noise.module.Module;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferUShort;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -42,28 +43,35 @@ public class ImageGenerator {
             }
         }
 
+        // System.out.println("bytes size is " + getSizeOfImage(image));
         return image;
     }
 
-    public static boolean writeImageToFile(String filename, int lowLimitKb, int highLimitKb, BufferedImage image) {
+    public static boolean writeImageToFile(String filename, BufferedImage image) {
         try {
             File file = new File(filename);
-            if (file.exists()) {
-                // delete the old file
-                System.out.println("overwriting previous image");
-            }
             ImageIO.write(image, "PNG", file);
-            double kb = file.length() / 1000.0;
-            System.out.println("file length is " + kb + " kb");
-            if (kb>lowLimitKb && kb<highLimitKb) {
-                return true;
-            } else {
-                file.delete();
-                System.out.println("file is outside size limits - deleting");
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }
         return false;
+    }
+
+    /**
+     * Gets the image size without writing to disk.
+     *
+     * @param img
+     * @return
+     */
+    public static int getSizeOfImage(BufferedImage img) {
+        byte[] imageBytes = new byte[0];
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(img, "png", baos);
+            imageBytes = baos.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return imageBytes.length;
     }
 }

@@ -54,27 +54,39 @@ public class ImageGenerationHandler implements ControllerComponent {
     }
 
     private void generateAndWriteFile(String imageFilePath) {
-        Module module = moduleBuilder.build();
-
-        boolean color = Boolean.parseBoolean(prefs.getPreference(UserPreferences.KEY_IMAGE_COLOR));
-        int chop = prefs.getIntPreference(UserPreferences.KEY_IMAGE_CHOP);
-        int size = prefs.getIntPreference(UserPreferences.KEY_IMAGE_PIXEL_SIZE);
-        int period = prefs.getIntPreference(UserPreferences.KEY_IMAGE_PERIOD);
-        int llkb = prefs.getIntPreference(UserPreferences.KEY_IMAGE_LOW_LIMIT_KB);
-        int hlkb = prefs.getIntPreference(UserPreferences.KEY_IMAGE_HIGH_LIMIT_KB);
-
-        BufferedImage image = ImageGenerator.generateImage(module, color, chop,
-                size, size, period, period);
-
-        if (ImageGenerator.writeImageToFile(imageFilePath, llkb, hlkb, image)) {
-            // success
-        } else {
-            // image was either too large or too small and was not written
-            systemHandler.popupMessage("image size is outside of bounds");
-        }
+        BufferedImage image = generateImage();
+        ImageGenerator.writeImageToFile(imageFilePath, image);
     }
 
     public void generateAndShowImage() {
+        try {
+            BufferedImage image = generateImage();
+            imagePreviewView.previewImage(image);
+            addImageToPreviewPanel(image);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean generatoImageWithinLimits(int lowerLimit, int upperLimit) {
+        try {
+            BufferedImage image = generateImage();
+            int imageSize = ImageGenerator.getSizeOfImage(image);
+            System.out.println("image size is " + imageSize);
+            if (imageSize>lowerLimit && imageSize<upperLimit) {
+                imagePreviewView.previewImage(image);
+                addImageToPreviewPanel(image);
+                return true;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return true;
+        }
+
+        return false;
+    }
+
+    private BufferedImage generateImage() {
         Module module = moduleBuilder.build();
 
         boolean color = Boolean.parseBoolean(prefs.getPreference(UserPreferences.KEY_IMAGE_COLOR));
@@ -85,15 +97,9 @@ public class ImageGenerationHandler implements ControllerComponent {
         // recalculate size for the preview, we will use this only for writing the file
         int appHeight = systemHandler.getCurrentAppHeight();
         // size = (appHeight / period) * period;  // NOTE: the first part will be rounded down, so imgHeight < appHeight
-        BufferedImage image = ImageGenerator.generateImage(module, color, chop,
-                size, size, period, period);
 
-        try {
-            imagePreviewView.previewImage(image);
-            addImageToPreviewPanel(image);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return ImageGenerator.generateImage(module, color, chop,
+                size, size, period, period);
     }
 
     private void addImageToPreviewPanel(BufferedImage image) throws IOException {

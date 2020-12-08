@@ -206,15 +206,20 @@ public class ModuleHandler implements ControllerComponent {
         Random random = new Random();
         Map<String, String> moduleParams = this.moduleBuilder.getParams().getEntriesForModule(moduleId);
         moduleParams.forEach((key, value) -> {
-            System.out.println("randomizing param : " + key);
             if (!key.startsWith("seed")) {
                 String newValue = NumberUtils.randomize(value, random);
-                System.out.println("resetting to : " + newValue);
                 this.moduleBuilder.getParams().resetValue(moduleId, key, newValue);
             }
         });
-        this.moduleTabs.refreshTabData();
-        this.imageGenerationHandler.generateAndShowImage();
+
+        // reject random parameters if too noisy, or not noisy enough
+        boolean withinLimits = this.imageGenerationHandler.generatoImageWithinLimits(5000, 250000);
+        if (!withinLimits) {
+            // re-randomize
+            randomizeParams(moduleId);
+        } else {
+            this.moduleTabs.refreshTabData();
+        }
     }
 
     public String getRootModule() {
